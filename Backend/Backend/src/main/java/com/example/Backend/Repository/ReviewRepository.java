@@ -1,4 +1,7 @@
 package com.example.Backend.Repository;
 
-public interface ReviewRepository {
+import com.example.Backend.Model.Review;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ReviewRepository extends MongoRepository<Review, Long> {
 }
