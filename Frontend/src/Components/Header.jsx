@@ -18,7 +18,7 @@ const Header = () => {
 
   return (
     <div
-      className="h-[34vw] mx-auto mt-8 bg-cover bg-center relative rounded-lg transition-background-image ease-in-out duration-1000"
+      className="h-[34vw] mx-auto mt-8 bg-cover bg-center relative  transition-background-image ease-in-out duration-1000"
       style={{ backgroundImage: `url(${currentImage})` }}
     >
       <div className="absolute flex flex-col items-start gap-[1.5vw] bottom-0 left-0 w-1/2 h-full bg-[rgba(147,136,136,0.6)] backdrop-blur-lg p-[4vw] box-border slideInLeft">
