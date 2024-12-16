@@ -1,7 +1,13 @@
 import Header from "../Components/Header";
+import Navbar from "../Components/Navbar";
 
 const Home = () => {
-  return <Header />;
+  return (
+  <>
+  <Navbar/>
+  <Header />
+  </>
+  )
 };
 
 export default Home;
