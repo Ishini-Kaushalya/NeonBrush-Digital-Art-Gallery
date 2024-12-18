@@ -11,7 +11,7 @@ const Header = () => {
         if (prevImage === assets.bg_2) return assets.bg_3;
         return assets.bg_1;
       });
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
