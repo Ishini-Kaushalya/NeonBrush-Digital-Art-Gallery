@@ -5,7 +5,7 @@ const ExploreMenu = ({ category, setCategory }) => {
   return (
     <div className="flex flex-col text-center gap-6 mt-5 mb-[-70px] px-5" id="explore-menu">
       <h1 className="text-black font-bold text-[max(2vw,22px)]">
-        Explore our menu
+        Explore our products
       </h1>
 
       <p className="max-w-[90%] text-center text-gray-600 leading-[1.8] text-[max(1vw,16px)] md:max-w-full">

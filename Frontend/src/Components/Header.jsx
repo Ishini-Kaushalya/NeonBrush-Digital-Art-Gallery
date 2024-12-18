@@ -11,14 +11,14 @@ const Header = () => {
         if (prevImage === assets.bg_2) return assets.bg_3;
         return assets.bg_1;
       });
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div
-      className="h-[34vw] mx-auto mt-8 bg-cover bg-center relative  transition-background-image ease-in-out duration-1000"
+      className="h-[34vw] mx-auto mt-8 bg-cover bg-center relative  transition-background-image"
       style={{ backgroundImage: `url(${currentImage})` }}
     >
       <div className="absolute flex flex-col items-start gap-[1.5vw] bottom-0 left-0 w-1/2 h-full bg-[rgba(147,136,136,0.6)] backdrop-blur-lg p-[4vw] box-border slideInLeft">
