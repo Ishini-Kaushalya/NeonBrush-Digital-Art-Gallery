@@ -18,15 +18,16 @@ const Header = () => {
 
   return (
     <div
-      className="h-[34vw] mx-auto mt-8 bg-cover bg-center relative  transition-background-image"
+      className="h-[34vw] mx-auto mt-8 bg-cover bg-center relative transition-all duration-1000"
       style={{ backgroundImage: `url(${currentImage})` }}
     >
-      <div className="absolute flex flex-col items-start gap-[1.5vw] bottom-0 left-0 w-1/2 h-full bg-[rgba(147,136,136,0.6)] backdrop-blur-lg p-[4vw] box-border slideInLeft">
-        <h2 className="font-medium text-white text-[max(4.5vw,22px)]">
+      <div className="absolute flex flex-col items-center gap-[3vw] bottom-0 left-0 w-full md:w-2/3 lg:w-1/2 h-full bg-[rgba(0,0,0,0.6)] backdrop-blur-md p-[5vw] box-border slideInLeft">
+        <h2 className="font-bold text-white border-l-8 border-white text-[max(4.5vw,22px)] pl-6 leading-tight shadow-lg">
           Your Vision <br /> Our Canvas <br /> Explore Now
         </h2>
-        <p className="text-black text-[1vw] hidden md:block fadeIn">
-          Explore our curated collection of stunning artworks...
+        <p className="text-white text-[clamp(10px, 1.2vw, 16px)] hidden md:block leading-[1.6] fadeIn drop-shadow-md">
+        Discover curated collections of stunning artwork, crafted to inspire
+        and transform your spaces into a masterpiece.
         </p>
       </div>
     </div>
