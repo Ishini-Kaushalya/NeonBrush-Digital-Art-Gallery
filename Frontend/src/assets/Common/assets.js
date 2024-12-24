@@ -2,10 +2,9 @@ import basket_icon from "./basket_icon.png";
 import logo from "./logo.png";
 import header_img from "./header_img.png";
 
-import bg_1 from "./bg_1.png"
-import bg_2 from "./bg_2.png"
-import bg_3 from "./bg_3.png"
-
+import bg_1 from "./bg_1.png";
+import bg_2 from "./bg_2.png";
+import bg_3 from "./bg_3.png";
 
 import search_icon from "./search_icon.png";
 import illustration from "./illustration.jpeg";
@@ -17,7 +16,9 @@ import charcoal from "./charcoal.jpeg";
 import typography from "./typography.jpeg";
 import painting from "./painting.jpeg";
 
-
+import image_SigninSelection1 from "./image_46.png";
+import image_SigninSelection2 from "./image_47.jpg";
+import image_SigninSelection3 from "./image_48.jpg";
 
 import add_icon_white from "./add_icon_white.png";
 import add_icon_green from "./add_icon_green.png";
@@ -58,6 +59,9 @@ export const assets = {
   bg_1,
   bg_2,
   bg_3,
+  image_SigninSelection1,
+  image_SigninSelection2,
+  image_SigninSelection3,
 };
 
 export const menu_list = [
@@ -95,6 +99,4 @@ export const menu_list = [
   },
 ];
 
-export const art_list = [
-  
-];
+export const art_list = [];
