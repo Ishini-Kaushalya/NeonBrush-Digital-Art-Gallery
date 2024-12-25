@@ -5,7 +5,6 @@ import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
-import PlaceOrder from "./Pages/PlaceOrder";
 import SignInSelection from "./Pages/SignInSelection"; // Import the new page
 import LoginPopup from "./Components/LoginPopup";
 
