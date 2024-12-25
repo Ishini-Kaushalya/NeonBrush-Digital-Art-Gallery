@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import ArtItem from "../Components/ArtItem"; 
+import ArtItem from "../Components/ArtItem"; // Import the ArtItem component
 import { art_list } from "../assets/Common/assets";
 
 const Products = () => {
