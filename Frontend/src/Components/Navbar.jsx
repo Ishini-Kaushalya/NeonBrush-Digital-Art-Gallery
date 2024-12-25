@@ -22,9 +22,9 @@ const Navbar = () => {
         </Link>
         <Link
           to='/products'
-          onClick={() => setMenu("menu")}
+          onClick={() => setMenu("arts")}
           className={`cursor-pointer ${
-            menu === "menu" ? "border-b-2 pb-1 border-[#49557e]" : ""
+            menu === "arts" ? "border-b-2 pb-1 border-[#49557e]" : ""
           }`}
         >
           Arts
