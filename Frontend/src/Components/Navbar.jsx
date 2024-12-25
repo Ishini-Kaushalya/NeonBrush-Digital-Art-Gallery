@@ -6,13 +6,13 @@ const Navbar = () => {
   const [menu, setMenu] = useState("home");
 
   return (
-    <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
-      <Link to='/'>
-        <img src={assets.logo} alt='' className='w-[80px]' />
+    <div className="flex justify-between items-center px-24 py-5 mb-[-40px]">
+      <Link to="/">
+        <img src={assets.logo} alt="" className="w-[80px]" />
       </Link>
-      <ul className='flex gap-12 text-[#49557e] text-lg'>
+      <ul className="flex gap-12 text-[#49557e] text-lg">
         <Link
-          to='/'
+          to="/"
           onClick={() => setMenu("home")}
           className={`cursor-pointer ${
             menu === "home" ? "border-b-2 pb-1 border-[#49557e]" : ""
@@ -21,16 +21,16 @@ const Navbar = () => {
           Home
         </Link>
         <Link
-          to='/products'
+          to="/products"
           onClick={() => setMenu("arts")}
           className={`cursor-pointer ${
             menu === "arts" ? "border-b-2 pb-1 border-[#49557e]" : ""
           }`}
         >
-          Arts
+           Arts
         </Link>
         <a
-          href='#footer'
+          href="#footer"
           onClick={() => setMenu("contact-us")}
           className={`cursor-pointer ${
             menu === "contact-us" ? "border-b-2 pb-1 border-[#49557e]" : ""
@@ -39,16 +39,16 @@ const Navbar = () => {
           Contact us
         </a>
       </ul>
-      <div className='flex items-center gap-10'>
-        <img src={assets.search_icon} alt='' />
-        <div className='relative'>
-          <Link to='/cart'>
-            <img src={assets.basket_icon} alt='' />
+      <div className="flex items-center gap-10">
+        <img src={assets.search_icon} alt="" />
+        <div className="relative">
+          <Link to="/cart">
+            <img src={assets.basket_icon} alt="" />
           </Link>
-          <div className='absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#47ffff] rounded-full'></div>
+          <div className="absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#47ffff] rounded-full"></div>
         </div>
-        <Link to='/sign-in'>
-          <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#fff4f2] hover:border-[#ff6347]'>
+        <Link to="/sign-in">
+          <button className="bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#fff4f2] hover:border-[#ff6347]">
             Sign in
           </button>
         </Link>
