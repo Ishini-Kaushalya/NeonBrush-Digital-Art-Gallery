@@ -23,6 +23,14 @@ public class Gallery {
         this.object_Id = object_Id;
     }
 
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
     public long getObject_Id() {
         return object_Id;
     }
