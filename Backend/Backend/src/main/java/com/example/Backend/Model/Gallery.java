@@ -17,9 +17,18 @@ public class Gallery {
     private double price;
     private Date created_at;
     private String is_available;
+    private String image_url;
 
     public void setObject_Id(long object_Id) {
         this.object_Id = object_Id;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     public long getObject_Id() {
