@@ -9,10 +9,11 @@ const Home = () => {
   const [category, setCategory] = useState("All");
   const navigate = useNavigate(); // For navigation
 
-  const handleCategoryChange = (newCategory) => {
-    setCategory(newCategory);
-    navigate("/products", { state: { category: newCategory } }); // Navigate to Products page with category
-  };
+ const handleCategoryChange = (newCategory) => {
+   setCategory(newCategory);
+   navigate("/products", { state: { category: newCategory } }); // Navigate to Products page with category
+ };
+
 
   return (
     <div>
