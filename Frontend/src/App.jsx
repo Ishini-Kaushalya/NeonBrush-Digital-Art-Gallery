@@ -7,6 +7,7 @@ import { useState } from "react";
 import LoginPopup from "./Components/LoginPopup";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import ArtDetail from './Pages/ArtDetail'; 
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -23,6 +24,7 @@ const App = () => {
             path='/sign-in'
             element={<SignInSelection setShowLogin={setShowLogin} />}
           />
+          <Route path='/art-detail' element={<ArtDetail />} /> {/* ArtDetail Route */}
         </Routes>
       </div>
       <Footer />
