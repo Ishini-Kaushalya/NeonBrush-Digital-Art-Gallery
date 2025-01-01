@@ -7,10 +7,16 @@ const StoreContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
 
   const addToCart = (itemId) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [itemId]: (prev[itemId] || 0) + 1,
-    }));
+    // Only add the item if it's not already in the cart
+    setCartItems((prev) => {
+      if (prev[itemId]) {
+        return prev; // If item is already in cart, don't modify
+      }
+      return {
+        ...prev,
+        [itemId]: 1, // Add item with a quantity of 1 if not already in cart
+      };
+    });
   };
 
   const removeFromCart = (itemId) => {
