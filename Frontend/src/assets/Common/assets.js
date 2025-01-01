@@ -12,6 +12,9 @@ import illus_3 from "./i_3.png";
 import illus_4 from "./i_4.png";
 import illus_5 from "./i_6.jpeg";
 
+import artist_1 from "./artist_1.png"
+import artist_bg1 from "./artist_bg_1.jpg"
+
 import search_icon from "./search_icon.png";
 import illustration from "./illustration.jpeg";
 import anime from "./anime.jpeg";
@@ -68,6 +71,8 @@ export const assets = {
   image_SigninSelection1,
   image_SigninSelection2,
   image_SigninSelection3,
+  artist_1 ,
+  artist_bg1,
 };
 
 export const menu_list = [
@@ -295,5 +300,25 @@ export const art_list = [
     category: "Illustration",
     ownerName: "NatureSketch",
     imageSize: "3600x2400",
+  },
+];
+export const artists = [
+  {
+    _id: "1",
+    name: "John Doe",
+    image: artist_1 , // Use existing images for simplicity
+    description: "John Doe is an accomplished digital artist specializing in portraits. His work is celebrated for its vibrant colors and intricate details.",
+  },
+  {
+    _id: "2",
+    name: "Jane Smith",
+    image: illus_2,
+    description: "Jane Smith is an imaginative fantasy artist whose landscapes transport viewers to magical realms.",
+  },
+  {
+    _id: "3",
+    name: "Yuuki Tanaka",
+    image: bg_3,
+    description: "Yuuki Tanaka is a renowned anime artist known for their unique character designs and storytelling.",
   },
 ];

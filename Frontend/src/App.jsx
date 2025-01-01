@@ -8,6 +8,7 @@ import LoginPopup from "./Components/LoginPopup";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ArtDetail from './Pages/ArtDetail'; 
+import ArtistDetail from './Pages/ArtistDetail';
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -20,11 +21,9 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/products' element={<Products />} />
           <Route path='/cart' element={<Cart />} />
-          <Route
-            path='/sign-in'
-            element={<SignInSelection setShowLogin={setShowLogin} />}
-          />
+          <Route path='/sign-in' element={<SignInSelection setShowLogin={setShowLogin} />} />
           <Route path='/art-detail' element={<ArtDetail />} /> {/* ArtDetail Route */}
+          <Route path="/artist-detail/:id" element={<ArtistDetail />} />
         </Routes>
       </div>
       <Footer />
