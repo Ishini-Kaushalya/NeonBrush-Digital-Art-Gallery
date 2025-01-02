@@ -42,5 +42,8 @@ public class ArtistServiceImpl implements ArtistService {
         artistRepository.deleteById(id);
     }
 
-
+    @Override
+    public Optional<Artist> getArtistByUserName(String userName) {
+        return artistRepository.findByUserName(userName);
+    }
 }

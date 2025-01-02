@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface ArtistRepository extends MongoRepository<Artist,Long> {
-    Optional<Artist> getArtistByUserName(String userName);
+    Optional<Artist> findByUserName(String userName);
 }
