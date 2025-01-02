@@ -8,4 +8,5 @@ public interface GalleryService {
     List<Gallery> getAllGallery();
     Gallery updateGallery(long id, Gallery gallery);
     void deleteGallery(long id);
+    List<Gallery> getGalleryByType(String type);
 }
