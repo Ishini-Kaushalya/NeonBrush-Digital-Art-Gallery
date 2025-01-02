@@ -5,7 +5,7 @@ import com.example.Backend.Service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
@@ -42,5 +42,11 @@ public class ReviewController {
     public ResponseEntity<Void> deleteReview(@PathVariable long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/artist/{artist_Id}")
+    public ResponseEntity<List<Review>> getReviewByArtistId(@PathVariable("artistId") Long artist_Id) {
+        List<Review> review = reviewService.getReviewByArtistId(artist_Id);
+        return review.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(review);
     }
 }

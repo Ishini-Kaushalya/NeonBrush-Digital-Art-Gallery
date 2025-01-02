@@ -45,7 +45,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getReviewByArtistId(Long artistId) {
-        return reviewRepository.findByArtistId(artistId);
+    public List<Review> getReviewByArtistId(Long artist_Id) {
+        return reviewRepository.findByArtistId(artist_Id);
     }
 }
