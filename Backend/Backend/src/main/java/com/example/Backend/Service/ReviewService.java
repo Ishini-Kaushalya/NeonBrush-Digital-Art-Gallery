@@ -8,5 +8,6 @@ public interface ReviewService {
     List<Review> getAllReviews();
     Review updateReview(long id, Review review);
     void deleteReview(long id);
+    List<Review> getReviewByArtistId(Long artist_Id);
 }
 
