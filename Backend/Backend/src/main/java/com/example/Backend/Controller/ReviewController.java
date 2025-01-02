@@ -1,5 +1,7 @@
 package com.example.Backend.Controller;
 
+import com.example.Backend.Model.Artist;
+import com.example.Backend.Model.Gallery;
 import com.example.Backend.Model.Review;
 import com.example.Backend.Service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -44,9 +47,9 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/artist/{artist_Id}")
-    public ResponseEntity<List<Review>> getReviewByArtistId(@PathVariable("artistId") Long artist_Id) {
-        List<Review> review = reviewService.getReviewByArtistId(artist_Id);
-        return review.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(review);
+    @GetMapping("/artist_Id/{artist_Id}")
+    public ResponseEntity<List<Review>> getReviewsByArtist_Id(@PathVariable("artist_Id") long artist_Id) {
+        List<Review> reviews = reviewService.getReviewsByArtist_Id(artist_Id);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }
