@@ -9,5 +9,6 @@ public interface ReviewService {
     Review updateReview(long id, Review review);
     void deleteReview(long id);
 
+    List<Review> getReviewsByArtist_userName(String artist_userName);
 }
 
