@@ -39,8 +39,9 @@ public class GalleryServiceImpl implements GalleryService{
 
     @Override
     public List<Gallery> getGalleryByType(String type) {
-        return GalleryRepository.findByType(type);
+        return galleryRepository.findByType(type);
     }
+
 
 
 }
