@@ -43,4 +43,9 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(long id) {
         reviewRepository.deleteById(id);
     }
+
+    @Override
+    public List<Review> getReviewByArtistId(Long artistId) {
+        return reviewRepository.findByArtistId(artistId);
+    }
 }
