@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface ReviewRepository extends MongoRepository<Review, Long> {
-    List<Review> findByArtist_Id(long artist_Id);
+    List<Review> findByArtist_userName(String artist_userName);
 }

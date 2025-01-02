@@ -47,9 +47,5 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/artist_Id/{artist_Id}")
-    public ResponseEntity<List<Review>> getReviewsByArtist_Id(@PathVariable("artist_Id") long artist_Id) {
-        List<Review> reviews = reviewService.getReviewsByArtist_Id(artist_Id);
-        return new ResponseEntity<>(reviews, HttpStatus.OK);
-    }
+
 }
