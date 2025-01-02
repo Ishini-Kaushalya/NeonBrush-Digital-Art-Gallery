@@ -47,5 +47,9 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @GetMapping("/artist/{artist_userName}") // New endpoint
+    public ResponseEntity<List<Review>> getReviewsByArtist_userName(@PathVariable("artist_userName") String artist_userName) {
+        List<Review> reviews = reviewService.getReviewsByArtist_userName(artist_userName);
+        return reviews.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(reviews);
+    }
 }
