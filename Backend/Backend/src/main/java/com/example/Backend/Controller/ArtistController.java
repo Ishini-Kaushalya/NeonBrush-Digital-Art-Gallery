@@ -1,13 +1,14 @@
 package com.example.Backend.Controller;
 
-
+import org.springframework.http.HttpStatus;
 import com.example.Backend.Model.Artist;
 import com.example.Backend.Service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Optional;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/artist")
@@ -42,6 +43,13 @@ public class ArtistController {
     public ResponseEntity<Void> deleteArtist(@PathVariable long id) {
         this.artistService.deleteArtist(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/username/{userName}")
+    public ResponseEntity<Artist> getArtistByUserName(@PathVariable("userName") String userName) {
+        Optional<Artist> artist = artistService.getArtistByUserName(userName);
+        return artist.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 }

@@ -37,5 +37,14 @@ public class GalleryServiceImpl implements GalleryService{
         galleryRepository.deleteById(id);
     }
 
+    @Override
+    public List<Gallery> getGalleryByType(String type) {
+        return galleryRepository.findByType(type);
+    }
+
+
 
 }
+
+
+

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("/api/galleries")
 
@@ -46,4 +47,12 @@ public class GalleryController {
         this.galleryService.deleteGallery(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<Gallery>> getGalleryByType(@PathVariable("type") String type) {
+        List<Gallery> gallery = galleryService.getGalleryByType(type);
+        return new ResponseEntity<>(gallery, HttpStatus.OK);
+    }
 }
+
+

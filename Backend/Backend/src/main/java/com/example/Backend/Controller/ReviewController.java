@@ -1,12 +1,15 @@
 package com.example.Backend.Controller;
 
+import com.example.Backend.Model.Artist;
+import com.example.Backend.Model.Gallery;
 import com.example.Backend.Model.Review;
 import com.example.Backend.Service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.HttpStatus;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -43,4 +46,5 @@ public class ReviewController {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();
     }
+
 }
