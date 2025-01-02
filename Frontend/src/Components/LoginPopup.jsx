@@ -76,7 +76,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
         )}
         {/* Customizing the footer message based on type */}
         <p className='text-sm text-center mt-4'>
-          {type === "user" ? "User Login" : "Artist Login"}
+          {type === "user" ? "User Login" : ""}
         </p>
       </form>
     </div>
