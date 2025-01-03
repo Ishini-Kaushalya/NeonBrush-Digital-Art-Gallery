@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Review {
     @Id
     private long object_Id;
-    private String artist_userName;
+    private String artistName;
     private long user_Id;
     private int rating;
     private String comment;
@@ -19,12 +19,12 @@ public class Review {
         this.object_Id = object_Id;
     }
 
-    public String getArtist_userName() {
-        return artist_userName;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public void setArtist_userName(String artist_userName) {
-        this.artist_userName = artist_userName;
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
     public long getUser_Id() {
