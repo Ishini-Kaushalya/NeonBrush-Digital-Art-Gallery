@@ -47,7 +47,7 @@ public class ArtistController {
 
     @GetMapping("/artistname/{artistName}")
     public ResponseEntity<Artist> getArtistByUserName(@PathVariable("artistName") String artistName) {
-        Optional<Artist> artist = artistService.getArtistByUserName(artistName);
+        Optional<Artist> artist = artistService.getArtistByArtistName(artistName);
         return artist.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
