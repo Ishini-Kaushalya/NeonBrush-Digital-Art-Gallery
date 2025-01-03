@@ -12,5 +12,5 @@ public interface ArtistService {
     List<Artist> getAllArtists();
     Artist updateArtist(long id, Artist artist);
     void deleteArtist(long id);
-    Optional<Artist> getArtistByUserName(String userName);
+    Optional<Artist> getArtistByArtistName(String artistName);
 }
