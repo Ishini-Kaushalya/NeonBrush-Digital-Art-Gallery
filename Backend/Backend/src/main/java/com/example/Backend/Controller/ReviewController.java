@@ -47,4 +47,9 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/artistName/{artistName}")
+    public ResponseEntity<List<Review>> getReviewsByArtistName(@PathVariable("artistName") String artistName) {
+        List<Review> reviews = reviewService.getReviewsByArtistName(artistName);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
 }
