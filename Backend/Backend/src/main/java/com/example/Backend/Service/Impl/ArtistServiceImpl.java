@@ -43,7 +43,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Optional<Artist> getArtistByUserName(String userName) {
-        return artistRepository.findByUserName(userName);
+    public Optional<Artist> getArtistByArtistName(String artistName) {
+        return artistRepository.findByArtistName(artistName);
     }
 }
