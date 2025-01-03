@@ -8,7 +8,7 @@ public class Artist {
     private long artistId;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String artistName;
     private String email;
     private String password;
     private String types;
@@ -38,12 +38,12 @@ public class Artist {
         this.lastName = lastName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 
     public String getEmail() {
