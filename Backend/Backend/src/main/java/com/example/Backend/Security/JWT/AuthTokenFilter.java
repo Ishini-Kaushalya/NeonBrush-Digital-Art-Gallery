@@ -17,7 +17,7 @@ package com.example.Backend.Security.JWT;
         import org.springframework.util.StringUtils;
         import org.springframework.web.filter.OncePerRequestFilter;
 
-        import com.example.CRUD_BE_MDB.Security.Services.UserDetailsServiceImpl;
+        import com.example.Backend.Security.Services.UserDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
