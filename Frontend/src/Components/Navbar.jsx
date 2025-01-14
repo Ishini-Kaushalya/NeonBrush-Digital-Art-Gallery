@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, {useContext, useState } from "react";
 import { assets } from "../assets/Common/assets.js";
 import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
+import { StoreContext } from '../Context/StoreContext.jsx';
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
+  const  {getTotalCartAmount} =useContext(StoreContext)
 
   return (
     <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
@@ -45,12 +48,16 @@ const Navbar = () => {
           <Link to='/cart'>
             <img src={assets.basket_icon} alt='' />
           </Link>
-          <div className='absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#47ffff] rounded-full'></div>
+          <div className= {getTotalCartAmount()===0 ?"":"absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#38bdf8] rounded-full"} ></div>
         </div>
         <Link to='/sign-in'>
           <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#fff4f2] hover:border-[#49557e]'>
             Sign in
           </button>
+        </Link>
+           {/* User Icon - Artist Profile Link */}
+        <Link to="/artist-profile" className="cursor-pointer">
+           <FaUserCircle className="w-[30px] h-[30px] text-gray-700" />
         </Link>
       </div>
     </div>

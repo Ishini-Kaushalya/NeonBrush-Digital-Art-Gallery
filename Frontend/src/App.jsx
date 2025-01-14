@@ -11,6 +11,7 @@ import ArtDetail from "./Pages/ArtDetail";
 import ArtistDetail from "./Pages/ArtistDetail";
 import ContactUs from "./Pages/ContactUs";
 import PaymentPage from './Pages/Payment';
+import ArtistProfile from './Pages/ArtistProfile';
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -33,6 +34,7 @@ const App = () => {
           <Route path='/contact-us' element={<ContactUs />} />{" "}
           {/* Contact Us Route */}
           <Route path='/payment' element={<PaymentPage />} />
+          <Route path="/artist-profile" element={<ArtistProfile />} />
         </Routes>
       </div>
       <Footer />
