@@ -48,7 +48,7 @@ const Navbar = () => {
           <div className='absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#47ffff] rounded-full'></div>
         </div>
         <Link to='/sign-in'>
-          <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#fff4f2] hover:border-[#ff6347]'>
+          <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#fff4f2] hover:border-[#49557e]'>
             Sign in
           </button>
         </Link>
