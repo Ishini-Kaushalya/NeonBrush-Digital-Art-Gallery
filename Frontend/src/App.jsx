@@ -10,6 +10,7 @@ import Footer from "./Components/Footer";
 import ArtDetail from "./Pages/ArtDetail";
 import ArtistDetail from "./Pages/ArtistDetail";
 import ContactUs from "./Pages/ContactUs";
+import PaymentPage from './Pages/Payment';
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -31,6 +32,7 @@ const App = () => {
           <Route path='/artist-detail/:id' element={<ArtistDetail />} />
           <Route path='/contact-us' element={<ContactUs />} />{" "}
           {/* Contact Us Route */}
+          <Route path='/payment' element={<PaymentPage />} />
         </Routes>
       </div>
       <Footer />
