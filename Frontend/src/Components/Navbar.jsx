@@ -29,15 +29,15 @@ const Navbar = () => {
         >
           Arts
         </Link>
-        <a
-          href='#footer'
+        <Link
+          to='/contact-us'
           onClick={() => setMenu("contact-us")}
           className={`cursor-pointer ${
             menu === "contact-us" ? "border-b-2 pb-1 border-[#49557e]" : ""
           }`}
         >
           Contact us
-        </a>
+        </Link>
       </ul>
       <div className='flex items-center gap-10'>
         <img src={assets.search_icon} alt='' />
