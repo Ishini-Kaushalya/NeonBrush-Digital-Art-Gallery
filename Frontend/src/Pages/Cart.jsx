@@ -1,11 +1,15 @@
 import React, { useContext } from "react";
 import { StoreContext } from "../Context/StoreContext";
-// import { useNavigate } from "react-router-dom";
+ import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cartItems, art_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
+   // Function to handle navigation to the payment page
+   const handleProceedToCheckout = () => {
+    navigate("/payment"); // Navigate to Payment page
+  };
   return (
     <div className="mt-24 px-4">
       <div className="space-y-4">
@@ -67,7 +71,15 @@ const Cart = () => {
             </div>
           </div>
         </div>
-
+         {/* Button to navigate to the payment page */}
+        <div className="flex-1 space-y-4 relative">
+        <button
+          onClick={handleProceedToCheckout}
+          className="absolute right-4 bottom-2 bg-sky-800 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-sky-950"
+           >
+          PROCEED TO CHECKOUT
+        </button>
+        </div>
        
       </div>
     </div>

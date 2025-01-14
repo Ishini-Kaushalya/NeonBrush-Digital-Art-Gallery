@@ -45,7 +45,7 @@ const PaymentPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-green-100 shadow-lg rounded-lg p-8">
+    <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
       <h2 className="text-2xl font-semibold text-black">Payment Details</h2>
       
       <div className="payment-form space-y-6 mt-6">
@@ -55,7 +55,7 @@ const PaymentPage = () => {
           placeholder="Your Name"
           value={paymentDetails.userName}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
         />
         <input
           type="text"
@@ -63,7 +63,7 @@ const PaymentPage = () => {
           placeholder="Your Address"
           value={paymentDetails.address}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
         />
         <input
           type="text"
@@ -71,7 +71,7 @@ const PaymentPage = () => {
           placeholder="Name on Card"
           value={paymentDetails.name}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
         />
         <input
           type="text"
@@ -79,7 +79,7 @@ const PaymentPage = () => {
           placeholder="Card Number"
           value={paymentDetails.cardNumber}
           onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
         />
         <div className="flex space-x-4">
           <input
@@ -88,7 +88,7 @@ const PaymentPage = () => {
             placeholder="Expiration Date"
             value={paymentDetails.expiration}
             onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
           />
           <input
             type="text"
@@ -96,7 +96,7 @@ const PaymentPage = () => {
             placeholder="CVV"
             value={paymentDetails.cvv}
             onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
           />
         </div>
       </div>
@@ -135,7 +135,7 @@ const PaymentPage = () => {
         {/* Complete Payment Button */}
         <button
           onClick={handlePayment}
-          className="w-1/3 bg-green-800 text-white py-3 rounded-lg hover:bg-green-950 "
+          className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950 "
         >
           Complete Payment
         </button>
