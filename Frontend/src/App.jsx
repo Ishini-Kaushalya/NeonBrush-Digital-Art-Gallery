@@ -7,8 +7,9 @@ import { useState } from "react";
 import LoginPopup from "./Components/LoginPopup";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
-import ArtDetail from './Pages/ArtDetail'; 
-import ArtistDetail from './Pages/ArtistDetail';
+import ArtDetail from "./Pages/ArtDetail";
+import ArtistDetail from "./Pages/ArtistDetail";
+import ContactUs from "./Pages/ContactUs";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -21,9 +22,15 @@ const App = () => {
           <Route path='/' element={<Home />} />
           <Route path='/products' element={<Products />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/sign-in' element={<SignInSelection setShowLogin={setShowLogin} />} />
-          <Route path='/art-detail' element={<ArtDetail />} /> {/* ArtDetail Route */}
-          <Route path="/artist-detail/:id" element={<ArtistDetail />} />
+          <Route
+            path='/sign-in'
+            element={<SignInSelection setShowLogin={setShowLogin} />}
+          />
+          <Route path='/art-detail' element={<ArtDetail />} />{" "}
+          {/* ArtDetail Route */}
+          <Route path='/artist-detail/:id' element={<ArtistDetail />} />
+          <Route path='/contact-us' element={<ContactUs />} />{" "}
+          {/* Contact Us Route */}
         </Routes>
       </div>
       <Footer />
