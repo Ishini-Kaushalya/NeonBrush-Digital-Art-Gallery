@@ -51,7 +51,7 @@ const Navbar = () => {
           <div className= {getTotalCartAmount()===0 ?"":"absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#38bdf8] rounded-full"} ></div>
         </div>
         <Link to='/sign-in'>
-          <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#fff4f2] hover:border-[#49557e]'>
+          <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]'>
             Sign in
           </button>
         </Link>
