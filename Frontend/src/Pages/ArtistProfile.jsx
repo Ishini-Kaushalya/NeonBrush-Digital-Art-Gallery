@@ -1,8 +1,104 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiImageAddFill } from "react-icons/ri";
 import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
+import axios from "axios";
+
+function Artist() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [description, setDescription] = useState("");
+  const [artists, setArtists] = useState([]);
+
+
+ 
+  useEffect(() => {
+    (async () => await Load())();
+  }, []);
+ 
+ 
+  async function Load() {
+    const result = await axios.get("http://localhost:8080//api/artist");
+    setUsers(result.data);
+    console.log(result.data);
+  }
+ 
+
+  
+  async function save(event) {
+    event.preventDefault();
+    try {
+      await axios.post("http://localhost:8080//api/artist", {
+        firstName: firstName,
+        lastName: lastName,
+        userName: userName,
+        email: email,
+        password: password,
+        description: description
+      });
+      alert("Artist Registation Successfully");
+      setArtistId("");
+      setFirstName("");
+      setLastName("");
+      setUserName("");
+      setEmail("");
+      setPassword("");
+      setDescription("");
+      Load();
+    }
+    catch (err) {
+      alert("Artist Registation Failed");
+    }
+  }
+
+ 
+  async function editArtist(artists) {
+    setFirstName(artists.firstName);
+    setLastName(artists.lastName);
+    setUserName(artists.userName);
+    setEmail(artists.email);
+    setPassword(artists.password);
+    setDescription(artists.description);
+    setArtistId(artists._id);
+  }
+ 
+  async function DeleteStudent(studentid) {
+    await axios.delete("http://localhost:8080//api/artist/" + artistId);
+    alert("Student deleted Successfully");
+    Load();
+  }
+ 
+  async function update(event) {
+    event.preventDefault();
+ 
+    try {
+      await axios.put("http://localhost:8080//api/artist" + artistId, {
+        firstName: firstName,
+        lastName: lastName,
+        userName: userName,
+        email: email,
+        password: password,
+        description: description,
+      });
+      alert("Registation Updateddddd");
+       setArtistId("");
+       setFirstName("");
+       setLastName("");
+       setUserName("");
+       setEmail("");
+       setPassword("");
+       setDescription("");
+      Load();
+    }
+    catch (err) {
+      alert("Artist Updated Failed");
+    }
+  }
+}
 
 const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -123,6 +219,11 @@ const ArtistProfile = () => {
               type="text"
               placeholder="Your First Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              id="firstName"
+              value={firstName}
+              onChange={(event) => {
+                setFirstName(event.target.value);
+              }}
             />
             {errors.fullName && (
               <p className="text-red-500 text-sm">{errors.fullName}</p>
@@ -139,6 +240,11 @@ const ArtistProfile = () => {
               type="text"
               placeholder="Your username"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              id="userName"
+              value={userName}
+              onChange={(event) => {
+                setUserName(event.target.value);
+              }}
             />
             {errors.username && (
               <p className="text-red-500 text-sm">{errors.username}</p>
@@ -155,6 +261,11 @@ const ArtistProfile = () => {
               type="text"
               placeholder="Your Last Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              id="lastName"
+              value={lastName}
+              onChange={(event) => {
+                setLastName(event.target.value);
+              }}
             />
             {errors.lastName && (
               <p className="text-red-500 text-sm">{errors.lastName}</p>
@@ -171,6 +282,11 @@ const ArtistProfile = () => {
               type="password"
               placeholder="Your password"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+              id="password"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
             />
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password}</p>
@@ -187,6 +303,11 @@ const ArtistProfile = () => {
               type="email"
               placeholder="Your email"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              id="email"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
@@ -203,6 +324,11 @@ const ArtistProfile = () => {
               placeholder="Description about artist"
               rows="4"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              id="description"
+              value={description}
+              onChange={(event) => {
+                setDescription(event.target.value);
+              }}
             ></textarea>
             {errors.description && (
               <p className="text-red-500 text-sm">{errors.description}</p>
@@ -217,7 +343,7 @@ const ArtistProfile = () => {
             className="px-4 py-2 text-black focus:outline-none"
             onClick={() => navigate("/")}
           >
-           <MdArrowBackIos className="mr-2" />
+            <MdArrowBackIos className="mr-2" />
           </button>
 
           {/* Other Buttons */}
@@ -225,6 +351,7 @@ const ArtistProfile = () => {
             <button
               type="submit"
               className="bg-sky-800 text-white px-6 py-2 rounded-full hover:bg-sky-950"
+              onClick={save}
             >
               Submit
             </button>
