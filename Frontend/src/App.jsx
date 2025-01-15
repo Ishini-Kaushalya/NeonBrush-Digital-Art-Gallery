@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home";
+import Products from "./Pages/Products";
+import Cart from "./Pages/Cart";
+import SignInSelection from "./Pages/SignInSelection";
+import { useState } from "react";
+import LoginPopup from "./Components/LoginPopup";
+import Navbar from "./Components/Navbar";
+import Footer from "./Components/Footer";
+import ArtDetail from "./Pages/ArtDetail";
+import ArtistDetail from "./Pages/ArtistDetail";
+import ContactUs from "./Pages/ContactUs";
+import PaymentPage from './Pages/Payment';
+import ArtistProfile from './Pages/ArtistProfile';
+import AddArtItem from './Pages/AddArtItem'; // Import AddArtItem page
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
+  const [showLogin, setShowLogin] = useState(false);
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : null}
+      <div className='app'>
+        <Navbar setShowLogin={setShowLogin} />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/products' element={<Products />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route
+            path='/sign-in'
+            element={<SignInSelection setShowLogin={setShowLogin} />}
+          />
+          <Route path='/art-detail' element={<ArtDetail />} />{" "}
+          {/* ArtDetail Route */}
+          <Route path='/artist-detail/:id' element={<ArtistDetail />} />
+          <Route path='/contact-us' element={<ContactUs />} />{" "}
+          {/* Contact Us Route */}
+          <Route path='/payment' element={<PaymentPage />} />
+          <Route path="/artist-profile" element={<ArtistProfile />} />
+          <Route path="/add-art" element={<AddArtItem />} /> {/* Add Art Item Route */}
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
