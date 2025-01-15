@@ -3,6 +3,7 @@ import { assets } from "../assets/Common/assets.js";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { StoreContext } from '../Context/StoreContext.jsx';
+import { TbBasketFilled } from "react-icons/tb";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
@@ -30,7 +31,7 @@ const Navbar = () => {
             menu === "menu" ? "border-b-2 pb-1 border-[#49557e]" : ""
           }`}
         >
-          Arts
+          All Arts
         </Link>
         <Link
           to='/contact-us'
@@ -43,10 +44,10 @@ const Navbar = () => {
         </Link>
       </ul>
       <div className='flex items-center gap-10'>
-        <img src={assets.search_icon} alt='' />
+        {/* <img src={assets.search_icon} alt='' /> */}
         <div className='relative'>
-          <Link to='/cart'>
-            <img src={assets.basket_icon} alt='' />
+        <Link to="/cart" className="cursor-pointer">
+          <TbBasketFilled className="w-[30px] h-[30px] text-gray-700" />
           </Link>
           <div className= {getTotalCartAmount()===0 ?"":"absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#38bdf8] rounded-full"} ></div>
         </div>
