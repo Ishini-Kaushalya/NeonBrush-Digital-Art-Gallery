@@ -11,7 +11,7 @@ public class Artist {
     private String userName;
     private String email;
     private String password;
-    private String types;
+
     private String description;
 
     public long getArtistId() {
@@ -62,13 +62,7 @@ public class Artist {
         this.password = password;
     }
 
-    public String getTypes() {
-        return types;
-    }
 
-    public void setTypes(String types) {
-        this.types = types;
-    }
 
     public String getDescription() {
         return description;
