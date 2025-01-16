@@ -24,7 +24,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
     e.preventDefault();
     setMessage("");
 
-    if (!termsAccepted) {
+    if (!termsAccepted && formState === "Sign Up") {
       setMessage("You must accept the terms and conditions.");
       return;
     }
@@ -44,7 +44,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
               roles: formData.roles,
             }
           : {
-              username: formData.username,
+              username: formData.username, // Changed to username for login
               password: formData.password,
             };
 
@@ -90,15 +90,27 @@ const LoginPopup = ({ setShowLogin, type }) => {
               onChange={handleInputChange}
             />
           )}
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email"
-            required
-            className="outline-none border border-gray-300 p-3 rounded-md text-sm focus:ring-2 focus:ring-tomato"
-            value={formData.email}
-            onChange={handleInputChange}
-          />
+          {formState === "Sign Up" ? (
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email"
+              required
+              className="outline-none border border-gray-300 p-3 rounded-md text-sm focus:ring-2 focus:ring-tomato"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          ) : (
+            <input
+              type="text" // Changed to text for username in Login
+              name="username"
+              placeholder="Username"
+              required
+              className="outline-none border border-gray-300 p-3 rounded-md text-sm focus:ring-2 focus:ring-tomato"
+              value={formData.username}
+              onChange={handleInputChange}
+            />
+          )}
           <input
             type="password"
             name="password"
@@ -119,20 +131,22 @@ const LoginPopup = ({ setShowLogin, type }) => {
         </button>
 
         {/* Terms and Conditions */}
-        <div className="flex items-start gap-2 text-xs mt-3">
-          <input
-            type="checkbox"
-            required
-            className="mt-[5px] accent-tomato"
-            checked={termsAccepted}
-            onChange={(e) => setTermsAccepted(e.target.checked)}
-          />
-          <p>
-            By continuing, I agree to the{" "}
-            <span className="font-medium">terms of use</span> &{" "}
-            <span className="font-medium">privacy policy</span>.
-          </p>
-        </div>
+        {formState === "Sign Up" && (
+          <div className="flex items-start gap-2 text-xs mt-3">
+            <input
+              type="checkbox"
+              required
+              className="mt-[5px] accent-tomato"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+            />
+            <p>
+              By continuing, I agree to the{" "}
+              <span className="font-medium">terms of use</span> &{" "}
+              <span className="font-medium">privacy policy</span>.
+            </p>
+          </div>
+        )}
 
         {/* Toggle Between Login and Sign Up */}
         <p className="text-sm text-center">
