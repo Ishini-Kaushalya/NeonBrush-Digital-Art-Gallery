@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/Common/assets";
 
 const LoginPopup = ({ setShowLogin, type }) => {
@@ -12,6 +13,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   // Handles input changes dynamically
   const handleInputChange = (e) => {
@@ -53,6 +55,10 @@ const LoginPopup = ({ setShowLogin, type }) => {
       });
 
       setMessage(response.data.message || "Operation successful!");
+
+      if (formState === "Login" && response.status === 200) {
+        navigate("/products");
+      }
     } catch (error) {
       setMessage(
         error.response?.data?.message || "An error occurred. Please try again."
