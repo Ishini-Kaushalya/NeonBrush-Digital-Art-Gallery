@@ -33,7 +33,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
       const apiEndpoint =
         formState === "Sign Up"
           ? "http://localhost:8080/api/auth/signup"
-          : "http://localhost:8080/api/auth/login";
+          : "http://localhost:8080/api/auth/signin";
 
       const payload =
         formState === "Sign Up"
@@ -44,7 +44,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
               roles: formData.roles,
             }
           : {
-              email: formData.email,
+              username: formData.username,
               password: formData.password,
             };
 
