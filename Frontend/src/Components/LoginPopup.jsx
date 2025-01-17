@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { assets } from "../assets/Common/assets";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const LoginPopup = ({ setShowLogin, type }) => {
   const [formState, setFormState] = useState("Login");
@@ -9,15 +9,19 @@ const LoginPopup = ({ setShowLogin, type }) => {
     username: "",
     email: "",
     password: "",
-    roles: ["user"],
+    roles: [type], // Set role based on the passed type
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCheckboxChange = () => {
+    setTermsAccepted(!termsAccepted);
   };
 
   const handleSubmit = async (e) => {
@@ -54,9 +58,8 @@ const LoginPopup = ({ setShowLogin, type }) => {
 
       setMessage(response.data.message || "Operation successful!");
 
-      // If login is successful, navigate to the "All Arts" page
       if (formState === "Login" && response.status === 200) {
-        navigate("/Products"); // Redirect to the "All Arts" page
+        navigate("/Products");
       }
     } catch (error) {
       setMessage(
@@ -71,7 +74,6 @@ const LoginPopup = ({ setShowLogin, type }) => {
         className="w-full max-w-md bg-white rounded-lg p-8 flex flex-col gap-6 shadow-lg"
         onSubmit={handleSubmit}
       >
-        {/* Header */}
         <div className="flex justify-between items-center text-black">
           <h2 className="text-xl font-semibold">{formState}</h2>
           <img
@@ -81,8 +83,6 @@ const LoginPopup = ({ setShowLogin, type }) => {
             className="w-5 h-5 cursor-pointer"
           />
         </div>
-
-        {/* Input Fields */}
         <div className="flex flex-col gap-5">
           {formState === "Sign Up" && (
             <input
@@ -107,7 +107,7 @@ const LoginPopup = ({ setShowLogin, type }) => {
             />
           ) : (
             <input
-              type="text" // Changed to text for username in Login
+              type="text"
               name="username"
               placeholder="Username"
               required
@@ -125,17 +125,30 @@ const LoginPopup = ({ setShowLogin, type }) => {
             value={formData.password}
             onChange={handleInputChange}
           />
+          {formState === "Sign Up" && (
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="terms"
+                className="w-4 h-4"
+                checked={termsAccepted}
+                onChange={handleCheckboxChange}
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                I accept the{" "}
+                <a href="#" className="text-tomato">
+                  terms and conditions
+                </a>
+              </label>
+            </div>
+          )}
         </div>
-
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-black text-white py-2 rounded-md text-sm font-medium hover:bg-tomato-dark transition duration-200"
         >
           {formState === "Sign Up" ? "Create account" : "Login"}
         </button>
-
-        {/* Toggle Between Login and Sign Up */}
         <p className="text-sm text-center">
           {formState === "Login" ? (
             <>
@@ -159,13 +172,9 @@ const LoginPopup = ({ setShowLogin, type }) => {
             </>
           )}
         </p>
-
-        {/* Login Type Information */}
-        {type === "user" && (
-          <p className="text-sm text-center mt-4">User Login</p>
+        {type === "artist" && (
+          <p className="text-sm text-center">Artist Signup</p>
         )}
-
-        {/* Feedback Message */}
         {message && <p className="text-center text-red-500">{message}</p>}
       </form>
     </div>
