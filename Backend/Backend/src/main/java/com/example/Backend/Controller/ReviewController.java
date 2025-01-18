@@ -1,7 +1,6 @@
 package com.example.Backend.Controller;
 
-import com.example.Backend.Model.Artist;
-import com.example.Backend.Model.Gallery;
+
 import com.example.Backend.Model.Review;
 import com.example.Backend.Service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
