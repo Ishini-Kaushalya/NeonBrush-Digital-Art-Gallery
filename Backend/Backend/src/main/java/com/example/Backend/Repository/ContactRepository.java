@@ -1,4 +1,7 @@
 package com.example.Backend.Repository;
 
-public interface ContactRepository {
+import com.example.Backend.Model.Contact;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface ContactRepository extends MongoRepository<Contact, Long>{
 }
