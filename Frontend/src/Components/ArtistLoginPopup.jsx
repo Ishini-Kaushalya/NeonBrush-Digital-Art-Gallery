@@ -13,6 +13,7 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
