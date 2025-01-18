@@ -19,12 +19,12 @@ package com.example.Backend.Controller;
 
 public class ContactController {
     @Autowired
-    private ContactService galleryService;
+    private ContactService contactService;
     public ContactController() {
     }
     @PostMapping
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
-        Contact createdContact = this.galleryService.createContact(contact);
+        Contact createdContact = this.contactService.createContact(contact);
         return ResponseEntity.ok(createdContact);
     }
     @GetMapping({"/{id}"})
@@ -48,11 +48,6 @@ public class ContactController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/type/{type}")
-    public ResponseEntity<List<Contact>> getContactByType(@PathVariable("type") String type) {
-        List<Contact> contact = contactService.getContactByType(type);
-        return new ResponseEntity<>(contact, HttpStatus.OK);
-    }
 }
 
 
