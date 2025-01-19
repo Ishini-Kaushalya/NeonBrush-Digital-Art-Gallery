@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Contact {
     @Id
     private long contactId;
-    private String fullName;
+    private String userName;
     private String email;
     private String phoneNumber;
     private String message;
@@ -20,12 +20,12 @@ public class Contact {
         this.contactId = contactId;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
