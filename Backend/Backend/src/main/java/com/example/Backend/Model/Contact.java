@@ -6,26 +6,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Contact")
 public class Contact {
     @Id
-    private long contactId;
-    private String fullName;
+    private String contactId;
+    private String userName;
     private String email;
     private String phoneNumber;
     private String message;
 
-    public long getContactId() {
+    public String getContactId() {
         return contactId;
     }
 
-    public void setContactId(long contactId) {
+    public void setContactId(String contactId) {
         this.contactId = contactId;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
