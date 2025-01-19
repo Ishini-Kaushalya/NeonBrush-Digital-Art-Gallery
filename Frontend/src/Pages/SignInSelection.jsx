@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/Common/assets"; // Assuming you have an image in assets
 
-const SignInSelection = ({ setShowLogin }) => {
+const SignInSelection = ({ setShowLogin, setLoginType }) => {
   // Array of images to rotate
   const images = [
     assets.image_SigninSelection1, // Replace with your actual image paths
@@ -26,11 +26,13 @@ const SignInSelection = ({ setShowLogin }) => {
   }, [images]);
 
   const handleUserClick = () => {
-    setShowLogin(true);
+    setLoginType('user');
+    setShowLogin(true); // Trigger login popup
   };
 
   const handleArtistClick = () => {
-    setShowLogin(true);
+    setLoginType('artist');
+    setShowLogin(true); // Trigger login popup
   };
 
   return (

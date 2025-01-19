@@ -4,7 +4,7 @@ import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
 import SignInSelection from "./Pages/SignInSelection";
 import { useState } from "react";
-import LoginPopup from "./Components/LoginPopup";
+
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ArtDetail from "./Pages/ArtDetail";
@@ -14,29 +14,38 @@ import PaymentPage from './Pages/Payment';
 import ArtistProfile from './Pages/ArtistProfile';
 import AddArtItem from './Pages/AddArtItem'; // Import AddArtItem page
 
+import ArtistLoginPopup from './Components/ArtistLoginPopup'; // Import ArtistLoginPopup
+import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPopup
+
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const [loginType, setLoginType] = useState(""); // Holds the type of login: 'artist' or 'user'
   return (
     <>
-      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : null}
+  {/* Display the login popup based on the loginType */}
+  {showLogin && (loginType === "artist" ? (
+        <ArtistLoginPopup setShowLogin={setShowLogin} />
+      ) : (
+        <UserLoginPopup setShowLogin={setShowLogin} />
+      ))}
+
       <div className='app'>
-        <Navbar setShowLogin={setShowLogin} />
+        {/* Navbar with login control */}
+        <Navbar setShowLogin={setShowLogin} setLoginType={setLoginType} />
+
+        {/* Define all the routes */}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/products' element={<Products />} />
           <Route path='/cart' element={<Cart />} />
-          <Route
-            path='/sign-in'
-            element={<SignInSelection setShowLogin={setShowLogin} />}
-          />
+          <Route path='/sign-in' element={<SignInSelection setShowLogin={setShowLogin} setLoginType={setLoginType} />} />
           <Route path='/art-detail' element={<ArtDetail />} />{" "}
-          {/* ArtDetail Route */}
           <Route path='/artist-detail/:id' element={<ArtistDetail />} />
           <Route path='/contact-us' element={<ContactUs />} />{" "}
-          {/* Contact Us Route */}
           <Route path='/payment' element={<PaymentPage />} />
           <Route path="/artist-profile" element={<ArtistProfile />} />
           <Route path="/add-art" element={<AddArtItem />} /> {/* Add Art Item Route */}
+          <Route path='/payment' element={<PaymentPage />} />
         </Routes>
       </div>
       <Footer />
