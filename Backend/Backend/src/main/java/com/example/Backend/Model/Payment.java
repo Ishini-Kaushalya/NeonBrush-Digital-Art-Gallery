@@ -3,81 +3,91 @@ package com.example.Backend.Model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.util.Map;
+
 @Document(collection = "payment")
 public class Payment {
 
     @Id
-    private long payment_id;
-    private long order_id;
-    private long user_id;
-    private double amount;
-    private String payment_method;
-    private String payment_status;
-    private String billing_address;
-    private Date created_at;
+    private String payment_id;
+    private String userName;
+    private String address;
+    private String nameOnCard;
+    private String cardNumber;
+    private String expirationDate;
+    private String CVV;
+    private Map<String, Integer> cartItems; // Key: Item ID, Value: Quantity
+    private double totalAmount;
 
-    public Date getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
-    }
-
-    public long getPayment_id() {
+    public String getPayment_id() {
         return payment_id;
     }
 
-    public void setPayment_id(long payment_id) {
+    public void setPayment_id(String payment_id) {
         this.payment_id = payment_id;
     }
 
-    public long getOrder_id() {
-        return order_id;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setOrder_id(long order_id) {
-        this.order_id = order_id;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public double getAmount() {
-        return amount;
+    public String getNameOnCard() {
+        return nameOnCard;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setNameOnCard(String nameOnCard) {
+        this.nameOnCard = nameOnCard;
     }
 
-    public String getPayment_method() {
-        return payment_method;
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public void setPayment_method(String payment_method) {
-        this.payment_method = payment_method;
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
-    public String getPayment_status() {
-        return payment_status;
+    public String getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setPayment_status(String payment_status) {
-        this.payment_status = payment_status;
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
-    public String getBilling_address() {
-        return billing_address;
+    public String getCVV() {
+        return CVV;
     }
 
-    public void setBilling_address(String billing_address) {
-        this.billing_address = billing_address;
+    public void setCVV(String CVV) {
+        this.CVV = CVV;
+    }
+
+    public Map<String, Integer> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(Map<String, Integer> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }
