@@ -45,7 +45,7 @@ const App = () => {
           <Route path='/payment' element={<PaymentPage />} />
           <Route path="/artist-profile" element={<ArtistProfile />} />
           <Route path="/add-art" element={<AddArtItem />} /> {/* Add Art Item Route */}
-          <Route path='/payment' element={<PaymentPage />} />
+       
         </Routes>
       </div>
       <Footer />
