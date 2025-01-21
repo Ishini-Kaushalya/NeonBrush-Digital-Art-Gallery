@@ -1,53 +1,96 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
+import axios from "axios";
 
 const PaymentPage = () => {
   const { cartItems, art_list, getTotalCartAmount } = useContext(StoreContext);
   const [paymentDetails, setPaymentDetails] = useState({
+    userName: "", // Automatically filled with signed-in user's name
+    address: "",
     name: "",
     cardNumber: "",
     expiration: "",
     cvv: "",
-    userName: "", // Added user name
-    address: "", // Added address
   });
-
   const navigate = useNavigate();
+
+  // Retrieve token and username from sessionStorage
+  const token = sessionStorage.getItem("authToken");
+  const storedUserName = sessionStorage.getItem("userName");
+
+  // Automatically set the userName from session storage
+  useEffect(() => {
+    if (storedUserName) {
+      setPaymentDetails((prev) => ({ ...prev, userName: storedUserName }));
+    }
+  }, [storedUserName]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPaymentDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPaymentDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (
+      paymentDetails.userName &&
+      paymentDetails.address &&
       paymentDetails.name &&
       paymentDetails.cardNumber &&
       paymentDetails.expiration &&
-      paymentDetails.cvv &&
-      paymentDetails.userName &&
-      paymentDetails.address
+      paymentDetails.cvv
     ) {
-      alert("Payment Successful!");
-      navigate("/order");  // Redirect to order confirmation page
+      try {
+        const paymentPayload = {
+          user_id: "USER_ID", // Replace with actual user ID if available
+          amount: getTotalCartAmount(),
+          payment_method: "Card", // Add logic for other methods if required
+          payment_status: "Pending",
+          billing_address: paymentDetails.address,
+          created_at: new Date(),
+          cartItems: art_list
+            .filter((item) => cartItems[item._id] > 0)
+            .map((item) => ({
+              id: item._id,
+              quantity: cartItems[item._id],
+              price: item.price,
+            })),
+        };
+
+        const response = await axios.post(
+          "http://localhost:8080/api/payment",
+          paymentPayload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          alert("Payment Successful!");
+          navigate("/order"); // Redirect to the order confirmation page
+        }
+      } catch (error) {
+        alert(
+          error.response?.data?.message ||
+            "An error occurred while processing your payment."
+        );
+      }
     } else {
       alert("Please fill in all payment details.");
     }
   };
 
   const handleBack = () => {
-    navigate(-1);  // Go back to the previous page
+    navigate(-1);
   };
 
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
       <h2 className="text-2xl font-semibold text-black">Payment Details</h2>
-      
       <div className="payment-form space-y-6 mt-6">
         <input
           type="text"
@@ -56,6 +99,7 @@ const PaymentPage = () => {
           value={paymentDetails.userName}
           onChange={handleChange}
           className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+          readOnly
         />
         <input
           type="text"
@@ -100,7 +144,6 @@ const PaymentPage = () => {
           />
         </div>
       </div>
-
       <div className="cart-summary mt-8">
         <h3 className="font-semibold text-gray-800">Cart Summary</h3>
         <div className="space-y-4 mt-4">
@@ -109,7 +152,9 @@ const PaymentPage = () => {
               return (
                 <div key={item._id} className="grid grid-cols-2 items-center">
                   <p className="text-gray-600">{item.name}</p>
-                  <p className="text-gray-600">Rs.{item.price * cartItems[item._id]}</p>
+                  <p className="text-gray-600">
+                    Rs.{item.price * cartItems[item._id]}
+                  </p>
                 </div>
               );
             }
@@ -117,25 +162,20 @@ const PaymentPage = () => {
           })}
         </div>
         <div className="total mt-4 flex justify-between text-gray-800">
-          <p className="font-bold">Total: </p>
+          <p className="font-bold">Total:</p>
           <p>Rs.{getTotalCartAmount()}</p>
         </div>
       </div>
-
       <div className="flex justify-between items-center mt-8">
-        {/* Back Button */}
         <button
           onClick={handleBack}
-          className="text-black py-3 px-4 rounded-lg flex items-center justify-centerfocus:outline-none  "
+          className="text-black py-3 px-4 rounded-lg flex items-center justify-center focus:outline-none"
         >
           <IoChevronBackCircleOutline size={24} className="mr-2" />
-          
         </button>
-
-        {/* Complete Payment Button */}
         <button
           onClick={handlePayment}
-          className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950 "
+          className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950"
         >
           Complete Payment
         </button>

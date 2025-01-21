@@ -73,8 +73,9 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
       if (response.status === 200) {
         const token = response.data.token;
 
-        // Save token in sessionStorage
+        // Save token and username in sessionStorage
         sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("artistUsername", formData.username);
 
         if (formState === "Sign Up") {
           setSuccessMessage("Artist registered successfully!"); // Show success message

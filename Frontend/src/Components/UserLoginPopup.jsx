@@ -72,6 +72,7 @@ const UserLoginPopup = ({ setShowLogin }) => {
       if (response.status === 200) {
         const { token } = response.data; // Assume token is returned in response.data
         sessionStorage.setItem("authToken", token); // Save token to sessionStorage
+        sessionStorage.setItem("userName", formData.username); // Save username to sessionStorage
 
         if (formState === "Sign Up") {
           setSuccessMessage("User registered successfully!");
