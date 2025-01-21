@@ -1,21 +1,23 @@
 package com.example.Backend.Security.JWT;
 
-        import java.security.Key;
-        import java.util.Date;
+import java.security.Key;
+import java.util.Date;
 
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.security.core.Authentication;
-        import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
-        import com.example.Backend.Security.Services.UserDetailsImpl;
+import com.example.Backend.Security.Services.UserDetailsImpl;
 
-        import io.jsonwebtoken.*;
-        import io.jsonwebtoken.io.Decoders;
-        import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
 @Component
 public class JwtUtils {
+
         private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
         @Value("${CRUD.app.jwtSecret}")
@@ -24,29 +26,52 @@ public class JwtUtils {
         @Value("${CRUD.app.jwtExpirationMs}")
         private int jwtExpirationMs;
 
+        /**
+         * Generates a JWT token for the authenticated user
+         *
+         * @param authentication The authentication object containing user details
+         * @return The generated JWT token
+         */
         public String generateJwtToken(Authentication authentication) {
-
                 UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
                 return Jwts.builder()
-                        .setSubject((userPrincipal.getUsername()))
+                        .setSubject(userPrincipal.getUsername())
                         .setIssuedAt(new Date())
                         .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                         .signWith(key(), SignatureAlgorithm.HS256)
                         .compact();
         }
 
+        /**
+         * Returns the key used for signing the JWT
+         *
+         * @return The key for signing the JWT
+         */
         private Key key() {
                 return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
         }
 
+        /**
+         * Extracts the username (subject) from the JWT token
+         *
+         * @param token The JWT token
+         * @return The username from the token
+         */
         public String getUserNameFromJwtToken(String token) {
                 return Jwts.parserBuilder().setSigningKey(key()).build()
                         .parseClaimsJws(token).getBody().getSubject();
         }
 
+        /**
+         * Validates the JWT token and checks for potential errors
+         *
+         * @param authToken The JWT token to be validated
+         * @return True if the token is valid, false otherwise
+         */
         public boolean validateJwtToken(String authToken) {
                 try {
+                        // Parse and validate the JWT token
                         Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);
                         return true;
                 } catch (MalformedJwtException e) {
@@ -62,4 +87,3 @@ public class JwtUtils {
                 return false;
         }
 }
-
