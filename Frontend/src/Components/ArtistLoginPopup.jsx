@@ -70,14 +70,21 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (formState === "Sign Up" && response.status === 200) {
-        setSuccessMessage("Artist registered successfully!"); // Show success message
-        setTimeout(() => navigate("/artist-profile"), 2000); // Navigate after 2 seconds
-      }
+      if (response.status === 200) {
+        const token = response.data.token;
 
-      if (formState === "Login" && response.status === 200) {
-        setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
-        setTimeout(() => navigate("/artist-profile"), 2000); // Navigate to artist profile after 2 seconds
+        // Save token in sessionStorage
+        sessionStorage.setItem("authToken", token);
+
+        if (formState === "Sign Up") {
+          setSuccessMessage("Artist registered successfully!"); // Show success message
+          setTimeout(() => navigate("/artist-profile"), 2000); // Navigate after 2 seconds
+        }
+
+        if (formState === "Login") {
+          setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
+          setTimeout(() => navigate("/artist-profile"), 2000); // Navigate to artist profile after 2 seconds
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
