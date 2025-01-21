@@ -20,12 +20,15 @@ const PaymentPage = () => {
   const token = sessionStorage.getItem("authToken");
   const storedUserName = sessionStorage.getItem("userName");
 
-  // Automatically set the userName from session storage
   useEffect(() => {
+    // If no token is found or the token is invalid, redirect to login page
+    if (!token) {
+      navigate("/UserLoginPopup");
+    }
     if (storedUserName) {
       setPaymentDetails((prev) => ({ ...prev, userName: storedUserName }));
     }
-  }, [storedUserName]);
+  }, [token, storedUserName, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,10 +77,22 @@ const PaymentPage = () => {
           navigate("/order"); // Redirect to the order confirmation page
         }
       } catch (error) {
-        alert(
-          error.response?.data?.message ||
-            "An error occurred while processing your payment."
-        );
+        if (error.response) {
+          // Error response from server
+          console.error("Error response:", error.response);
+          alert(
+            error.response?.data?.message ||
+              "An error occurred while processing your payment."
+          );
+        } else if (error.request) {
+          // No response received
+          console.error("Error request:", error.request);
+          alert("No response received from server. Please try again later.");
+        } else {
+          // Error in setting up request
+          console.error("Error message:", error.message);
+          alert("An error occurred while setting up the payment request.");
+        }
       }
     } else {
       alert("Please fill in all payment details.");
