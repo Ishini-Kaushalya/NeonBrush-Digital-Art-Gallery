@@ -5,20 +5,28 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Artist")
 public class Artist {
     @Id
-    private long artistId;
+    private String artistId;
     private String firstName;
     private String lastName;
     private String userName;
     private String email;
     private String password;
-    private String types;
     private String description;
+    private String imageUrl;
 
-    public long getArtistId() {
+    public String getArtistId() {
         return artistId;
     }
 
-    public void setArtistId(long artistId) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setArtistId(String artistId) {
         this.artistId = artistId;
     }
 
@@ -62,14 +70,6 @@ public class Artist {
         this.password = password;
     }
 
-    public String getTypes() {
-        return types;
-    }
-
-    public void setTypes(String types) {
-        this.types = types;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -77,7 +77,4 @@ public class Artist {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-
 }
