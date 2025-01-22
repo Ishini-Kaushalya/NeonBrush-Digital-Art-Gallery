@@ -71,7 +71,7 @@ public class GalleryController {
     }
 
     @GetMapping({ "/{id}" })
-    public ResponseEntity<Gallery> getGalleryById(@PathVariable long id) {
+    public ResponseEntity<Gallery> getGalleryById(@PathVariable String id) {
         Gallery gallery = this.galleryService.getGalleryById(id);
         return gallery != null ? ResponseEntity.ok(gallery) : ResponseEntity.notFound().build();
     }
@@ -83,20 +83,20 @@ public class GalleryController {
     }
 
     @PutMapping({ "/{id}" })
-    public ResponseEntity<Gallery> updateGallery(@PathVariable long id, @RequestBody Gallery gallery) {
+    public ResponseEntity<Gallery> updateGallery(@PathVariable String id, @RequestBody Gallery gallery) {
         Gallery updatedGallery = this.galleryService.updateGallery(id, gallery);
         return updatedGallery != null ? ResponseEntity.ok(updatedGallery) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping({ "/{id}" })
-    public ResponseEntity<Void> deleteGallery(@PathVariable long id) {
+    public ResponseEntity<Void> deleteGallery(@PathVariable String id) {
         this.galleryService.deleteGallery(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/type/{type}")
-    public ResponseEntity<List<Gallery>> getGalleryByType(@PathVariable("type") String type) {
-        List<Gallery> gallery = galleryService.getGalleryByType(type);
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Gallery>> getGalleryByCategory(@PathVariable("category") String category) {
+        List<Gallery> gallery = galleryService.getGalleryByCategory(category);
         return new ResponseEntity<>(gallery, HttpStatus.OK);
     }
 }

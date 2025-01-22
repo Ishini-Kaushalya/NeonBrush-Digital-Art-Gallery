@@ -17,7 +17,7 @@ public class GalleryServiceImpl implements GalleryService{
         return galleryRepository.save(gallery);
     }
     @Override
-    public Gallery getGalleryById(long id) {
+    public Gallery getGalleryById(String id) {
         Optional<Gallery> gallery = galleryRepository.findById(id);
         return gallery.orElse(null);
     }
@@ -26,20 +26,20 @@ public class GalleryServiceImpl implements GalleryService{
         return galleryRepository.findAll();
     }
     @Override
-    public Gallery updateGallery(long id, Gallery gallery) {
+    public Gallery updateGallery(String id, Gallery gallery) {
         if (galleryRepository.existsById(id)) { gallery.setObject_Id(id);
             return galleryRepository.save(gallery);
         }
         return null; // Return null or throw an exception if not found
     }
     @Override
-    public void deleteGallery(long id) {
+    public void deleteGallery(String id) {
         galleryRepository.deleteById(id);
     }
 
     @Override
-    public List<Gallery> getGalleryByType(String type) {
-        return galleryRepository.findByType(type);
+    public List<Gallery> getGalleryByCategory(String category) {
+        return galleryRepository.findByCategory(category);
     }
 
 

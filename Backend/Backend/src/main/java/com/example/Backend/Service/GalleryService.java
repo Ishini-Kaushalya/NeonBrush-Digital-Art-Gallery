@@ -4,9 +4,9 @@ import com.example.Backend.Model.Gallery;
 import java.util.List;
 public interface GalleryService {
     Gallery createGallery(Gallery gallery);
-    Gallery getGalleryById(long id);
+    Gallery getGalleryById(String id);
     List<Gallery> getAllGallery();
-    Gallery updateGallery(long id, Gallery gallery);
-    void deleteGallery(long id);
-    List<Gallery> getGalleryByType(String type);
+    Gallery updateGallery(String id, Gallery gallery);
+    void deleteGallery(String id);
+    List<Gallery> getGalleryByCategory(String category);
 }
