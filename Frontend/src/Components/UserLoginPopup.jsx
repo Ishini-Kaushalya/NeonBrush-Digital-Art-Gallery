@@ -70,9 +70,18 @@ const UserLoginPopup = ({ setShowLogin }) => {
       });
 
       if (response.status === 200) {
-        const { token } = response.data; // Assume token is returned in response.data
-        sessionStorage.setItem("authToken", token); // Save token to sessionStorage
-        sessionStorage.setItem("userName", formData.username); // Save username to sessionStorage
+        //console.log("1" + response.data.accessToken);
+        const token  = response.data.accessToken;
+        console.log("1" + token);
+        localStorage.setItem("accessToken", JSON.stringify(token));
+        const token3=localStorage.getItem("accessToken");
+        const token2 = JSON.parse(token3);
+        console.log("2" + token3);
+        //const { token } = response.data.accessToken; // Assume token is returned in response.data
+        //sessionStorage.setItem("accessToken", token); // Save token to sessionStorage
+        //sessionStorage.setItem("userName", formData.username); // Save username to sessionStorage
+        //const token2 = JSON.parse(sessionStorage.getItem("accessToken"));
+        //console.log("3" + token2);
 
         if (formState === "Sign Up") {
           setSuccessMessage("User registered successfully!");

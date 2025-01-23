@@ -17,7 +17,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
 
   // Retrieve token and username from sessionStorage
-  const token = sessionStorage.getItem("authToken");
+  const token = sessionStorage.getItem("accessToken");
   const storedUserName = sessionStorage.getItem("userName");
 
   useEffect(() => {
