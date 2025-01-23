@@ -48,7 +48,7 @@ const Products = () => {
           <ArtItem
             key={art._id}
             id={art._id}
-            name={art.name}
+            name={art.title}
             price={art.price}
             description={art.description}
             image={art.image}

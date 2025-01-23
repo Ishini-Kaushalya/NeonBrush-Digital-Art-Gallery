@@ -103,9 +103,13 @@ const AddArtItem = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/api/galleries", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/galleries",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       setArtItems((prevItems) => [...prevItems, response.data]);
       handleClear();

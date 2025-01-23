@@ -27,7 +27,6 @@ import org.springframework.http.HttpStatus;
 public class GalleryController {
     @Autowired
     private GalleryService galleryService;
-    private static final String IMAGE_FOLDER = "src/main/resources/static/images/";
 
     public GalleryController() {
     }
@@ -44,10 +43,13 @@ public class GalleryController {
             // Handle the image upload if an image is provided
             if (image != null && !image.isEmpty()) {
                 // Define the folder where images will be stored
-                String folderPath = "src/main/resources/static/images/";
+                String folderPath = System.getProperty("user.dir") + "/uploaded-images/";
                 File folder = new File(folderPath);
                 if (!folder.exists()) {
                     folder.mkdirs();
+                }
+                if (!folder.exists() && !folder.mkdirs()) {
+                    throw new IOException("Failed to create directory: " + folderPath);
                 }
 
                 // Save the image file
@@ -57,7 +59,7 @@ public class GalleryController {
                 image.transferTo(destinationFile);
 
                 // Generate the image URL
-                String imageUrl = "/images/" + fileName;
+                String imageUrl = "/uploaded-images/" + fileName;
                 gallery.setImage_url(imageUrl);
             }
 
@@ -66,6 +68,7 @@ public class GalleryController {
             return ResponseEntity.ok(createdGallery);
 
         } catch (IOException e) {
+            e.printStackTrace(); // Log the error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
