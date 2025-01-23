@@ -78,6 +78,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/api/contacts/**").permitAll()
                         .requestMatchers("//api/artist/**").permitAll()
+                        .requestMatchers("//api/galleries/**").permitAll()
                         .requestMatchers(
                                 "/v2/api-docs",       // Swagger v2 API docs
                                 "/v3/api-docs/**",    // Swagger v3 API docs
