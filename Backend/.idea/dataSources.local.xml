@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-243.23654.117">
+    <data-source name="Gallery@artwork.qutvz.mongodb.net" uuid="9bab5c0a-cfd1-4676-8690-ba8f86740cdb">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MONGO" />
+      <user-name>amikaushalya</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>
