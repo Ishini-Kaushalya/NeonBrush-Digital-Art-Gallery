@@ -1,18 +1,28 @@
 import React, {useContext, useState } from "react";
 import { assets } from "../assets/Common/assets.js";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { StoreContext } from '../Context/StoreContext.jsx';
 import { TbBasketFilled } from "react-icons/tb";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
-  const  {getTotalCartAmount} =useContext(StoreContext)
+  const  {getTotalCartAmount} =useContext(StoreContext);
+  const navigate = useNavigate();
+
+  const handleAdminClick = () => {
+    const password = prompt('Enter Admin Password:');
+    if (password === '454545') {
+      navigate('/admin');
+    } else {
+      alert('Incorrect password');
+    }
+  };
 
   return (
     <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
       <Link to='/'>
-        <img src={assets.logo} alt='' className='w-[80px]' />
+        <img src={assets.logo} alt='Logo' className='w-[80px]' />
       </Link>
       <ul className='flex gap-12 text-[#49557e] text-lg'>
         <Link
@@ -42,6 +52,13 @@ const Navbar = () => {
         >
           Contact us
         </Link>
+         {/* Admin Button */}
+         <button
+          onClick={handleAdminClick}
+          className="bg-transparent text-[#49557e] text-base border-2 rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f2f7f2] hover:border-[#38bdf8]"
+        >
+          Admin
+        </button>
       </ul>
       <div className='flex items-center gap-10'>
         {/* <img src={assets.search_icon} alt='' /> */}
