@@ -1,6 +1,6 @@
-import React, {useContext, useState } from "react";
+import React, {useContext, useState,useEffect } from "react";
 import { assets } from "../assets/Common/assets.js";
-import { Link} from "react-router-dom";
+import { Link,useLocation} from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { StoreContext } from '../Context/StoreContext.jsx';
 import { TbBasketFilled } from "react-icons/tb";
@@ -9,8 +9,24 @@ const Navbar = () => {
   const [menu, setMenu] = useState("home");
   const  {getTotalCartAmount} =useContext(StoreContext);
   
-
+  const location = useLocation();
  
+   // Update menu state based on the current location (URL)
+   useEffect(() => {
+    if (location.pathname === '/') {
+      setMenu('home');
+    } else if (location.pathname === '/products') {
+      setMenu('arts');
+    } else if (location.pathname === '/contact-us') {
+      setMenu('contact-us');
+    } else if (location.pathname === '/cart') {
+      setMenu('cart');
+    } else if (location.pathname === '/sign-in') {
+      setMenu('sign-in');
+    } else if (location.pathname === '/artist-profile') {
+      setMenu('artist-profile');
+    }
+  }, [location.pathname]);
 
   return (
     <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
@@ -22,7 +38,7 @@ const Navbar = () => {
           to='/'
           onClick={() => setMenu("home")}
           className={`cursor-pointer ${
-            menu === "home" ? "border-b-2 pb-1 border-[#49557e]" : ""
+            menu === "home" ? "border-b-2 pb-1 border-sky-600" : ""
           }`}
         >
           Home
@@ -31,7 +47,7 @@ const Navbar = () => {
           to='/products'
           onClick={() => setMenu("menu")}
           className={`cursor-pointer ${
-            menu === "menu" ? "border-b-2 pb-1 border-[#49557e]" : ""
+            menu === "arts" ? "border-b-2 pb-1 border-sky-600" : ""
           }`}
         >
           All Arts
@@ -40,15 +56,15 @@ const Navbar = () => {
           to='/contact-us'
           onClick={() => setMenu("contact-us")}
           className={`cursor-pointer ${
-            menu === "contact-us" ? "border-b-2 pb-1 border-[#49557e]" : ""
+            menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
           }`}
         >
           Contact us
         </Link>
         
       </ul>
+
       <div className='flex items-center gap-10'>
-        {/* <img src={assets.search_icon} alt='' /> */}
         <div className='relative'>
         <Link to="/cart" className="cursor-pointer">
           <TbBasketFilled className="w-[30px] h-[30px] text-gray-700" />
