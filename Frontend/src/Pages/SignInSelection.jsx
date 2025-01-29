@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/Common/assets"; // Assuming you have an image in assets
+import { useNavigate } from 'react-router-dom';
+
 
 const SignInSelection = ({ setShowLogin, setLoginType }) => {
+
+  const navigate = useNavigate();
+  const [showPasswordPrompt, setShowPasswordPrompt] = useState(false);
+  const [password, setPassword] = useState("");
+  
+  const validPasswords = ["121212", "121212", "121212"];
+
   // Array of images to rotate
   const images = [
     assets.image_SigninSelection1, // Replace with your actual image paths
@@ -35,18 +44,32 @@ const SignInSelection = ({ setShowLogin, setLoginType }) => {
     setShowLogin(true); // Trigger login popup
   };
 
+  const handleAdminClick = () => {
+    setShowPasswordPrompt(true);
+  };
+
+  const handlePasswordSubmit = () => {
+    if (validPasswords.includes(password)) {
+      localStorage.setItem("isAdminAuthenticated", "true"); // Store login status
+      navigate("/admin");
+    } else {
+      alert("Incorrect password!");
+      setPassword("");
+    }
+  };
+
   return (
-    <div className='flex min-h-screen'>
+    <div className='flex min-h-screen '>
       {/* Left Side: Image */}
       <div
-        className='w-3/5 h-[70vh] bg-cover mt-10 bg-center flex items-center justify-center'
+        className='w-3/5 h-[85vh] bg-cover mt-10 bg-center flex items-center justify-center'
         style={{ backgroundImage: `url(${currentImage})` }}
       >
         {/* Add any additional content here */}
       </div>
 
       {/* Right Side: Buttons */}
-      <div className='w-3/5 flex items-center justify-center p-4'>
+      <div className='w-3/5 flex h-[90vh] items-center justify-center p-4'>
         <div className='bg-white rounded-lg shadow-lg p-6 w-full max-w-md'>
           <h2 className='text-4xl font-semibold mb-4'>Welcome to NeonBrush</h2>
           <p className='text-lg text-gray-700 mb-6'>
@@ -61,22 +84,51 @@ const SignInSelection = ({ setShowLogin, setLoginType }) => {
             Select Account Type
           </h4>
 
-          <div className='flex gap-4'>
+          <div className='flex flex-col gap-4'>
             <button
               onClick={handleUserClick}
-              className='w-1/2 py-3 bg-[#08090a] text-white text-lg rounded-full border border-none transition duration-300 hover:bg-transparent hover:text-black hover:border-black'
+              className='px-6 py-2 rounded-full bg-sky-900 text-white hover:bg-sky-950 transition duration-300'
             >
               User
             </button>
             <button
               onClick={handleArtistClick}
-              className='w-1/2 py-3 bg-[#08090a] text-white text-lg rounded-full border border-none transition duration-300 hover:bg-transparent hover:text-black hover:border-black'
+              className='px-6 py-2 rounded-full bg-sky-700 text-white hover:bg-sky-800 transition duration-300'
             >
               Artist
+            </button>
+            <button
+              onClick={handleAdminClick}
+              className="px-6 py-2 rounded-full bg-sky-600 text-white hover:bg-sky-700 transition duration-300"
+            >
+              Admin
             </button>
           </div>
         </div>
       </div>
+
+      {showPasswordPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg w-[350px]">
+            <h2 className="text-lg font-bold mb-4">Enter Admin Password</h2>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border p-2 rounded w-full mb-4"
+              placeholder="Enter password"
+            />
+           <div className="flex justify-center">
+            <button
+              onClick={handlePasswordSubmit}
+              className="px-6 py-2 rounded-full  bg-sky-600 text-white hover:bg-blue-700 transition duration-300"
+            >
+              Submit
+            </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
