@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { artists, art_list } from "../assets/Common/assets";
 
-const Admin = () => {
+const AdminPage = () => {
   const [artistList, setArtistList] = useState(artists);
   const [artList, setArtList] = useState(art_list);
   const [messages, setMessages] = useState([]);
@@ -12,15 +12,21 @@ const Admin = () => {
     setMessages(storedMessages);
   }, []);
 
-  // Handle delete artist
+  // Handle delete artist with confirmation
   const deleteArtist = (id) => {
-    setArtistList((prev) => prev.filter((artist) => artist._id !== id));
-    setArtList((prev) => prev.filter((art) => art.ownerName.trim() !== id.trim()));
+    const confirmDelete = window.confirm("Are you sure you want to delete this artist?");
+    if (confirmDelete) {
+      setArtistList((prev) => prev.filter((artist) => artist._id !== id));
+      setArtList((prev) => prev.filter((art) => art.ownerName.trim() !== id.trim()));
+    }
   };
 
-  // Handle delete art
+  // Handle delete art with confirmation
   const deleteArt = (artId) => {
-    setArtList((prev) => prev.filter((art) => art._id !== artId));
+    const confirmDelete = window.confirm("Are you sure you want to delete this artwork?");
+    if (confirmDelete) {
+      setArtList((prev) => prev.filter((art) => art._id !== artId));
+    }
   };
 
   // Handle adding a message when an artist adds art
@@ -117,4 +123,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default AdminPage;
