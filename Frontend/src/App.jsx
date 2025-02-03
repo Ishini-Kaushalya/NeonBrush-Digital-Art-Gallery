@@ -13,7 +13,7 @@ import ContactUs from "./Pages/ContactUs";
 import PaymentPage from './Pages/Payment';
 import ArtistProfile from './Pages/ArtistProfile';
 import AddArtItem from './Pages/AddArtItem'; // Import AddArtItem page
-
+import AdminLoginPopup from './Components/AdminLoginPopup';
 import ArtistLoginPopup from './Components/ArtistLoginPopup'; // Import ArtistLoginPopup
 import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPopup
 import Admin from "./Pages/Admin";
@@ -24,11 +24,15 @@ const App = () => {
   return (
     <>
   {/* Display the login popup based on the loginType */}
-  {showLogin && (loginType === "artist" ? (
-        <ArtistLoginPopup setShowLogin={setShowLogin} />
-      ) : (
-        <UserLoginPopup setShowLogin={setShowLogin} />
-      ))}
+  {showLogin && (
+        loginType === "artist" ? (
+          <ArtistLoginPopup setShowLogin={setShowLogin} />
+        ) : loginType === "admin" ? (
+          <AdminLoginPopup setShowLogin={setShowLogin} />
+        ) : (
+          <UserLoginPopup setShowLogin={setShowLogin} />
+        )
+      )}
 
       <div className='app'>
         {/* Navbar with login control */}
