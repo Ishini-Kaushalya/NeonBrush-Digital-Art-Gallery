@@ -1,25 +1,5 @@
 package com.example.Backend.Controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.Backend.Model.ERole;
 import com.example.Backend.Model.Role;
 import com.example.Backend.Model.User;
@@ -31,6 +11,21 @@ import com.example.Backend.Repository.RoleRepository;
 import com.example.Backend.Repository.UserRepository;
 import com.example.Backend.Security.JWT.JwtUtils;
 import com.example.Backend.Security.Services.UserDetailsImpl;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -94,33 +89,36 @@ public class AuthController {
         Set<String> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
-        String successMessage = "User registered successfully!";
-
-        if (strRoles == null || strRoles.isEmpty()) {
-            // Default to ROLE_USER if no roles are provided
+        if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
-            for (String role : strRoles) {
+            strRoles.forEach(role -> {
                 switch (role) {
                     case "artist":
-                        Role artistRole = roleRepository.findByName(ERole.ROLE_ARTIST)
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ARTIST)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(artistRole);
-                        successMessage = "Artist registered successfully!";
+                        roles.add(adminRole);
+
+                        break;
+                    case "admin":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(modRole);
+
                         break;
                     default:
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }
-            }
+            });
         }
 
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse(successMessage));
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }
