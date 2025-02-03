@@ -35,7 +35,7 @@ const PaymentPage = () => {
         };
         await axios.post("http://localhost:8080/api/payment", payload);
         alert("Payment Successful!");
-        navigate("/order");
+        navigate("/products");
       } catch (error) {
         console.error("Payment error:", error);
         alert("Payment failed. Please try again.");
