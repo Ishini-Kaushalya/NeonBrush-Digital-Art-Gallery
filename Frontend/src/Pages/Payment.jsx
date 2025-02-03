@@ -5,12 +5,12 @@ import axios from "axios";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 
 const PaymentPage = () => {
-  const { cartItems, art_list, getTotalCartAmount } = useContext(StoreContext);
+  const { cartItems, getTotalCartAmount } = useContext(StoreContext);
   const [paymentDetails, setPaymentDetails] = useState({
-    name: "",
+    nameOnCard: "",
     cardNumber: "",
-    expiration: "",
-    cvv: "",
+    expirationDate: "",
+    CVV: "",
     userName: "",
     address: "",
   });
@@ -26,14 +26,7 @@ const PaymentPage = () => {
   };
 
   const handlePayment = async () => {
-    if (
-      paymentDetails.name &&
-      paymentDetails.cardNumber &&
-      paymentDetails.expiration &&
-      paymentDetails.cvv &&
-      paymentDetails.userName &&
-      paymentDetails.address
-    ) {
+    if (Object.values(paymentDetails).every((field) => field.trim() !== "")) {
       try {
         const payload = {
           ...paymentDetails,
@@ -78,9 +71,9 @@ const PaymentPage = () => {
         />
         <input
           type="text"
-          name="name"
+          name="nameOnCard"
           placeholder="Name on Card"
-          value={paymentDetails.name}
+          value={paymentDetails.nameOnCard}
           onChange={handleChange}
           className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
         />
@@ -95,17 +88,17 @@ const PaymentPage = () => {
         <div className="flex space-x-4">
           <input
             type="text"
-            name="expiration"
+            name="expirationDate"
             placeholder="Expiration Date"
-            value={paymentDetails.expiration}
+            value={paymentDetails.expirationDate}
             onChange={handleChange}
             className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
           />
           <input
             type="text"
-            name="cvv"
+            name="CVV"
             placeholder="CVV"
-            value={paymentDetails.cvv}
+            value={paymentDetails.CVV}
             onChange={handleChange}
             className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
           />
@@ -114,7 +107,7 @@ const PaymentPage = () => {
       <div className="flex justify-between items-center mt-8">
         <button
           onClick={handleBack}
-          className="text-black py-3 px-4 rounded-lg flex items-center justify-centerfocus:outline-none"
+          className="text-black py-3 px-4 rounded-lg flex items-center justify-center focus:outline-none"
         >
           <IoChevronBackCircleOutline size={24} className="mr-2" />
         </button>
