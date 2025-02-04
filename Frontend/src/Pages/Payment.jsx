@@ -3,6 +3,16 @@ import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
+import { z } from "zod";
+
+const paymentSchema = z.object({
+  nameOnCard: z.string().min(1, "Name on Card is required"),
+  cardNumber: z.string().regex(/^[0-9]{16}$/, "Card Number must be 16 digits"),
+  expirationDate: z.string().min(1, "Expiration Date is required"),
+  CVV: z.string().regex(/^[0-9]{3,4}$/, "CVV must be 3 or 4 digits"),
+  userName: z.string().min(1, "Your Name is required"),
+  address: z.string().min(1, "Address is required"),
+});
 
 const PaymentPage = () => {
   const { cartItems, getTotalCartAmount } = useContext(StoreContext);
@@ -14,35 +24,51 @@ const PaymentPage = () => {
     userName: "",
     address: "",
   });
-
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPaymentDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "cardNumber" || name === "CVV") {
+      if (!/^[0-9]*$/.test(value)) return;
+    }
+    setPaymentDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePayment = async () => {
-    if (Object.values(paymentDetails).every((field) => field.trim() !== "")) {
-      try {
-        const payload = {
-          ...paymentDetails,
-          cartItems,
-          totalAmount: getTotalCartAmount(),
-        };
-        await axios.post("http://localhost:8080/api/payment", payload);
-        alert("Payment Successful!");
-        navigate("/products");
-      } catch (error) {
-        console.error("Payment error:", error);
-        alert("Payment failed. Please try again.");
-      }
-    } else {
-      alert("Please fill in all payment details.");
+    const validationResult = paymentSchema.safeParse(paymentDetails);
+    if (!validationResult.success) {
+      const formattedErrors = validationResult.error.flatten();
+      setErrors(formattedErrors.fieldErrors); // Use flattened errors
+      return;
     }
+    setErrors({});
+    try {
+      const payload = {
+        ...paymentDetails,
+        cartItems,
+        totalAmount: getTotalCartAmount(),
+      };
+      await axios.post("http://localhost:8080/api/payment", payload);
+      setMessage("Payment Successful! Redirecting...");
+      setTimeout(() => navigate("/products"), 2000);
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed. Please try again.");
+    }
+  };
+
+  const handleClear = () => {
+    setPaymentDetails({
+      nameOnCard: "",
+      cardNumber: "",
+      expirationDate: "",
+      CVV: "",
+      userName: "",
+      address: "",
+    });
+    setErrors({});
   };
 
   const handleBack = () => {
@@ -52,56 +78,51 @@ const PaymentPage = () => {
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
       <h2 className="text-2xl font-semibold text-black">Payment Details</h2>
+      {message && <p className="text-green-600 text-lg font-medium text-center mt-4">{message}</p>}
       <div className="payment-form space-y-6 mt-6">
-        <input
-          type="text"
-          name="userName"
-          placeholder="Your Name"
-          value={paymentDetails.userName}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Your Address"
-          value={paymentDetails.address}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
-        <input
-          type="text"
-          name="nameOnCard"
-          placeholder="Name on Card"
-          value={paymentDetails.nameOnCard}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
-        <input
-          type="text"
-          name="cardNumber"
-          placeholder="Card Number"
-          value={paymentDetails.cardNumber}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
+        {[ 
+          { name: "userName", label: "Your Name" },
+          { name: "address", label: "Your Address" },
+          { name: "nameOnCard", label: "Name on Card" },
+          { name: "cardNumber", label: "Card Number" },
+        ].map(({ name, label }) => (
+          <div key={name}>
+            <label className="block text-gray-700 font-medium mb-1">{label}</label>
+            <input
+              type="text"
+              name={name}
+              placeholder={label}
+              value={paymentDetails[name]}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            {errors[name] && <p className="text-red-500 text-sm">{errors[name]}</p>}
+          </div>
+        ))}
         <div className="flex space-x-4">
-          <input
-            type="text"
-            name="expirationDate"
-            placeholder="Expiration Date"
-            value={paymentDetails.expirationDate}
-            onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-          />
-          <input
-            type="text"
-            name="CVV"
-            placeholder="CVV"
-            value={paymentDetails.CVV}
-            onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-          />
+          <div className="w-1/2">
+            <label className="block text-gray-700 font-medium mb-1">Expiration Date</label>
+            <input
+              type="date"
+              name="expirationDate"
+              value={paymentDetails.expirationDate}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            {errors.expirationDate && <p className="text-red-500 text-sm">{errors.expirationDate}</p>}
+          </div>
+          <div className="w-1/2">
+            <label className="block text-gray-700 font-medium mb-1">CVV</label>
+            <input
+              type="text"
+              name="CVV"
+              placeholder="CVV"
+              value={paymentDetails.CVV}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            {errors.CVV && <p className="text-red-500 text-sm">{errors.CVV}</p>}
+          </div>
         </div>
       </div>
       <div className="flex justify-between items-center mt-8">
@@ -110,6 +131,12 @@ const PaymentPage = () => {
           className="text-black py-3 px-4 rounded-lg flex items-center justify-center focus:outline-none"
         >
           <IoChevronBackCircleOutline size={24} className="mr-2" />
+        </button>
+        <button
+          onClick={handleClear}
+          className="w-1/3 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-700"
+        >
+          Clear
         </button>
         <button
           onClick={handlePayment}
