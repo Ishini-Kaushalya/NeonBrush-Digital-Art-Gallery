@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { IoCloseCircleOutline } from "react-icons/io5"; // Import the icon
+import { IoCloseCircleOutline } from "react-icons/io5";
 import { z } from "zod";
 
 const UserLoginPopup = ({ setShowLogin }) => {
@@ -17,7 +17,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
   const [welcomeMessage, setWelcomeMessage] = useState(""); // State for welcome message after login
   const navigate = useNavigate();
 
-  // Define schemas for login and signup
   const loginSchema = z.object({
     username: z.string().min(1, "Username is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
@@ -62,22 +61,26 @@ const UserLoginPopup = ({ setShowLogin }) => {
               username: formData.username,
               email: formData.email,
               password: formData.password,
-              roles: ["user"],
-            } // Role changed to 'user'
+              roles: ["user"], // Role set to 'user'
+            }
           : { username: formData.username, password: formData.password };
 
       const response = await axios.post(apiEndpoint, payload, {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (formState === "Sign Up" && response.status === 200) {
-        setSuccessMessage("User registered successfully!"); // Success message for sign up
-        setTimeout(() => navigate("/products"), 2000); // Navigate after 2 seconds
-      }
+      if (response.status === 200) {
+        
 
-      if (formState === "Login" && response.status === 200) {
-        setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message for login
-        setTimeout(() => navigate("/products"), 2000); // Navigate to user dashboard after 2 seconds
+        if (formState === "Sign Up") {
+          
+          navigate("/products");
+          setShowLogin(false);
+        } else {
+         
+          navigate("/products");
+          setShowLogin(false);
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
