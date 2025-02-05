@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { RiImageAddFill } from "react-icons/ri";
 import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
+import axios from "axios"; // Import axios for making HTTP requests
 
 const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -11,14 +12,16 @@ const ArtistProfile = () => {
   const fileInputRef = React.useRef();
   const navigate = useNavigate();
 
-  // Define Zod schema
+  // Define Zod schema for form validation
   const schema = z.object({
     fullName: z.string().min(1, "Full Name is required"),
     username: z.string().min(1, "Username is required"),
     lastName: z.string().min(1, "Last Name is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     email: z.string().email("Invalid email address"),
-    description: z.string().min(10, "Description must be at least 10 characters"),
+    description: z
+      .string()
+      .min(10, "Description must be at least 10 characters"),
   });
 
   // Handle image upload
@@ -39,25 +42,59 @@ const ArtistProfile = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Collect form data
-    const formData = {
-      fullName: event.target.fullName.value,
-      username: event.target.username.value,
-      lastName: event.target.lastName.value,
-      password: event.target.password.value,
-      email: event.target.email.value,
-      description: event.target.description.value,
-    };
+    const formData = new FormData();
+    formData.append("fullName", event.target.fullName.value);
+    formData.append("username", event.target.username.value);
+    formData.append("lastName", event.target.lastName.value);
+    formData.append("password", event.target.password.value);
+    formData.append("email", event.target.email.value);
+    formData.append("description", event.target.description.value);
 
-    // Validate using Zod
+    // If there's an image, append it to FormData
+    if (profileImage) {
+      const imageFile = fileInputRef.current.files[0];
+      formData.append("profileImage", imageFile);
+    }
+
+    // Validate using Zod schema
     try {
-      schema.parse(formData);
-      console.log("Form data is valid:", formData);
+      schema.parse({
+        fullName: event.target.fullName.value,
+        username: event.target.username.value,
+        lastName: event.target.lastName.value,
+        password: event.target.password.value,
+        email: event.target.email.value,
+        description: event.target.description.value,
+      });
+
       setErrors({});
       setIsProfileComplete(true); // Mark profile as complete
+
+      // Retrieve JWT token from localStorage or context
+      const token = localStorage.getItem("token"); // Replace with actual token storage method
+
+      // Submit the form data to backend using Axios with the token in the Authorization header
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/artist/addArtist", // Replace with your backend URL
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // Necessary for file upload
+              Authorization: `Bearer ${token}`, // Include JWT token
+            },
+          }
+        );
+
+        console.log("Profile created successfully", response.data);
+        // You can navigate or perform other actions after successful submission
+      } catch (error) {
+        console.error("Error while submitting form", error);
+      }
     } catch (err) {
       if (err.errors) {
         // Map Zod errors to state
@@ -217,7 +254,7 @@ const ArtistProfile = () => {
             className="px-4 py-2 text-black focus:outline-none"
             onClick={() => navigate("/")}
           >
-           <MdArrowBackIos className="mr-2" />
+            <MdArrowBackIos className="mr-2" />
           </button>
 
           {/* Other Buttons */}
@@ -234,7 +271,6 @@ const ArtistProfile = () => {
                   ? "bg-sky-800 text-white  hover:bg-sky-950"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              // disabled={!isProfileComplete}
               onClick={() => navigate("/add-art")}
             >
               Add Art
@@ -245,7 +281,6 @@ const ArtistProfile = () => {
                   ? "bg-sky-800 text-white hover:bg-sky-950"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              // disabled={!isProfileComplete}
               onClick={() => {
                 const artistName = document.querySelector(
                   "input[name='fullName']"
