@@ -12,18 +12,36 @@ public class Artist {
     private String email;
     private String password;
     private String description;
-    private String imageUrl;
+    private String imageName;
+    private byte[] imageData;
+    private String contentType;
 
     public String getArtistId() {
         return artistId;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageName() {
+        return imageName;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public void setArtistId(String artistId) {
