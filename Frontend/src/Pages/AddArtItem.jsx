@@ -68,6 +68,14 @@ const AddArtItem = () => {
       });
       setErrors({});
       setArtItems((prevItems) => [...prevItems, artDetails]);
+
+        // Send a notification to the admin
+        const message = {
+          type: "art_added",
+          content: `New artwork titled "${artDetails.title}" has been added by an artist.`,
+        };
+        sendMessageToAdmin(message);
+
       handleClear();
     } catch (validationError) {
       const formattedErrors = validationError.errors.reduce((acc, error) => {
@@ -76,6 +84,14 @@ const AddArtItem = () => {
       }, {});
       setErrors(formattedErrors);
     }
+  };
+
+   // Function to send the message (this could be stored in the state or sent to a backend)
+   const sendMessageToAdmin = (message) => {
+    // Store the message in localStorage or a state management solution
+    let messages = JSON.parse(localStorage.getItem("adminMessages")) || [];
+    messages.push(message);
+    localStorage.setItem("adminMessages", JSON.stringify(messages));
   };
 
   const handleRemove = (indexToRemove) => {
