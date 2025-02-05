@@ -21,10 +21,6 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.save(artist);
     }
 
-    @Override
-    public Artist getArtistById(String id) {
-        Optional<Artist> artist = artistRepository.findById(id);
-        return artist.orElse(null);    }
 
     @Override
     public List<Artist> getAllArtists() {
@@ -50,11 +46,36 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist addArtist(Artist artist, MultipartFile imageFile) throws IOException {
-        artist.setImageName(imageFile.getOriginalFilename());
-        artist.setContentType(imageFile.getContentType());
-        artist.setImageData(imageFile.getBytes());
+    public Artist addArtist(String firstName, String lastName, String userName, String email, String password,
+                            String description, MultipartFile profileImage) {
+
+        Artist artist = new Artist();
+        artist.setFirstName(firstName);
+        artist.setLastName(lastName);
+        artist.setUserName(userName);
+        artist.setEmail(email);
+        artist.setPassword(password); // You should hash the password before saving
+        artist.setDescription(description);
+
+        try {
+            if (profileImage != null && !profileImage.isEmpty()) {
+                // Set the image details
+                artist.setImageName(profileImage.getOriginalFilename());
+                artist.setContentType(profileImage.getContentType());
+                artist.setImageData(profileImage.getBytes()); // Convert the file to byte array
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Save the artist to MongoDB
         return artistRepository.save(artist);
     }
+
+    @Override
+    public Artist getArtistById(String artistId) {
+        return artistRepository.findById(artistId).orElse(null);
+    }
+
 }
 

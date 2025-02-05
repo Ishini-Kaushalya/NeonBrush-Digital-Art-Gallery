@@ -2,14 +2,12 @@ package com.example.Backend.Controller;
 
 import com.example.Backend.Model.Artist;
 import com.example.Backend.Service.ArtistService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +25,6 @@ public class ArtistController {
     public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
         Artist createdArtist = this.artistService.createArtist(artist);
         return ResponseEntity.ok(createdArtist);
-    }
-    @GetMapping({"/{id}"})
-    public ResponseEntity<Artist> getArtistById(@PathVariable String id) {
-        Artist artist = this.artistService.getArtistById(id);
-        return artist != null ? ResponseEntity.ok(artist) :ResponseEntity.notFound().build();
     }
     @GetMapping
     public ResponseEntity<List<Artist>> getAllArtists() {
@@ -56,14 +49,25 @@ public class ArtistController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
     @PostMapping("/addArtist")
-    public ResponseEntity<?> addArtist (@RequestPart("artist") String artistJson, @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Artist artist = objectMapper.readValue(artistJson, Artist.class);
-            Artist artistExist = artistService.addArtist(artist, imageFile);
-            return new ResponseEntity<>(artistExist, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> addArtist(@RequestParam("firstName") String firstName,
+                                       @RequestParam("lastName") String lastName,
+                                       @RequestParam("userName") String userName,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("password") String password,
+                                       @RequestParam("description") String description,
+                                       @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
+        Artist artist = artistService.addArtist(firstName, lastName, userName, email, password, description, profileImage);
+        return ResponseEntity.ok(artist); // Return the saved artist object
+    }
+
+    // Get an artist by ID
+    @GetMapping("/{artistId}")
+    public ResponseEntity<?> getArtistById(@PathVariable("artistId") String artistId) {
+        Artist artist = artistService.getArtistById(artistId);
+        if (artist != null) {
+            return ResponseEntity.ok(artist);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }
