@@ -1,357 +1,158 @@
-// import React, { useContext, useState } from "react";
-// import { StoreContext } from "../Context/StoreContext";
-// import { useNavigate } from "react-router-dom";
-// import { IoChevronBackCircleOutline } from "react-icons/io5";
-// import { z } from "zod";  // Importing Zod for validation
-
-// const PaymentPage = () => {
-//   const { cartItems, art_list, getTotalCartAmount } = useContext(StoreContext);
-//   const [paymentDetails, setPaymentDetails] = useState({
-//     name: "",
-//     cardNumber: "",
-//     expiration: "",
-//     cvv: "",
-//     userName: "",
-//     address: "",
-//   });
-
-//   const navigate = useNavigate();
-
-//   // Define Zod schema for form validation
-//   const paymentDetailsSchema = z.object({
-//     name: z.string().min(1, "Name on card is required"),
-//     // Card number validation: It must be a string of exactly 16 digits
-//     cardNumber: z.string()
-//       .regex(/^\d{16}$/, "Card number must be exactly 16 digits and contain only numbers"), // Regex to check only digits and exact length
-//     expiration: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Expiration date must be in MM/YY format"),
-//     cvv: z.string().regex(/^\d{3}$/, "CVV must be exactly 3 digits"),
-//     userName: z.string().min(1, "Your name is required"),
-//     address: z.string().min(1, "Your address is required"),
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setPaymentDetails((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handlePayment = () => {
-//     // Validate payment details using Zod schema
-//     try {
-//       paymentDetailsSchema.parse(paymentDetails);  // Will throw an error if validation fails
-//       alert("Payment Successful!");
-//       navigate("/order");  // Redirect to order confirmation page
-//     } catch (err) {
-//       if (err instanceof z.ZodError) {
-//         alert(err.errors.map((e) => e.message).join("\n"));
-//       }
-//     }
-//   };
-
-//   const handleBack = () => {
-//     navigate(-1);  // Go back to the previous page
-//   };
-
-//   // Handle clear button click
-//   const handleClear = () => {
-//     setPaymentDetails({
-//       name: "",
-//       cardNumber: "",
-//       expiration: "",
-//       cvv: "",
-//       userName: "",
-//       address: "",
-//     });
-//   };
-
-//   return (
-//     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
-//       <h2 className="text-2xl font-semibold text-black">Payment Details</h2>
-      
-//       <div className="payment-form space-y-6 mt-6">
-//         {/* User Name Input */}
-//         <div className="flex flex-col">
-//           <label htmlFor="userName" className="text-gray-700">Your Name</label>
-//           <input
-//             type="text"
-//             name="userName"
-//             id="userName"
-//             placeholder="Your Name"
-//             value={paymentDetails.userName}
-//             onChange={handleChange}
-//             className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-//           />
-//         </div>
-
-//         {/* Address Input */}
-//         <div className="flex flex-col">
-//           <label htmlFor="address" className="text-gray-700">Your Address</label>
-//           <input
-//             type="text"
-//             name="address"
-//             id="address"
-//             placeholder="Your Address"
-//             value={paymentDetails.address}
-//             onChange={handleChange}
-//             className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-//           />
-//         </div>
-
-//         {/* Name on Card Input */}
-//         <div className="flex flex-col">
-//           <label htmlFor="name" className="text-gray-700">Name on Card</label>
-//           <input
-//             type="text"
-//             name="name"
-//             id="name"
-//             placeholder="Name on Card"
-//             value={paymentDetails.name}
-//             onChange={handleChange}
-//             className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-//           />
-//         </div>
-
-//         {/* Card Number Input */}
-//         <div className="flex flex-col">
-//           <label htmlFor="cardNumber" className="text-gray-700">Card Number</label>
-//           <input
-//             type="text"
-//             name="cardNumber"
-//             id="cardNumber"
-//             placeholder="Card Number"
-//             value={paymentDetails.cardNumber}
-//             onChange={handleChange}
-//             className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-//           />
-//         </div>
-
-//         {/* Expiration Date and CVV Inputs */}
-//         <div className="flex space-x-4">
-//           {/* Expiration Date */}
-//           <div className="flex flex-col w-1/2">
-//             <label htmlFor="expiration" className="text-gray-700">Expiration Date</label>
-//             <input
-//               type="text"
-//               name="expiration"
-//               id="expiration"
-//               placeholder="MM/YY"
-//               value={paymentDetails.expiration}
-//               onChange={handleChange}
-//               className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-//             />
-//           </div>
-
-//           {/* CVV */}
-//           <div className="flex flex-col w-1/2">
-//             <label htmlFor="cvv" className="text-gray-700">CVV</label>
-//             <input
-//               type="text"
-//               name="cvv"
-//               id="cvv"
-//               placeholder="CVV"
-//               value={paymentDetails.cvv}
-//               onChange={handleChange}
-//               className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-//             />
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Cart Summary Section */}
-//       <div className="cart-summary mt-8">
-//         <h3 className="font-semibold text-gray-800">Cart Summary</h3>
-//         <div className="space-y-4 mt-4">
-//           {art_list.map((item) => {
-//             if (cartItems[item._id] > 0) {
-//               return (
-//                 <div key={item._id} className="grid grid-cols-2 items-center">
-//                   <p className="text-gray-600">{item.name}</p>
-//                   <p className="text-gray-600">Rs.{item.price * cartItems[item._id]}</p>
-//                 </div>
-//               );
-//             }
-//             return null;
-//           })}
-//         </div>
-//         <div className="total mt-4 flex justify-between text-gray-800">
-//           <p className="font-bold">Total: </p>
-//           <p>Rs.{getTotalCartAmount()}</p>
-//         </div>
-//       </div>
-
-//       {/* Buttons Section */}
-//       <div className="flex justify-between items-center mt-8">
-//         {/* Back and Clear Buttons */}
-//         <div className="flex space-x-4">
-//           <button
-//             onClick={handleBack}
-//             className="text-black py-3 px-4 rounded-lg flex items-center justify-centerfocus:outline-none"
-//           >
-//             <IoChevronBackCircleOutline size={24} className="mr-2" />
-//           </button>
-
-//           {/* Clear Button */}
-//           <button
-//             onClick={handleClear}
-//             className="text-gray-700 py-3 px-4 rounded-lg border border-gray-300 hover:bg-gray-200"
-//           >
-//             Clear
-//           </button>
-//         </div>
-
-//         {/* Complete Payment Button */}
-//         <button
-//           onClick={handlePayment}
-//           className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950"
-//         >
-//           Complete Payment
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default PaymentPage;
 import React, { useContext, useState } from "react";
 import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
+import { z } from "zod";
+
+const paymentSchema = z.object({
+  nameOnCard: z.string().min(1, "Name on Card is required"),
+  cardNumber: z.string().regex(/^[0-9]{16}$/, "Card Number must be 16 digits"),
+  expirationDate: z.string().min(1, "Expiration Date is required"),
+  CVV: z.string().regex(/^[0-9]{3,4}$/, "CVV must be 3 or 4 digits"),
+  userName: z.string().min(1, "Your Name is required"),
+  address: z.string().min(1, "Address is required"),
+});
 
 const PaymentPage = () => {
-  const { cartItems, art_list, getTotalCartAmount } = useContext(StoreContext);
+  const { cartItems, getTotalCartAmount } = useContext(StoreContext);
   const [paymentDetails, setPaymentDetails] = useState({
-    name: "",
+    nameOnCard: "",
     cardNumber: "",
-    expiration: "",
-    cvv: "",
-    userName: "", // Added user name
-    address: "", // Added address
+    expirationDate: "",
+    CVV: "",
+    userName: "",
+    address: "",
   });
-
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPaymentDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "cardNumber" || name === "CVV") {
+      if (!/^[0-9]*$/.test(value)) return;
+    }
+    setPaymentDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePayment = () => {
-    if (
-      paymentDetails.name &&
-      paymentDetails.cardNumber &&
-      paymentDetails.expiration &&
-      paymentDetails.cvv &&
-      paymentDetails.userName &&
-      paymentDetails.address
-    ) {
-      alert("Payment Successful!");
-      navigate("/order");  // Redirect to order confirmation page
-    } else {
-      alert("Please fill in all payment details.");
+  const handlePayment = async () => {
+    const validationResult = paymentSchema.safeParse(paymentDetails);
+    if (!validationResult.success) {
+      const formattedErrors = validationResult.error.flatten();
+      setErrors(formattedErrors.fieldErrors); // Use flattened errors
+      return;
+    }
+    setErrors({});
+    try {
+      const payload = {
+        ...paymentDetails,
+        cartItems,
+        totalAmount: getTotalCartAmount(),
+      };
+      await axios.post("http://localhost:8080/api/payment", payload);
+      setMessage("Payment Successful! Redirecting...");
+      setTimeout(() => navigate("/products"), 2000);
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Payment failed. Please try again.");
     }
   };
 
+  const handleClear = () => {
+    setPaymentDetails({
+      nameOnCard: "",
+      cardNumber: "",
+      expirationDate: "",
+      CVV: "",
+      userName: "",
+      address: "",
+    });
+    setErrors({});
+  };
+
   const handleBack = () => {
-    navigate(-1);  // Go back to the previous page
+    navigate(-1);
   };
 
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
       <h2 className="text-2xl font-semibold text-black">Payment Details</h2>
-      
+      {message && (
+        <p className="text-green-600 text-lg font-medium text-center mt-4">
+          {message}
+        </p>
+      )}
       <div className="payment-form space-y-6 mt-6">
-        <input
-          type="text"
-          name="userName"
-          placeholder="Your Name"
-          value={paymentDetails.userName}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Your Address"
-          value={paymentDetails.address}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
-        <input
-          type="text"
-          name="name"
-          placeholder="Name on Card"
-          value={paymentDetails.name}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
-        <input
-          type="text"
-          name="cardNumber"
-          placeholder="Card Number"
-          value={paymentDetails.cardNumber}
-          onChange={handleChange}
-          className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-        />
+        {[
+          { name: "userName", label: "Your Name" },
+          { name: "address", label: "Your Address" },
+          { name: "nameOnCard", label: "Name on Card" },
+          { name: "cardNumber", label: "Card Number" },
+        ].map(({ name, label }) => (
+          <div key={name}>
+            <label className="block text-gray-700 font-medium mb-1">
+              {label}
+            </label>
+            <input
+              type="text"
+              name={name}
+              placeholder={label}
+              value={paymentDetails[name]}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            {errors[name] && (
+              <p className="text-red-500 text-sm">{errors[name]}</p>
+            )}
+          </div>
+        ))}
         <div className="flex space-x-4">
-          <input
-            type="text"
-            name="expiration"
-            placeholder="Expiration Date"
-            value={paymentDetails.expiration}
-            onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-          />
-          <input
-            type="text"
-            name="cvv"
-            placeholder="CVV"
-            value={paymentDetails.cvv}
-            onChange={handleChange}
-            className="w-1/2 p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-          />
+          <div className="w-1/2">
+            <label className="block text-gray-700 font-medium mb-1">
+              Expiration Date
+            </label>
+            <input
+              type="date"
+              name="expirationDate"
+              value={paymentDetails.expirationDate}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            {errors.expirationDate && (
+              <p className="text-red-500 text-sm">{errors.expirationDate}</p>
+            )}
+          </div>
+          <div className="w-1/2">
+            <label className="block text-gray-700 font-medium mb-1">CVV</label>
+            <input
+              type="text"
+              name="CVV"
+              placeholder="CVV"
+              value={paymentDetails.CVV}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            {errors.CVV && <p className="text-red-500 text-sm">{errors.CVV}</p>}
+          </div>
         </div>
       </div>
-
-      <div className="cart-summary mt-8">
-        <h3 className="font-semibold text-gray-800">Cart Summary</h3>
-        <div className="space-y-4 mt-4">
-          {art_list.map((item) => {
-            if (cartItems[item._id] > 0) {
-              return (
-                <div key={item._id} className="grid grid-cols-2 items-center">
-                  <p className="text-gray-600">{item.name}</p>
-                  <p className="text-gray-600">Rs.{item.price * cartItems[item._id]}</p>
-                </div>
-              );
-            }
-            return null;
-          })}
-        </div>
-        <div className="total mt-4 flex justify-between text-gray-800">
-          <p className="font-bold">Total: </p>
-          <p>Rs.{getTotalCartAmount()}</p>
-        </div>
-      </div>
-
       <div className="flex justify-between items-center mt-8">
-        {/* Back Button */}
         <button
           onClick={handleBack}
-          className="text-black py-3 px-4 rounded-lg flex items-center justify-centerfocus:outline-none  "
+          className="text-black py-3 px-4 rounded-lg flex items-center justify-center focus:outline-none"
         >
           <IoChevronBackCircleOutline size={24} className="mr-2" />
-          
         </button>
-
-        {/* Complete Payment Button */}
+        <button
+          onClick={handleClear}
+          className="w-1/3 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-700"
+        >
+          Clear
+        </button>
         <button
           onClick={handlePayment}
-          className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950 "
+          className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950"
         >
           Complete Payment
         </button>
