@@ -1,13 +1,17 @@
 package com.example.Backend.Controller;
 
-import org.springframework.http.HttpStatus;
 import com.example.Backend.Model.Artist;
 import com.example.Backend.Service.ArtistService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -51,5 +55,16 @@ public class ArtistController {
         return artist.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
+    @PostMapping("/addArtist")
+    public ResponseEntity<?> addArtist (@RequestPart("artist") String artistJson, @RequestPart("imageFile") MultipartFile imageFile) throws IOException {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Artist artist = objectMapper.readValue(artistJson, Artist.class);
+            Artist artistExist = artistService.addArtist(artist, imageFile);
+            return new ResponseEntity<>(artistExist, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
+

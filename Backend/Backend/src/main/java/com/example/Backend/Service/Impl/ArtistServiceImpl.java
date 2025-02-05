@@ -5,7 +5,9 @@ import com.example.Backend.Repository.ArtistRepository;
 import com.example.Backend.Service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,14 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public Optional<Artist> getArtistByUserName(String userName) {
         return artistRepository.findByUserName(userName);
+    }
+
+    @Override
+    public Artist addArtist(Artist artist, MultipartFile imageFile) throws IOException {
+        artist.setImageName(imageFile.getOriginalFilename());
+        artist.setContentType(imageFile.getContentType());
+        artist.setImageData(imageFile.getBytes());
+        return artistRepository.save(artist);
     }
 }
 
