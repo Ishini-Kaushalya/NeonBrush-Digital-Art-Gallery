@@ -25,7 +25,7 @@ public class ArtistController {
         return ResponseEntity.ok(createdArtist);
     }
     @GetMapping({"/{id}"})
-    public ResponseEntity<Artist> getArtistById(@PathVariable long id) {
+    public ResponseEntity<Artist> getArtistById(@PathVariable String id) {
         Artist artist = this.artistService.getArtistById(id);
         return artist != null ? ResponseEntity.ok(artist) :ResponseEntity.notFound().build();
     }
@@ -35,12 +35,12 @@ public class ArtistController {
         return ResponseEntity.ok(artists);
     }
     @PutMapping({"/{id}"})
-    public ResponseEntity<Artist> updateArtist(@PathVariable long id, @RequestBody Artist artist) {
+    public ResponseEntity<Artist> updateArtist(@PathVariable String id, @RequestBody Artist artist) {
         Artist updatedArtist = this.artistService.updateArtist(id, artist);
         return updatedArtist != null ? ResponseEntity.ok(updatedArtist) :ResponseEntity.notFound().build();
     }
     @DeleteMapping({"/{id}"})
-    public ResponseEntity<Void> deleteArtist(@PathVariable long id) {
+    public ResponseEntity<Void> deleteArtist(@PathVariable String id) {
         this.artistService.deleteArtist(id);
         return ResponseEntity.noContent().build();
     }

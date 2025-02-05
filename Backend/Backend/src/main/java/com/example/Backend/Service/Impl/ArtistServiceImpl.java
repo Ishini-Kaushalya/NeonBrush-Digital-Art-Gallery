@@ -20,7 +20,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist getArtistById(long id) {
+    public Artist getArtistById(String id) {
         Optional<Artist> artist = artistRepository.findById(id);
         return artist.orElse(null);    }
 
@@ -30,7 +30,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist updateArtist(long id, Artist artist) {
+    public Artist updateArtist(String id, Artist artist) {
         if (artistRepository.existsById(id)) { artist.setArtistId(id);
             return artistRepository.save(artist);
         }
@@ -38,7 +38,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public void deleteArtist(long id) {
+    public void deleteArtist(String id) {
         artistRepository.deleteById(id);
     }
 
@@ -47,3 +47,4 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.findByUserName(userName);
     }
 }
+
