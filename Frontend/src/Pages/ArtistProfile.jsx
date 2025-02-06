@@ -16,8 +16,8 @@ const ArtistProfile = () => {
 
   // Define Zod schema for form validation
   const schema = z.object({
-    fullName: z.string().min(1, "Full Name is required"),
-    username: z.string().min(1, "Username is required"),
+    firstName: z.string().min(1, "first Name is required"),
+    userName: z.string().min(1, "Username is required"),
     lastName: z.string().min(1, "Last Name is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     email: z.string().email("Invalid email address"),
@@ -57,8 +57,8 @@ const ArtistProfile = () => {
 
     // Collect form data
     const formData = new FormData();
-    formData.append("fullName", event.target.fullName.value);
-    formData.append("username", event.target.username.value);
+    formData.append("firstName", event.target.firstName.value);
+    formData.append("userName", event.target.userName.value);
     formData.append("lastName", event.target.lastName.value);
     formData.append("password", event.target.password.value);
     formData.append("email", event.target.email.value);
@@ -73,8 +73,8 @@ const ArtistProfile = () => {
     // Validate using Zod schema
     try {
       schema.parse({
-        fullName: event.target.fullName.value,
-        username: event.target.username.value,
+        firstName: event.target.firstName.value,
+        userName: event.target.userName.value,
         lastName: event.target.lastName.value,
         password: event.target.password.value,
         email: event.target.email.value,
@@ -161,13 +161,13 @@ const ArtistProfile = () => {
               First Name
             </label>
             <input
-              name="fullName"
+              name="firstName"
               type="text"
               placeholder="Your First Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-sm">{errors.fullName}</p>
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
             )}
           </div>
 
@@ -177,13 +177,13 @@ const ArtistProfile = () => {
               Username
             </label>
             <input
-              name="username"
+              name="userName"
               type="text"
-              placeholder="Your username"
+              placeholder="Your user Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
-            {errors.username && (
-              <p className="text-red-500 text-sm">{errors.username}</p>
+            {errors.userName && (
+              <p className="text-red-500 text-sm">{errors.userName}</p>
             )}
           </div>
 
@@ -288,7 +288,7 @@ const ArtistProfile = () => {
               }`}
               onClick={() => {
                 const artistName = document.querySelector(
-                  "input[name='fullName']"
+                  "input[name='firstName']"
                 ).value;
                 if (artistName) {
                   navigate(`/artist-detail/${artistName}`);
