@@ -51,15 +51,20 @@ public class ArtistController {
 
 
     @PostMapping("/addArtist")
-    public ResponseEntity<?> addArtist(@RequestParam("firstName") String firstName,
-                                       @RequestParam("lastName") String lastName,
-                                       @RequestParam("userName") String userName,
-                                       @RequestParam("email") String email,
-                                       @RequestParam("password") String password,
-                                       @RequestParam("description") String description,
-                                       @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
-        Artist artist = artistService.addArtist(firstName, lastName, userName, email, password, description, profileImage);
-        return ResponseEntity.ok(artist); // Return the saved artist object
+    public ResponseEntity<String> addArtist(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("description") String description,
+            @RequestParam(value = "image", required = false) MultipartFile profileImage) {
+        try {
+            artistService.addArtist(firstName, lastName, userName, email, password, description, profileImage);
+            return ResponseEntity.ok("Artist added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to add artist: " + e.getMessage());
+        }
     }
 
     // Get an artist by ID
