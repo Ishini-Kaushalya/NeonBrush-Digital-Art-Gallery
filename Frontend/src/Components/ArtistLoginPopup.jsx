@@ -70,14 +70,15 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
         headers: { "Content-Type": "application/json" },
       });
 
+      
       if (response.status === 200) {
         // Save JWT token in sessionStorage
-        const token = response.data?.accessToken; // Adjust based on your response structure
+        const token = response.data.accessToken; // Adjust based on your response structure
         if (token) {
           console.log(
-            "Login successful. JWT Token received:", response.data.token
+            "Login successful. JWT Token received:", token
           );
-          sessionStorage.setItem("jwtToken", response.data.token); // Store the token in sessionStorage
+          localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in sessionStorage
         }
 
         if (formState === "Sign Up") {

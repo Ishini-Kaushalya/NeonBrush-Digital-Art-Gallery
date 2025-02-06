@@ -5,6 +5,8 @@ import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
 import axios from "axios"; // Import axios for making HTTP requests
 
+
+
 const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [errors, setErrors] = useState({});
@@ -44,6 +46,14 @@ const ArtistProfile = () => {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const token = JSON.parse(localStorage.getItem("accessToken"));
+
+    if (!token) {
+      console.error("No token found, please login first.");
+      return;
+    }
+
+    console.log("Using JWT Token:", token);
 
     // Collect form data
     const formData = new FormData();
@@ -74,37 +84,32 @@ const ArtistProfile = () => {
       setErrors({});
       setIsProfileComplete(true); // Mark profile as complete
 
-      // Retrieve JWT token from localStorage or context
-      const token = sessionStorage.getItem("jwtToken"); // Replace with actual token storage method
-      console.log("Retrieved JWT Token:", token);
-      // Submit the form data to backend using Axios with the token in the Authorization header
-      try {
-        const response = await axios.post(
-          "http://localhost:8080/api/artist/addArtist", // Replace with your backend URL
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data", // Necessary for file upload
-              Authorization: `Bearer ${token}`, // Include JWT token
-            },
-          }
-        );
+      
 
-        console.log("Profile created successfully", response.data);
-        // You can navigate or perform other actions after successful submission
-      } catch (error) {
-        console.error("Error while submitting form", error);
-      }
+      const response = await axios
+        .post("http://localhost:8080/api/artist/addArtist", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log("Artist added successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error adding artist:", error.response);
+        });
+
+      console.log("Profile created successfully", response.data);
     } catch (err) {
       if (err.errors) {
-        // Map Zod errors to state
         const errorMap = {};
         err.errors.forEach((error) => {
           errorMap[error.path[0]] = error.message;
         });
         setErrors(errorMap);
       }
-      setIsProfileComplete(false); // Mark profile as incomplete
+      setIsProfileComplete(false);
     }
   };
 
