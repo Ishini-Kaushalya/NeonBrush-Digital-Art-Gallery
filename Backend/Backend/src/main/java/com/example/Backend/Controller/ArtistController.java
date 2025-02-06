@@ -5,7 +5,6 @@ import com.example.Backend.Service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,7 +49,7 @@ public class ArtistController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PreAuthorize("hasRole('ROLE_ARTIST')")
+
     @PostMapping("/addArtist")
     public ResponseEntity<?> addArtist(@RequestParam("firstName") String firstName,
                                        @RequestParam("lastName") String lastName,
