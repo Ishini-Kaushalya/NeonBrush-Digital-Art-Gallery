@@ -75,8 +75,8 @@ const ArtistProfile = () => {
       setIsProfileComplete(true); // Mark profile as complete
 
       // Retrieve JWT token from localStorage or context
-      const token = localStorage.getItem("token"); // Replace with actual token storage method
-
+      const token = sessionStorage.getItem("jwtToken"); // Replace with actual token storage method
+      console.log("Retrieved JWT Token:", token);
       // Submit the form data to backend using Axios with the token in the Authorization header
       try {
         const response = await axios.post(
