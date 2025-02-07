@@ -11,44 +11,42 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping("/api/artist")
 public class ArtistController {
     @Autowired
     private ArtistService artistService;
 
-    public ArtistController(){
-
-    }
     @PostMapping
     public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
-        Artist createdArtist = this.artistService.createArtist(artist);
+        Artist createdArtist = artistService.createArtist(artist);
         return ResponseEntity.ok(createdArtist);
     }
+
     @GetMapping
     public ResponseEntity<List<Artist>> getAllArtists() {
-        List<Artist> artists = this.artistService.getAllArtists();
+        List<Artist> artists = artistService.getAllArtists();
         return ResponseEntity.ok(artists);
     }
-    @PutMapping({"/{id}"})
+
+    @PutMapping("/{id}")
     public ResponseEntity<Artist> updateArtist(@PathVariable String id, @RequestBody Artist artist) {
-        Artist updatedArtist = this.artistService.updateArtist(id, artist);
-        return updatedArtist != null ? ResponseEntity.ok(updatedArtist) :ResponseEntity.notFound().build();
+        Artist updatedArtist = artistService.updateArtist(id, artist);
+        return updatedArtist != null ? ResponseEntity.ok(updatedArtist) : ResponseEntity.notFound().build();
     }
-    @DeleteMapping({"/{id}"})
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArtist(@PathVariable String id) {
-        this.artistService.deleteArtist(id);
+        artistService.deleteArtist(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/username/{userName}")
-    public ResponseEntity<Artist> getArtistByUserName(@PathVariable("userName") String userName) {
+    public ResponseEntity<Artist> getArtistByUserName(@PathVariable String userName) {
         Optional<Artist> artist = artistService.getArtistByUserName(userName);
         return artist.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
 
     @PostMapping("/addArtist")
     public ResponseEntity<String> addArtist(
@@ -67,9 +65,8 @@ public class ArtistController {
         }
     }
 
-    // Get an artist by ID
     @GetMapping("/{artistId}")
-    public ResponseEntity<?> getArtistById(@PathVariable("artistId") String artistId) {
+    public ResponseEntity<?> getArtistById(@PathVariable String artistId) {
         Artist artist = artistService.getArtistById(artistId);
         if (artist != null) {
             return ResponseEntity.ok(artist);
@@ -78,4 +75,3 @@ public class ArtistController {
         }
     }
 }
-

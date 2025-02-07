@@ -1,4 +1,5 @@
 package com.example.Backend.Model;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,36 +13,11 @@ public class Artist {
     private String email;
     private String password;
     private String description;
-    private String imageName;
-    private byte[] imageData;
-    private String contentType;
+    private String imageId; // Stores the GridFS file ID
 
+    // Getters and Setters
     public String getArtistId() {
         return artistId;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public void setArtistId(String artistId) {
@@ -94,5 +70,13 @@ public class Artist {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
     }
 }
