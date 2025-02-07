@@ -87,7 +87,7 @@ const AddArtItem = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg">
+    <div className="max-w-4xl mx-auto mt-10 bg-sky-100 shadow-lg rounded-lg">
       <div className="text-black flex justify-between items-center px-6 py-4 rounded-t-lg">
         <h1 className="text-2xl font-semibold">Add Art Item</h1>
       </div>

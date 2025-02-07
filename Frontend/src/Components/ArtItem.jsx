@@ -19,7 +19,7 @@ const ArtItem = ({ id, name, price, description, image, onClick }) => {
           {/* <img className='w-16' src={assets.rating_starts} alt='Rating stars' /> */}
         </div>
         <p className='text-gray-600 text-sm truncate'>{description}</p>
-        <p className='text-tomato text-xl font-semibold mt-2'>${price}</p>
+        <p className='text-tomato text-xl font-semibold mt-2'>Rs.{price}</p>
       </div>
     </div>
   );

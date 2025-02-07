@@ -45,7 +45,7 @@ const ArtDetail = () => {
         <div className="w-full md:w-1/2 space-y-6">
           <h2 className="text-3xl font-semibold text-gray-900">{name}</h2>
           <p className="text-lg text-gray-700">{description}</p>
-          <p className="text-tomato text-xl font-semibold">Price: ${price}</p>
+          <p className="text-tomato text-xl font-semibold">Price: Rs.{price}</p>
           <p
             className="text-black cursor-pointer hover:text-blue-800 font-medium"
             onClick={handleOwnerClick}
