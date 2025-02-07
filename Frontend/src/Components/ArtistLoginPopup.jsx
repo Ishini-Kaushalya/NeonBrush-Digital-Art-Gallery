@@ -70,14 +70,30 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (formState === "Sign Up" && response.status === 200) {
-        setSuccessMessage("Artist registered successfully!"); // Show success message
-        setTimeout(() => navigate("/artist-profile"), 2000); // Navigate after 2 seconds
-      }
+      
+      if (response.status === 200) {
+        // Save JWT token in sessionStorage
+        const token = response.data.accessToken; // Adjust based on your response structure
+        if (token) {
+          console.log(
+            "Login successful. JWT Token received:", token
+          );
+          localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in sessionStorage
+        }
 
-      if (formState === "Login" && response.status === 200) {
-        setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
-        setTimeout(() => navigate("/artist-profile"), 2000); // Navigate to artist profile after 2 seconds
+        if (formState === "Sign Up") {
+          setSuccessMessage("Artist registered successfully!"); // Show success message
+          setTimeout(() => {
+            navigate("/artist-profile", {
+              state: { username: formData.username, email: formData.email }, // Pass username and email
+            });
+          }, 2000); // Navigate after 2 seconds
+        }
+
+        if (formState === "Login") {
+          setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
+          setTimeout(() => navigate("/artist-profile"), 2000); // Navigate to artist profile after 2 seconds
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {

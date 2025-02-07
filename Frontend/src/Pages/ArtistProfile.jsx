@@ -1,24 +1,31 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { RiImageAddFill } from "react-icons/ri";
 import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
+import axios from "axios";
 
 const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [errors, setErrors] = useState({});
-  const [isProfileComplete, setIsProfileComplete] = useState(false); // Track if profile is complete
+  const [isProfileComplete, setIsProfileComplete] = useState(false);
   const fileInputRef = React.useRef();
   const navigate = useNavigate();
+  const location = useLocation(); // Use useLocation to access navigation state
 
-  // Define Zod schema
+  // Retrieve username and email from the navigation state
+  const { username, email } = location.state || {};
+
+  // Define Zod schema for form validation
   const schema = z.object({
-    fullName: z.string().min(1, "Full Name is required"),
-    username: z.string().min(1, "Username is required"),
+    firstName: z.string().min(1, "First Name is required"),
+    userName: z.string().min(1, "Username is required"),
     lastName: z.string().min(1, "Last Name is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     email: z.string().email("Invalid email address"),
-    description: z.string().min(10, "Description must be at least 10 characters"),
+    description: z
+      .string()
+      .min(10, "Description must be at least 10 characters"),
   });
 
   // Handle image upload
@@ -39,35 +46,78 @@ const ArtistProfile = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const token = JSON.parse(localStorage.getItem("accessToken"));
+
+    if (!token) {
+      console.error("No token found, please login first.");
+      return;
+    }
+
+    console.log("Using JWT Token:", token);
 
     // Collect form data
-    const formData = {
-      fullName: event.target.fullName.value,
-      username: event.target.username.value,
-      lastName: event.target.lastName.value,
-      password: event.target.password.value,
-      email: event.target.email.value,
-      description: event.target.description.value,
-    };
+    const formData = new FormData();
+    formData.append("firstName", event.target.firstName.value);
+    formData.append("userName", event.target.userName.value);
+    formData.append("lastName", event.target.lastName.value);
+    formData.append("password", event.target.password.value);
+    formData.append("email", event.target.email.value);
+    formData.append("description", event.target.description.value);
 
-    // Validate using Zod
+    // If there's an image, append it to FormData
+    if (profileImage) {
+      const imageFile = fileInputRef.current.files[0];
+      formData.append("image", imageFile); // Use "image" as the key for the file
+    }
+
+    // Validate using Zod schema
     try {
-      schema.parse(formData);
-      console.log("Form data is valid:", formData);
+      schema.parse({
+        firstName: event.target.firstName.value,
+        userName: event.target.userName.value,
+        lastName: event.target.lastName.value,
+        password: event.target.password.value,
+        email: event.target.email.value,
+        description: event.target.description.value,
+      });
+
       setErrors({});
       setIsProfileComplete(true); // Mark profile as complete
+
+      // Send form data to the backend
+      const response = await axios.post(
+        "http://localhost:8080/api/artist/addArtist",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Artist added successfully:", response.data);
+      alert("Artist profile created successfully!");
+
+      // Redirect to the artist's profile or another page
+      navigate(`/artist-detail/${event.target.userName.value}`);
     } catch (err) {
       if (err.errors) {
-        // Map Zod errors to state
         const errorMap = {};
         err.errors.forEach((error) => {
           errorMap[error.path[0]] = error.message;
         });
         setErrors(errorMap);
+      } else if (err.response) {
+        console.error("Error adding artist:", err.response.data);
+        alert("Failed to create artist profile: " + err.response.data.message);
+      } else {
+        console.error("Error:", err.message);
+        alert("An unexpected error occurred.");
       }
-      setIsProfileComplete(false); // Mark profile as incomplete
+      setIsProfileComplete(false);
     }
   };
 
@@ -119,13 +169,13 @@ const ArtistProfile = () => {
               First Name
             </label>
             <input
-              name="fullName"
+              name="firstName"
               type="text"
               placeholder="Your First Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
-            {errors.fullName && (
-              <p className="text-red-500 text-sm">{errors.fullName}</p>
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
             )}
           </div>
 
@@ -135,13 +185,14 @@ const ArtistProfile = () => {
               Username
             </label>
             <input
-              name="username"
+              name="userName"
               type="text"
-              placeholder="Your username"
+              placeholder="Your user Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              defaultValue={username} // Pre-fill with username from signup
             />
-            {errors.username && (
-              <p className="text-red-500 text-sm">{errors.username}</p>
+            {errors.userName && (
+              <p className="text-red-500 text-sm">{errors.userName}</p>
             )}
           </div>
 
@@ -187,6 +238,7 @@ const ArtistProfile = () => {
               type="email"
               placeholder="Your email"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              defaultValue={email} // Pre-fill with email from signup
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
@@ -217,7 +269,7 @@ const ArtistProfile = () => {
             className="px-4 py-2 text-black focus:outline-none"
             onClick={() => navigate("/")}
           >
-           <MdArrowBackIos className="mr-2" />
+            <MdArrowBackIos className="mr-2" />
           </button>
 
           {/* Other Buttons */}
@@ -234,7 +286,6 @@ const ArtistProfile = () => {
                   ? "bg-sky-800 text-white  hover:bg-sky-950"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              // disabled={!isProfileComplete}
               onClick={() => navigate("/add-art")}
             >
               Add Art
@@ -245,10 +296,9 @@ const ArtistProfile = () => {
                   ? "bg-sky-800 text-white hover:bg-sky-950"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              // disabled={!isProfileComplete}
               onClick={() => {
                 const artistName = document.querySelector(
-                  "input[name='fullName']"
+                  "input[name='firstName']"
                 ).value;
                 if (artistName) {
                   navigate(`/artist-detail/${artistName}`);

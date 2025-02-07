@@ -1,8 +1,12 @@
 package com.example.Backend.Security;
 
+import com.example.Backend.Security.JWT.AuthEntryPointJwt;
+import com.example.Backend.Security.JWT.AuthTokenFilter;
+import com.example.Backend.Security.Services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,10 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.example.Backend.Security.JWT.AuthEntryPointJwt;
-import com.example.Backend.Security.JWT.AuthTokenFilter;
-import com.example.Backend.Security.Services.UserDetailsServiceImpl;
 
 @Configuration
 @EnableMethodSecurity
@@ -74,10 +74,13 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/api/payment/**").permitAll()
                         .requestMatchers("/api/contacts/**").permitAll()
+                        //.requestMatchers("/api/artist/**").permitAll()
+                        .requestMatchers("/api/artist/**").authenticated()
                         .requestMatchers(
                                 "/v2/api-docs",       // Swagger v2 API docs
                                 "/v3/api-docs/**",    // Swagger v3 API docs
