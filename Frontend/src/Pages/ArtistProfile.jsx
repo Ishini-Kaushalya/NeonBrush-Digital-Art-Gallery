@@ -5,8 +5,6 @@ import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
 import axios from "axios"; // Import axios for making HTTP requests
 
-
-
 const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [errors, setErrors] = useState({});
@@ -16,7 +14,7 @@ const ArtistProfile = () => {
 
   // Define Zod schema for form validation
   const schema = z.object({
-    firstName: z.string().min(1, "first Name is required"),
+    firstName: z.string().min(1, "First Name is required"),
     userName: z.string().min(1, "Username is required"),
     lastName: z.string().min(1, "Last Name is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
@@ -67,7 +65,7 @@ const ArtistProfile = () => {
     // If there's an image, append it to FormData
     if (profileImage) {
       const imageFile = fileInputRef.current.files[0];
-      formData.append("profileImage", imageFile);
+      formData.append("image", imageFile); // Use "image" as the key for the file
     }
 
     // Validate using Zod schema
@@ -84,23 +82,23 @@ const ArtistProfile = () => {
       setErrors({});
       setIsProfileComplete(true); // Mark profile as complete
 
-      
-
-      const response = await axios
-        .post("http://localhost:8080/api/artist/addArtist", formData, {
+      // Send form data to the backend
+      const response = await axios.post(
+        "http://localhost:8080/api/artist/addArtist",
+        formData,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        })
-        .then((response) => {
-          console.log("Artist added successfully:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error adding artist:", error.response);
-        });
+        }
+      );
 
-      console.log("Profile created successfully", response.data);
+      console.log("Artist added successfully:", response.data);
+      alert("Artist profile created successfully!");
+
+      // Redirect to the artist's profile or another page
+      navigate(`/artist-detail/${event.target.userName.value}`);
     } catch (err) {
       if (err.errors) {
         const errorMap = {};
@@ -108,6 +106,12 @@ const ArtistProfile = () => {
           errorMap[error.path[0]] = error.message;
         });
         setErrors(errorMap);
+      } else if (err.response) {
+        console.error("Error adding artist:", err.response.data);
+        alert("Failed to create artist profile: " + err.response.data.message);
+      } else {
+        console.error("Error:", err.message);
+        alert("An unexpected error occurred.");
       }
       setIsProfileComplete(false);
     }
