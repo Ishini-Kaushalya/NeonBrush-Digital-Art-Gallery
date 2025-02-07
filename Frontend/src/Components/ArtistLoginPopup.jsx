@@ -83,7 +83,11 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
 
         if (formState === "Sign Up") {
           setSuccessMessage("Artist registered successfully!"); // Show success message
-          setTimeout(() => navigate("/artist-profile"), 2000); // Navigate after 2 seconds
+          setTimeout(() => {
+            navigate("/artist-profile", {
+              state: { username: formData.username, email: formData.email }, // Pass username and email
+            });
+          }, 2000); // Navigate after 2 seconds
         }
 
         if (formState === "Login") {

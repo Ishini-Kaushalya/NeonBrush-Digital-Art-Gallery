@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { RiImageAddFill } from "react-icons/ri";
 import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
-import axios from "axios"; // Import axios for making HTTP requests
+import axios from "axios";
 
 const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [errors, setErrors] = useState({});
-  const [isProfileComplete, setIsProfileComplete] = useState(false); // Track if profile is complete
+  const [isProfileComplete, setIsProfileComplete] = useState(false);
   const fileInputRef = React.useRef();
   const navigate = useNavigate();
+  const location = useLocation(); // Use useLocation to access navigation state
+
+  // Retrieve username and email from the navigation state
+  const { username, email } = location.state || {};
 
   // Define Zod schema for form validation
   const schema = z.object({
@@ -185,6 +189,7 @@ const ArtistProfile = () => {
               type="text"
               placeholder="Your user Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              defaultValue={username} // Pre-fill with username from signup
             />
             {errors.userName && (
               <p className="text-red-500 text-sm">{errors.userName}</p>
@@ -233,6 +238,7 @@ const ArtistProfile = () => {
               type="email"
               placeholder="Your email"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              defaultValue={email} // Pre-fill with email from signup
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
