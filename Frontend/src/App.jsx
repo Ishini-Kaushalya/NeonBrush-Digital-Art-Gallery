@@ -23,35 +23,44 @@ const App = () => {
   const [loginType, setLoginType] = useState(""); // Holds the type of login: 'artist' or 'user'
   return (
     <>
-  {/* Display the login popup based on the loginType */}
-  {showLogin && (
-        loginType === "artist" ? (
+      {/* Display the login popup based on the loginType */}
+      {showLogin &&
+        (loginType === "artist" ? (
           <ArtistLoginPopup setShowLogin={setShowLogin} />
         ) : loginType === "admin" ? (
           <AdminLoginPopup setShowLogin={setShowLogin} />
         ) : (
           <UserLoginPopup setShowLogin={setShowLogin} />
-        )
-      )}
+        ))}
 
-      <div className='app'>
+      <div className="app">
         {/* Navbar with login control */}
         <Navbar setShowLogin={setShowLogin} setLoginType={setLoginType} />
 
         {/* Define all the routes */}
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/products' element={<Products />} />
-          <Route path='/cart' element={<Cart />} />
-          <Route path='/sign-in' element={<SignInSelection setShowLogin={setShowLogin} setLoginType={setLoginType} />} />
-          <Route path='/art-detail' element={<ArtDetail />} />{" "}
-          <Route path='/artist-detail/:id' element={<ArtistDetail />} />
-          <Route path='/contact-us' element={<ContactUs />} />{" "}
-          <Route path='/payment' element={<PaymentPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route
+            path="/sign-in"
+            element={
+              <SignInSelection
+                setShowLogin={setShowLogin}
+                setLoginType={setLoginType}
+              />
+            }
+          />
+          <Route path="/art-detail" element={<ArtDetail />} />{" "}
+          <Route path="/artist-detail/:id" element={<ArtistDetail />} />
+          <Route path="/contact-us" element={<ContactUs />} />{" "}
+          <Route path="/payment" element={<PaymentPage />} />
           <Route path="/artist-profile" element={<ArtistProfile />} />
-          <Route path="/add-art" element={<AddArtItem />} /> {/* Add Art Item Route */}
-          <Route path='/payment' element={<PaymentPage />} />
-          <Route path='/admin' element={<Admin />} />
+          <Route path="/add-art" element={<AddArtItem />} />{" "}
+          {/* Add Art Item Route */}
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/add-art/:userName" element={<AddArtItem />} />
         </Routes>
       </div>
       <Footer />

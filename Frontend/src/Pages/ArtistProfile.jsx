@@ -103,6 +103,7 @@ const ArtistProfile = () => {
 
       // Redirect to the artist's profile or another page
       navigate(`/artist-detail/${event.target.userName.value}`);
+      
     } catch (err) {
       if (err.errors) {
         const errorMap = {};

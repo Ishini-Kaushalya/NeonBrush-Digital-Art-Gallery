@@ -23,6 +23,8 @@ const ArtistDetail = () => {
           return;
         }
 
+        console.log("Using JWT Token:", token);
+
         // Fetch artist details
         const artistResponse = await axios.get(
           `http://localhost:8080/api/artist/username/${id}`,
@@ -66,6 +68,9 @@ const ArtistDetail = () => {
     fetchArtistDetails();
   }, [id]);
 
+  // Retrieve the JWT token from localStorage
+  const token = JSON.parse(localStorage.getItem("accessToken"));
+
   if (loading) {
     return <div>Loading artist details...</div>;
   }
@@ -96,6 +101,16 @@ const ArtistDetail = () => {
         onClick={() => navigate(-1)}
       >
         Back
+      </button>
+
+      {/* Add Art Button */}
+      <button
+        className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mb-4"
+        onClick={() =>
+          navigate(`/add-art/${artist.userName}`, { state: { token } })
+        }
+      >
+        Add Art
       </button>
 
       {/* Content Area */}
