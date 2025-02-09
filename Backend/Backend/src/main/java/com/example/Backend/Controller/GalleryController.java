@@ -20,10 +20,10 @@ public class GalleryController {
 
     // GalleryController.java
     @PostMapping
-    public ResponseEntity<Gallery> createGallery(@RequestPart("artistId") String artistId,
+    public ResponseEntity<Gallery> createGallery(@RequestPart("userName") String userName,
                                                  @RequestPart("gallery") Gallery gallery,
                                                  @RequestPart("image") MultipartFile image) throws IOException {
-        gallery.setArtistId(artistId); // Set the artistId in the gallery object
+        gallery.setUserName(userName); // Set the artistId in the gallery object
         Gallery savedGallery = galleryService.saveGallery(gallery, image);
         return new ResponseEntity<>(savedGallery, HttpStatus.CREATED);
     }

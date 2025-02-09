@@ -35,8 +35,8 @@ public class GalleryServiceImpl implements GalleryService {
     public Gallery saveGallery(Gallery gallery, MultipartFile image) throws IOException {
         // Save the image to GridFS
         DBObject metadata = new BasicDBObject();
-        metadata.put("artId", gallery.getArt_Id());
-        metadata.put("artistId", gallery.getArtistId()); // Include artistId in metadata
+        metadata.put("artId", gallery.getArtId());
+        metadata.put("userName", gallery.getUserName()); // Include artistId in metadata
         ObjectId imageId = gridFsTemplate.store(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), metadata);
 
         // Set the imageId in the gallery object

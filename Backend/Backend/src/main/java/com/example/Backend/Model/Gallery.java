@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Gallery {
     @Id
     private String artId;
-    private String artistId;
+    private String userName;
     private String title;
     private String size;
     private String description;
@@ -16,20 +16,21 @@ public class Gallery {
     private double price;
     private String imageId;
 
-    public String getArt_Id() {
+
+    public String getArtId() {
         return artId;
     }
 
-    public void setArt_Id(String art_Id) {
-        this.artId = art_Id;
+    public void setArtId(String artId) {
+        this.artId = artId;
     }
 
-    public String getArtistId() {
-        return artistId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setArtistId(String artistId) {
-        this.artistId = artistId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getTitle() {
