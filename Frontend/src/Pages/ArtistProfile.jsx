@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { RiImageAddFill } from "react-icons/ri";
 import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
@@ -9,10 +9,9 @@ const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const [artistId, setArtistId] = useState(null); // State to store artistId
   const fileInputRef = React.useRef();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); // Use useLocation to access navigation state
 
   // Retrieve username and email from the navigation state
   const { username, email } = location.state || {};
@@ -41,6 +40,11 @@ const ArtistProfile = () => {
     }
   };
 
+  // Trigger file input on image click
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,9 +52,10 @@ const ArtistProfile = () => {
 
     if (!token) {
       console.error("No token found, please login first.");
-      navigate("/login"); // Redirect to login if no token is found
       return;
     }
+
+    console.log("Using JWT Token:", token);
 
     // Collect form data
     const formData = new FormData();
@@ -64,7 +69,7 @@ const ArtistProfile = () => {
     // If there's an image, append it to FormData
     if (profileImage) {
       const imageFile = fileInputRef.current.files[0];
-      formData.append("image", imageFile);
+      formData.append("image", imageFile); // Use "image" as the key for the file
     }
 
     // Validate using Zod schema
@@ -79,7 +84,7 @@ const ArtistProfile = () => {
       });
 
       setErrors({});
-      setIsProfileComplete(true);
+      setIsProfileComplete(true); // Mark profile as complete
 
       // Send form data to the backend
       const response = await axios.post(
@@ -96,8 +101,8 @@ const ArtistProfile = () => {
       console.log("Artist added successfully:", response.data);
       alert("Artist profile created successfully!");
 
-      // Store the artistId in state
-      setArtistId(response.data._id); // Assuming the backend returns the artist ID as `_id`
+      // Redirect to the artist's profile or another page
+      navigate(`/artist-detail/${event.target.userName.value}`);
     } catch (err) {
       if (err.errors) {
         const errorMap = {};
@@ -116,24 +121,6 @@ const ArtistProfile = () => {
     }
   };
 
-  // Handle navigation to the "Add Art" page
-  const handleAddArt = () => {
-    if (!isProfileComplete || !artistId) {
-      alert("Please submit the artist profile first.");
-      return;
-    }
-    navigate("/add-art", { state: { artistId } }); // Navigate to the "Add Art" page with artistId
-  };
-
-  // Handle navigation to the "See My Profile" page
-  const handleSeeProfile = () => {
-    if (!isProfileComplete || !artistId) {
-      alert("Please submit the artist profile first.");
-      return;
-    }
-    navigate(`/artist-detail/${artistId}`); // Navigate to the artist's profile page
-  };
-
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-sky-100 shadow-lg rounded-lg">
       {/* Header */}
@@ -147,7 +134,7 @@ const ArtistProfile = () => {
         <div className="flex flex-col justify-center items-center mb-6">
           <div
             className="relative w-28 h-28 rounded-full border-2 border-sky-700 flex justify-center items-center cursor-pointer bg-gray-100"
-            onClick={() => fileInputRef.current.click()}
+            onClick={handleImageClick} // Trigger file input
           >
             {profileImage ? (
               <img
@@ -161,11 +148,12 @@ const ArtistProfile = () => {
               </span>
             )}
           </div>
+          {/* Hidden File Input */}
           <input
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: "none" }}
+            style={{ display: "none" }} // Hidden input
             onChange={handleImageUpload}
           />
           <p className="mt-2 text-sm text-gray-500">
@@ -201,7 +189,7 @@ const ArtistProfile = () => {
               type="text"
               placeholder="Your user Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-              defaultValue={username}
+              defaultValue={username} // Pre-fill with username from signup
             />
             {errors.userName && (
               <p className="text-red-500 text-sm">{errors.userName}</p>
@@ -250,7 +238,7 @@ const ArtistProfile = () => {
               type="email"
               placeholder="Your email"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-              defaultValue={email}
+              defaultValue={email} // Pre-fill with email from signup
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
@@ -293,24 +281,29 @@ const ArtistProfile = () => {
               Submit
             </button>
             <button
-              type="button" // Prevent form submission
               className={`px-6 py-2 rounded-full ${
                 isProfileComplete
                   ? "bg-sky-800 text-white  hover:bg-sky-950"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              onClick={handleAddArt} // Use the handleAddArt function
+              onClick={() => navigate("/add-art")}
             >
               Add Art
             </button>
             <button
-              type="button" // Prevent form submission
               className={`px-6 py-2 rounded-full ${
                 isProfileComplete
                   ? "bg-sky-800 text-white hover:bg-sky-950"
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
               }`}
-              onClick={handleSeeProfile} // Use the handleSeeProfile function
+              onClick={() => {
+                const artistName = document.querySelector(
+                  "input[name='firstName']"
+                ).value;
+                if (artistName) {
+                  navigate(`/artist-detail/${artistName}`);
+                }
+              }}
             >
               See My Profile
             </button>
