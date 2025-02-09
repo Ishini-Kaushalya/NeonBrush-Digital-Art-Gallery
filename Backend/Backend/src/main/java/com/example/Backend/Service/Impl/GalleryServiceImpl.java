@@ -3,48 +3,67 @@ package com.example.Backend.Service.Impl;
 import com.example.Backend.Model.Gallery;
 import com.example.Backend.Repository.GalleryRepository;
 import com.example.Backend.Service.GalleryService;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class GalleryServiceImpl implements GalleryService{
+public class GalleryServiceImpl implements GalleryService {
+
     @Autowired
     private GalleryRepository galleryRepository;
+
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    private GridFsOperations gridFsOperations;
+
+    // GalleryServiceImpl.java
     @Override
-    public Gallery createGallery(Gallery gallery) {
+    public Gallery saveGallery(Gallery gallery, MultipartFile image) throws IOException {
+        // Save the image to GridFS
+        DBObject metadata = new BasicDBObject();
+        metadata.put("artId", gallery.getArt_Id());
+        metadata.put("artistId", gallery.getArtistId()); // Include artistId in metadata
+        ObjectId imageId = gridFsTemplate.store(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), metadata);
+
+        // Set the imageId in the gallery object
+        gallery.setImageId(imageId.toString());
+
+        // Save the gallery object to MongoDB
         return galleryRepository.save(gallery);
     }
+
     @Override
-    public Gallery getGalleryById(long id) {
-        Optional<Gallery> gallery = galleryRepository.findById(id);
-        return gallery.orElse(null);
-    }
-    @Override
-    public List<Gallery> getAllGallery() {
+    public List<Gallery> getAllGalleries() {
         return galleryRepository.findAll();
     }
+
     @Override
-    public Gallery updateGallery(long id, Gallery gallery) {
-        if (galleryRepository.existsById(id)) { gallery.setObject_Id(id);
-            return galleryRepository.save(gallery);
-        }
-        return null; // Return null or throw an exception if not found
-    }
-    @Override
-    public void deleteGallery(long id) {
-        galleryRepository.deleteById(id);
+    public Gallery getGalleryById(String artId) {
+        Optional<Gallery> gallery = galleryRepository.findById(artId);
+        return gallery.orElseThrow(() -> new RuntimeException("Gallery not found with id: " + artId));
     }
 
     @Override
-    public List<Gallery> getGalleryByType(String type) {
-        return galleryRepository.findByType(type);
+    public void deleteGallery(String artId) {
+        // Delete the image from GridFS
+        Gallery gallery = getGalleryById(artId);
+        gridFsTemplate.delete(new Query(Criteria.where("metadata.artId").is(artId)));
+
+        // Delete the gallery object from MongoDB
+        galleryRepository.deleteById(artId);
     }
-
-
-
 }
-
-
-

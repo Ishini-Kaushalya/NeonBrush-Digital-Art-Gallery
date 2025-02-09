@@ -1,12 +1,13 @@
 package com.example.Backend.Service;
 
-import com.example.Backend.Model.Gallery;
-import java.util.List;
+        import com.example.Backend.Model.Gallery;
+        import org.springframework.web.multipart.MultipartFile;
+        import java.io.IOException;
+        import java.util.List;
+
 public interface GalleryService {
-    Gallery createGallery(Gallery gallery);
-    Gallery getGalleryById(long id);
-    List<Gallery> getAllGallery();
-    Gallery updateGallery(long id, Gallery gallery);
-    void deleteGallery(long id);
-    List<Gallery> getGalleryByType(String type);
+    Gallery saveGallery(Gallery gallery, MultipartFile image) throws IOException;
+    List<Gallery> getAllGalleries();
+    Gallery getGalleryById(String artId);
+    void deleteGallery(String artId);
 }
