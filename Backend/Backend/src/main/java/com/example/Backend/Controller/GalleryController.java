@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,12 +19,20 @@ public class GalleryController {
 
     // GalleryController.java
     @PostMapping
-    public ResponseEntity<Gallery> createGallery(@RequestPart("userName") String userName,
-                                                 @RequestPart("gallery") Gallery gallery,
-                                                 @RequestPart("image") MultipartFile image) throws IOException {
-        gallery.setUserName(userName); // Set the artistId in the gallery object
-        Gallery savedGallery = galleryService.saveGallery(gallery, image);
-        return new ResponseEntity<>(savedGallery, HttpStatus.CREATED);
+    public ResponseEntity<String> addArt(
+            @RequestParam("userName") String userName,
+            @RequestParam("title") String title,
+            @RequestParam("size") String size,
+            @RequestParam("description") String description,
+            @RequestParam("category") String category,
+            @RequestParam("price") double price,
+            @RequestParam("image") MultipartFile image) {
+        try {
+            galleryService.addArt(userName, title, size, description, category, price, image);
+            return ResponseEntity.ok("Art added successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add art: " + e.getMessage());
+        }
     }
 
     @GetMapping

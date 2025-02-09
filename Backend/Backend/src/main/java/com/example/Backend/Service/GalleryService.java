@@ -10,4 +10,5 @@ public interface GalleryService {
     List<Gallery> getAllGalleries();
     Gallery getGalleryById(String artId);
     void deleteGallery(String artId);
+    void addArt(String userName, String title, String size, String description, String category, double price, MultipartFile image) throws IOException;
 }

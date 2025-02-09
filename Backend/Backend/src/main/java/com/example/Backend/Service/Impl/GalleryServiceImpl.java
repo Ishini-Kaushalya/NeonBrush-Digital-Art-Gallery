@@ -45,6 +45,25 @@ public class GalleryServiceImpl implements GalleryService {
         // Save the gallery object to MongoDB
         return galleryRepository.save(gallery);
     }
+    public void addArt(String userName, String title, String size, String description, String category, double price, MultipartFile image) throws IOException {
+        // Save the image to GridFS
+        DBObject metadata = new BasicDBObject();
+        metadata.put("userName", userName);
+        ObjectId imageId = gridFsTemplate.store(image.getInputStream(), image.getOriginalFilename(), image.getContentType(), metadata);
+
+        // Create a new Gallery object
+        Gallery gallery = new Gallery();
+        gallery.setUserName(userName);
+        gallery.setTitle(title);
+        gallery.setSize(size);
+        gallery.setDescription(description);
+        gallery.setCategory(category);
+        gallery.setPrice(price);
+        gallery.setImageId(imageId.toString());
+
+        // Save the gallery object to MongoDB
+        galleryRepository.save(gallery);
+    }
 
     @Override
     public List<Gallery> getAllGalleries() {
