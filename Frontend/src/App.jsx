@@ -17,6 +17,7 @@ import AdminLoginPopup from './Components/AdminLoginPopup';
 import ArtistLoginPopup from './Components/ArtistLoginPopup'; // Import ArtistLoginPopup
 import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPopup
 import Admin from "./Pages/Admin";
+import ShowArtist from "./Pages/ShowArtist";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/add-art" element={<AddArtItem />} /> {/* Add Art Item Route */}
           <Route path='/payment' element={<PaymentPage />} />
           <Route path='/admin' element={<Admin />} />
+          <Route path="/show-artist" element={<ShowArtist />} />
         </Routes>
       </div>
       <Footer />

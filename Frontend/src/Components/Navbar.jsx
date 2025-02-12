@@ -61,6 +61,14 @@ const Navbar = () => {
         >
           Contact us
         </Link>
+         {/* Add Artists Link */}
+         <Link 
+          to='/show-artist' 
+          onClick={() => setMenu('artists')} 
+          className={`cursor-pointer ${menu === 'artists' ? 'border-b-2 pb-1 border-[#38bdf8]' : ''}`}
+        >
+          Artists
+        </Link>
         
       </ul>
 
