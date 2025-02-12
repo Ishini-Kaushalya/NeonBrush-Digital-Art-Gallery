@@ -102,7 +102,7 @@ const ArtistProfile = () => {
       alert("Artist profile created successfully!");
 
       // Redirect to the artist's profile or another page
-      navigate(`/artist-detail/${event.target.userName.value}`);
+      navigate(`/artist-detail/${response.data.userName}`);
     } catch (err) {
       if (err.errors) {
         const errorMap = {};
@@ -298,7 +298,7 @@ const ArtistProfile = () => {
               }`}
               onClick={() => {
                 const artistName = document.querySelector(
-                  "input[name='firstName']"
+                  "input[name='userName']"
                 ).value;
                 if (artistName) {
                   navigate(`/artist-detail/${artistName}`);

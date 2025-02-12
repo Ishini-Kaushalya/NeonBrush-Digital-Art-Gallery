@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for making HTTP requests
+import axios from "axios";
 
 const ArtistDetail = () => {
   const { id } = useParams(); // Get the artist's ID or username from the URL
@@ -25,7 +25,7 @@ const ArtistDetail = () => {
 
         // Fetch artist details
         const artistResponse = await axios.get(
-          `http://localhost:8080/api/artist/username/${id}`,
+          `http://localhost:8080/api/artist/${id}`, // Use artist ID
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
@@ -125,6 +125,16 @@ const ArtistDetail = () => {
           <h1 className="text-4xl font-bold text-white">About the Artist</h1>
           <p className="text-lg text-white">{artist.description}</p>
         </div>
+      </div>
+
+      {/* See My Profile Button */}
+      <div className="flex justify-center mt-6">
+        <button
+          className="bg-sky-800 text-white px-6 py-2 rounded-full hover:bg-sky-950"
+          onClick={() => navigate(`/artist-detail/${artist.userName}`)}
+        >
+          Update My Profile
+        </button>
       </div>
     </div>
   );
