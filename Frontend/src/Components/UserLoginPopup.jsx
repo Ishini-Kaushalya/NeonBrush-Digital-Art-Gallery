@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { IoCloseCircleOutline } from "react-icons/io5"; // Import the icon
+import { IoCloseCircleOutline } from "react-icons/io5";
 import { z } from "zod";
 
 const UserLoginPopup = ({ setShowLogin }) => {
@@ -13,8 +13,8 @@ const UserLoginPopup = ({ setShowLogin }) => {
     agreeTerms: false,
   });
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState(""); // State for the success message
-  const [welcomeMessage, setWelcomeMessage] = useState(""); // State for welcome message after login
+  const [successMessage, setSuccessMessage] = useState("");
+  const [welcomeMessage, setWelcomeMessage] = useState("");
   const navigate = useNavigate();
 
   // Define schemas for login and signup
@@ -44,8 +44,8 @@ const UserLoginPopup = ({ setShowLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMessage(""); // Reset success message on form submit
-    setWelcomeMessage(""); // Reset welcome message
+    setSuccessMessage("");
+    setWelcomeMessage("");
 
     try {
       const schema = formState === "Sign Up" ? signupSchema : loginSchema;
@@ -63,21 +63,30 @@ const UserLoginPopup = ({ setShowLogin }) => {
               email: formData.email,
               password: formData.password,
               roles: ["user"],
-            } // Role changed to 'user'
+            }
           : { username: formData.username, password: formData.password };
 
       const response = await axios.post(apiEndpoint, payload, {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (formState === "Sign Up" && response.status === 200) {
-        setSuccessMessage("User registered successfully!"); // Success message for sign up
-        setTimeout(() => navigate("/products"), 2000); // Navigate after 2 seconds
-      }
+      if (response.status === 200) {
+        // Save JWT token in localStorage
+        const token = response.data.accessToken; // Adjust based on your response structure
+        if (token) {
+          console.log("Login successful. JWT Token received:", token);
+          localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in localStorage
+        }
 
-      if (formState === "Login" && response.status === 200) {
-        setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message for login
-        setTimeout(() => navigate("/products"), 2000); // Navigate to user dashboard after 2 seconds
+        if (formState === "Sign Up") {
+          setSuccessMessage("User registered successfully!");
+          setTimeout(() => navigate("/products"), 2000);
+        }
+
+        if (formState === "Login") {
+          setWelcomeMessage(`Welcome back, ${formData.username}!`);
+          setTimeout(() => navigate("/products"), 2000);
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -107,18 +116,15 @@ const UserLoginPopup = ({ setShowLogin }) => {
           />
         </div>
 
-        {/* Success Message */}
         {successMessage && (
           <div className="text-sm text-green-500 mb-4">{successMessage}</div>
         )}
 
-        {/* Welcome Back Message (for login) */}
         {welcomeMessage && (
           <div className="text-sm text-blue-500 mb-4">{welcomeMessage}</div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username Field */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">
               Username
@@ -136,7 +142,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
             )}
           </div>
 
-          {/* Email Field (Only for Sign Up) */}
           {formState === "Sign Up" && (
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700">Email</label>
@@ -154,7 +159,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
             </div>
           )}
 
-          {/* Password Field */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">
               Password
@@ -172,7 +176,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
             )}
           </div>
 
-          {/* Checkbox Field */}
           <div className="flex items-start gap-2 text-xs mt-3">
             <input
               type="checkbox"
@@ -191,12 +194,10 @@ const UserLoginPopup = ({ setShowLogin }) => {
             <p className="text-xs text-red-500">{errors.agreeTerms}</p>
           )}
 
-          {/* General Error */}
           {errors.general && (
             <p className="text-sm text-center text-red-500">{errors.general}</p>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-sky-600 text-white py-2 rounded font-medium hover:bg-sky-950 transition"
@@ -205,7 +206,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
           </button>
         </form>
 
-        {/* Toggle Between Login and Sign Up */}
         <div className="text-center mt-4">
           <p className="text-sm">
             {formState === "Login"
