@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ShowArtist = () => {
   const [artists, setArtists] = useState([]);
   const [imageUrls, setImageUrls] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -54,6 +55,15 @@ const ShowArtist = () => {
     fetchArtists();
   }, []);
 
+  // Function to navigate to ArtistDetail
+  const navigateToArtistDetailFromList = (artistId) => {
+    if (artistId) {
+      navigate(`/artist-detail/${artistId}`);
+    } else {
+      console.error("Artist ID is not available.");
+    }
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-16">
@@ -61,10 +71,10 @@ const ShowArtist = () => {
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {artists.map((artist) => (
-          <Link
+          <div
             key={artist.artistId}
-            to={`/artist-detail/${artist.artistId}`} // Correct path to ArtistDetail
-            className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+            onClick={() => navigateToArtistDetailFromList(artist.artistId)}
+            className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
           >
             <div className="flex flex-col items-center text-center">
               {artist.imageId && (
@@ -79,7 +89,7 @@ const ShowArtist = () => {
               </h3>
               <p className="text-gray-600 mt-2">{artist.description}</p>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>
