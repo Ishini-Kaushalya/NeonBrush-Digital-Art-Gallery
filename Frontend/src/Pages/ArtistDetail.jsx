@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "axios"; // Import axios for making HTTP requests
 
 const ArtistDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the artist's ID or username from the URL
   const navigate = useNavigate();
   const [artist, setArtist] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [imageUrl, setImageUrl] = useState(""); // State to store the image URL
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [error, setError] = useState(""); // State to handle errors
 
+  // Fetch artist details and image from the backend
   useEffect(() => {
     const fetchArtistDetails = async () => {
       try {
+        // Retrieve the JWT token from localStorage
         const token = JSON.parse(localStorage.getItem("accessToken"));
 
         if (!token) {
@@ -23,28 +25,29 @@ const ArtistDetail = () => {
 
         // Fetch artist details
         const artistResponse = await axios.get(
-          `http://localhost:8080/api/artist/${id}`,
+          `http://localhost:8080/api/artist/username/${id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
             },
           }
         );
         const artistData = artistResponse.data;
         setArtist(artistData);
 
-        // Fetch the image from GridFS
+        // Fetch the image from GridFS using the imageId
         if (artistData.imageId) {
           const imageResponse = await axios.get(
             `http://localhost:8080/api/artist/image/${artistData.imageId}`,
             {
-              responseType: "blob",
+              responseType: "blob", // Fetch the image as a blob
               headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
               },
             }
           );
 
+          // Convert the blob to a URL
           const imageUrl = URL.createObjectURL(imageResponse.data);
           setImageUrl(imageUrl);
         }
@@ -56,7 +59,7 @@ const ArtistDetail = () => {
           setError("An error occurred while fetching artist details.");
         }
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false after the request completes
       }
     };
 
@@ -73,7 +76,7 @@ const ArtistDetail = () => {
         <p className="text-red-500">{error}</p>
         <button
           className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mt-4"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/login")} // Redirect to login page
         >
           Log In
         </button>
@@ -99,16 +102,16 @@ const ArtistDetail = () => {
       <div
         className="relative flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-8 bg-cover bg-center p-8 rounded-lg"
         style={{
-          backgroundImage: `url(${imageUrl})`,
+          backgroundImage: `url(${imageUrl})`, // Use the fetched image as the background
         }}
       >
-        {/* Transparent Overlay */}
+        {/* Transparent Overlay for background */}
         <div className="absolute inset-0 bg-black opacity-70 backdrop-blur-10 rounded-lg"></div>
 
         {/* Left Side: Artist Image */}
         <div className="relative z-10">
           <img
-            src={imageUrl}
+            src={imageUrl} // Use the fetched image URL
             alt={artist.userName}
             className="w-[300px] h-[300px] object-cover rounded-lg shadow-lg border-8 border-white"
           />
@@ -122,16 +125,6 @@ const ArtistDetail = () => {
           <h1 className="text-4xl font-bold text-white">About the Artist</h1>
           <p className="text-lg text-white">{artist.description}</p>
         </div>
-      </div>
-
-      {/* Update My Profile Button */}
-      <div className="flex justify-center mt-6">
-        <button
-          className="bg-sky-800 text-white px-6 py-2 rounded-full hover:bg-sky-950"
-          onClick={() => navigate(`/artist-detail/${artist.userName}`)}
-        >
-          Update My Profile
-        </button>
       </div>
     </div>
   );

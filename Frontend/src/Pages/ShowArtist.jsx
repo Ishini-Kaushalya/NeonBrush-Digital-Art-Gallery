@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ShowArtist = () => {
@@ -55,12 +55,12 @@ const ShowArtist = () => {
     fetchArtists();
   }, []);
 
-  // Function to navigate to ArtistDetail
-  const navigateToArtistDetailFromList = (artistId) => {
-    if (artistId) {
-      navigate(`/artist-detail/${artistId}`);
+  // Function to navigate to ArtistDetail using username
+  const navigateToArtistDetailFromList = (userName) => {
+    if (userName) {
+      navigate(`/artist-detail/${userName}`);
     } else {
-      console.error("Artist ID is not available.");
+      console.error("Username is not available.");
     }
   };
 
@@ -73,7 +73,7 @@ const ShowArtist = () => {
         {artists.map((artist) => (
           <div
             key={artist.artistId}
-            onClick={() => navigateToArtistDetailFromList(artist.artistId)}
+            onClick={() => navigateToArtistDetailFromList(artist.userName)} // Use artist.userName instead of artist.artistId
             className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
           >
             <div className="flex flex-col items-center text-center">
