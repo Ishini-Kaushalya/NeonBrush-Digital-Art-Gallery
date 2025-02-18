@@ -3,48 +3,71 @@ package com.example.Backend.Service.Impl;
 import com.example.Backend.Model.Gallery;
 import com.example.Backend.Repository.GalleryRepository;
 import com.example.Backend.Service.GalleryService;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.model.GridFSUploadOptions;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class GalleryServiceImpl implements GalleryService{
+public class GalleryServiceImpl implements GalleryService {
+
     @Autowired
     private GalleryRepository galleryRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Override
-    public Gallery createGallery(Gallery gallery) {
+    public Gallery addArtItem(String userName, String title, String size, String description, String category, double price, MultipartFile image) {
+        Gallery gallery = new Gallery();
+        gallery.setUserName(userName);
+        gallery.setTitle(title);
+        gallery.setSize(size);
+        gallery.setDescription(description);
+        gallery.setCategory(category);
+        gallery.setPrice(price);
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                GridFSBucket gridFSBucket = GridFSBuckets.create(mongoTemplate.getDb());
+                GridFSUploadOptions options = new GridFSUploadOptions()
+                        .metadata(new Document("contentType", image.getContentType()));
+
+                ObjectId fileId = gridFSBucket.uploadFromStream(image.getOriginalFilename(), image.getInputStream(), options);
+                gallery.setImageId(fileId.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         return galleryRepository.save(gallery);
     }
+
     @Override
-    public Gallery getGalleryById(long id) {
-        Optional<Gallery> gallery = galleryRepository.findById(id);
-        return gallery.orElse(null);
-    }
-    @Override
-    public List<Gallery> getAllGallery() {
+    public List<Gallery> getAllArtItems() {
         return galleryRepository.findAll();
     }
+
     @Override
-    public Gallery updateGallery(long id, Gallery gallery) {
-        if (galleryRepository.existsById(id)) { gallery.setObject_Id(id);
-            return galleryRepository.save(gallery);
-        }
-        return null; // Return null or throw an exception if not found
-    }
-    @Override
-    public void deleteGallery(long id) {
-        galleryRepository.deleteById(id);
+    public List<Gallery> getArtItemsByUserName(String userName) {
+        return galleryRepository.findByUserName(userName);
     }
 
     @Override
-    public List<Gallery> getGalleryByType(String type) {
-        return galleryRepository.findByType(type);
+    public Gallery getArtItemById(String artId) {
+        return galleryRepository.findById(artId).orElse(null);
     }
 
-
-
+    @Override
+    public void deleteArtItem(String artId) {
+        galleryRepository.deleteById(artId);
+    }
 }
-
-
-
