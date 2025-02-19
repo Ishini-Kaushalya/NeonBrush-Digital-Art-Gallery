@@ -2,8 +2,14 @@ package com.example.Backend.Controller;
 
 import com.example.Backend.Model.Gallery;
 import com.example.Backend.Service.GalleryService;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +23,8 @@ public class GalleryController {
     @Autowired
     private GalleryService galleryService;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
     @PostMapping("/addArtItem")
     public ResponseEntity<Gallery> addArtItem(
             @RequestParam("userName") String userName,
@@ -57,4 +65,22 @@ public class GalleryController {
         galleryService.deleteArtItem(artId);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/image/{imageId}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String imageId) {
+        try {
+            GridFSBucket gridFSBucket = GridFSBuckets.create(mongoTemplate.getDb());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            gridFSBucket.downloadToStream(new ObjectId(imageId), outputStream);
+            byte[] imageBytes = outputStream.toByteArray();
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // Adjust based on the image type
+                    .body(imageBytes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+    }
+
+
 }
