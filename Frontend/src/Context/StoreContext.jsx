@@ -1,31 +1,57 @@
 import { createContext, useEffect, useState } from "react";
 import { art_list } from "../assets/Common/assets";
+import axios from "axios";
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState({});
+  const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (itemId) => {
-    // Only add the item if it's not already in the cart
-    setCartItems((prev) => {
-      if (prev[itemId]) {
-        return prev; // If item is already in cart, don't modify
+  const addToCart = async (artId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+      if (!token) {
+        console.error("User not authenticated");
+        return;
       }
-      return {
-        ...prev,
-        [itemId]: 1, // Add item with a quantity of 1 if not already in cart
-      };
-    });
+
+      // Fetch art details from the database
+      const response = await axios.get(
+        `http://localhost:8080/api/gallery/${artId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        const artDetails = response.data;
+
+        // Check if item is already in cart to avoid duplicates
+        const existingItem = cartItems.find((item) => item._id === artId);
+        if (existingItem) {
+          console.warn("Item is already in cart.");
+          return;
+        }
+
+        setCartItems((prevCart) => [...prevCart, artDetails]);
+      }
+    } catch (error) {
+      console.error("Error fetching art details:", error);
+    }
   };
 
   const removeFromCart = (itemId) => {
     setCartItems((prev) => {
       const updatedCart = { ...prev };
-      if (updatedCart[itemId] > 1) {
-        updatedCart[itemId] -= 1;
-      } else {
-        delete updatedCart[itemId];
+      // Check if the item exists in the cart
+      if (updatedCart[itemId]) {
+        if (updatedCart[itemId].quantity > 1) {
+          // If quantity is greater than 1, reduce by 1
+          updatedCart[itemId].quantity -= 1;
+        } else {
+          // If quantity is 1, remove the item completely
+          delete updatedCart[itemId];
+        }
       }
       return updatedCart;
     });

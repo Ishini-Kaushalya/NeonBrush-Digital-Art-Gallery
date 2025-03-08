@@ -34,7 +34,17 @@ const Products = () => {
       : artItems.filter((art) => art.category === category);
 
   const handleArtClick = (art) => {
-    navigate(`/art-detail`, { state: art });
+    const formattedArt = {
+      _id: art.artId, // Ensuring ArtDetail receives _id
+      name: art.title,
+      description: art.description,
+      price: art.price,
+      imageId: art.imageId,
+      userName: art.userName,
+      size: art.size,
+    };
+
+    navigate("/art-detail", { state: formattedArt });
   };
 
   if (loading) {
@@ -43,10 +53,10 @@ const Products = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-center mt-4">
+      <h1 className='text-2xl font-bold text-center mt-4'>
         {category} Artworks
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6'>
         {filteredArts.map((art) => (
           <ArtItem
             key={art.artId}
