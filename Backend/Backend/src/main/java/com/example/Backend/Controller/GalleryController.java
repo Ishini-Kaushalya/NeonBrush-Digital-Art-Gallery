@@ -25,6 +25,7 @@ public class GalleryController {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
     @PostMapping("/addArtItem")
     public ResponseEntity<Gallery> addArtItem(
             @RequestParam("userName") String userName,
@@ -65,6 +66,7 @@ public class GalleryController {
         galleryService.deleteArtItem(artId);
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/image/{imageId}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageId) {
         try {
@@ -79,8 +81,12 @@ public class GalleryController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-
     }
 
-
+    // New endpoint to get art items by category
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Gallery>> getArtItemsByCategory(@PathVariable String category) {
+        List<Gallery> galleries = galleryService.getArtItemsByCategory(category);
+        return ResponseEntity.ok(galleries);
+    }
 }

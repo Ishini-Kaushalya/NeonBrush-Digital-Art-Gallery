@@ -272,14 +272,14 @@ const AddArtItem = () => {
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
             >
               <option value="">Select Category</option>
-              <option value="illustration">Illustration</option>
-              <option value="anime">Anime</option>
-              <option value="doodling">Doodling</option>
-              <option value="geometric">Geometric</option>
-              <option value="pointilism">Pointilism</option>
+              <option value="pastel">Pastel</option>
+              <option value="oil">Oil</option>
+              <option value="ink">Ink</option>
+              <option value="water color">Water Color</option>
+              <option value="canvas">Canvas</option>
               <option value="charcoal">Charcoal</option>
-              <option value="typography">Typography</option>
-              <option value="painting">Painting</option>
+              <option value="acrylic">Acrylic</option>
+              <option value="pencil">Pencil</option>
             </select>
             {errors.category && (
               <p className="text-red-500 text-sm mt-1">{errors.category}</p>

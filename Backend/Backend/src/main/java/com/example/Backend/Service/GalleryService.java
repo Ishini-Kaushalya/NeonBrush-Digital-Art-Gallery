@@ -11,4 +11,7 @@ public interface GalleryService {
     List<Gallery> getArtItemsByUserName(String userName);
     Gallery getArtItemById(String artId);
     void deleteArtItem(String artId);
+
+    // New method to get art items by category
+    List<Gallery> getArtItemsByCategory(String category);
 }
