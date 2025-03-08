@@ -418,4 +418,34 @@ export const artists = [
     description: "NatureSketch is an artist who creates beautiful wildlife illustrations in harmony with nature.",
   },
 ];
+export const artist_arts = [
+  // Artist 1 with 3 artworks
+  { _id: "1", artist_id: "1", name: "Dreamy Eyes", image: illus_1 },
+  { _id: "2", artist_id: "1", name: "Starry Night", image: illus_2 },
+  { _id: "3", artist_id: "1", name: "Sunset Dreams", image: illus_2 },
+
+  // Artist 2 with 3 artworks
+  { _id: "4", artist_id: "2", name: "Enchanted Valley", image: illus_2 },
+  { _id: "5", artist_id: "2", name: "Mystic Forest", image: illus_2 },
+  { _id: "6", artist_id: "2", name: "Moonlit Path", image: illus_2 },
+
+  // Artist 3 with 5 artworks
+  { _id: "7", artist_id: "3", name: "Warrior Spirit", image: bg_3 },
+  { _id: "8", artist_id: "3", name: "Strength of the Sea", image: illus_2 },
+  { _id: "9", artist_id: "3", name: "Echo of the Mountains", image: illus_2 },
+  { _id: "10", artist_id: "3", name: "Dragon's Fury", image: illus_2 },
+  { _id: "11", artist_id: "3", name: "Wings of Fire", image: illus_2 },
+
+  // Artist 4 with 5 artworks
+  { _id: "12", artist_id: "4", name: "Chibi Wonderland", image: illus_2 },
+  { _id: "13", artist_id: "4", name: "Tiny Adventures", image: illus_2 },
+  { _id: "14", artist_id: "4", name: "Magical Forest", image: illus_2 },
+  { _id: "15", artist_id: "4", name: "Dreamland Escape", image: illus_2 },
+  { _id: "16", artist_id: "4", name: "Funky Town", image: illus_2 },
+
+  // Artist 5 with 3 artworks
+  { _id: "17", artist_id: "5", name: "Doodle Magic", image: illus_2 },
+  { _id: "18", artist_id: "5", name: "Whimsical World", image: illus_2 },
+  { _id: "19", artist_id: "5", name: "Abstract Beauty", image: illus_2 }
+];
 

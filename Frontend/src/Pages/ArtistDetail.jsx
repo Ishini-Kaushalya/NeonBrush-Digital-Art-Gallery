@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for making HTTP requests
+import { artist_arts } from "../assets/Common/assets"; // Import artist_arts array
 
 const ArtistDetail = () => {
   const { id } = useParams(); // Get the artist's ID or username from the URL
@@ -88,6 +89,9 @@ const ArtistDetail = () => {
     return <div>Artist not found!</div>;
   }
 
+  // Filter artworks for the selected artist
+  const filteredArts = artist_arts.filter((art) => art.artist_id === id);
+  
   return (
     <div className="artist-detail container mx-auto mt-16 p-4">
       {/* Back Button */}
@@ -126,6 +130,28 @@ const ArtistDetail = () => {
           <p className="text-lg text-white">{artist.description}</p>
         </div>
       </div>
+
+      
+      {/* Artist's Artworks */}
+      {filteredArts.length > 0 ? (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Artworks</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filteredArts.map((art) => (
+              <div key={art._id} className="p-4 bg-white shadow-lg rounded-lg">
+                <img
+                  src={art.image}
+                  alt={art.name}
+                  className="w-full h-60 object-cover rounded-lg"
+                />
+                <h3 className="mt-2 text-lg font-semibold">{art.name}</h3>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="text-gray-600">No artworks available for this artist.</p>
+      )}
     </div>
   );
 };
