@@ -1,44 +1,67 @@
-import React, { useState ,useContext} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { StoreContext } from "../Context/StoreContext"; //new
-import { MdArrowBackIos } from "react-icons/md";//new
+import { StoreContext } from "../Context/StoreContext";
+import { MdArrowBackIos } from "react-icons/md";
 import { FaCartPlus } from "react-icons/fa";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import axios from "axios";
 
 const ArtDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { _id, name, description, price, image, ownerName, imageSize } = location.state || {};
-  const { addToCart } = useContext(StoreContext); // Access the addToCart function from context
+  const { _id, name, description, price, imageId, userName, size } =
+    location.state || {};
+  const { addToCart } = useContext(StoreContext);
   const [fullImage, setFullImage] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
 
-  // Navigate to artist detail page
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("accessToken"));
+        const response = await axios.get(
+          `http://localhost:8080/api/gallery/image/${imageId}`,
+          {
+            responseType: "arraybuffer",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const base64Image = btoa(
+          new Uint8Array(response.data).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ""
+          )
+        );
+        setImageSrc(`data:image/jpeg;base64,${base64Image}`);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    if (imageId) {
+      fetchImage();
+    }
+  }, [imageId]);
+
   const handleOwnerClick = () => {
-    navigate(`/artist-detail/${ownerName}`, { state: { ownerName } });
+    navigate(`/artist-detail/${userName}`, { state: { userName } });
   };
-
-  // // Close modal image view
-  // const closeImageModal = () => {
-  //   setFullImage(false);
-  // };
-
-  // // Navigate back to the previous page
-  // const navigateBack = () => {
-  //   navigate(-1);
-  //   closeImageModal();
-  // };
 
   return (
     <div>
       <div className="art-detail-page container mx-auto mt-16 flex flex-col md:flex-row space-y-8 md:space-y-0">
         {/* Left Side: Image */}
         <div className="w-full md:w-1/2 flex justify-center items-center relative">
-          <img
-            src={image}
-            alt={name}
-            className="w-[300px] h-[400px] object-contain rounded-lg shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-105 border-4 border-transparent animate-border"
-            onClick={() => setFullImage(true)}
-          />
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt={name}
+              className="w-[300px] h-[400px] object-contain rounded-lg shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-105 border-4 border-transparent animate-border"
+              onClick={() => setFullImage(true)}
+            />
+          ) : (
+            <div>Loading image...</div>
+          )}
         </div>
 
         {/* Right Side: Art Details */}
@@ -50,10 +73,10 @@ const ArtDetail = () => {
             className="text-black cursor-pointer hover:text-blue-800 font-medium"
             onClick={handleOwnerClick}
           >
-            Owner: {ownerName}
+            Owner: {userName}
           </p>
 
-          <p className="text-gray-500">Image Size: {imageSize}</p>
+          <p className="text-gray-500">Image Size: {size}</p>
           <div className="flex space-x-4">
             {/* Add to Cart Button */}
             <button
@@ -73,16 +96,15 @@ const ArtDetail = () => {
               Back
             </button>
           </div>
-          
         </div>
       </div>
 
       {/* Full Image Modal */}
-      {fullImage && (
+      {fullImage && imageSrc && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="relative max-w-full max-h-full p-4">
             <img
-              src={image}
+              src={imageSrc}
               alt={name}
               className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-lg"
             />
