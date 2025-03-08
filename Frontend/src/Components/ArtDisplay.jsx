@@ -17,6 +17,7 @@ const ArtDisplay = ({ category }) => {
                 key={index}
                 id={item._id}
                 name={item.name}
+                artistName={item.artistName}
                 description={item.description}
                 price={item.price}
                 image={item.image}

@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
-
-const ArtItem = ({ id, name, price, description, imageId, onClick }) => {
+const ArtItem = ({
+  id,
+  name,
+  artistName,
+  price,
+  description,
+  imageId,
+  onClick,
+}) => {
   const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
@@ -40,7 +46,12 @@ const ArtItem = ({ id, name, price, description, imageId, onClick }) => {
             className="w-full h-[250px] object-cover rounded-t-lg transition-transform duration-200 group-hover:scale-105"
             src={imageSrc}
             alt={name}
-            onClick={onClick}
+            onClick={() =>
+              onClick({
+                ...{ id, name, artistName, price, description, imageId },
+                image: imageSrc,
+              })
+            }
           />
         ) : (
           <div>Loading image...</div>
@@ -50,6 +61,7 @@ const ArtItem = ({ id, name, price, description, imageId, onClick }) => {
         <div className="flex justify-between items-center mb-2">
           <p className="text-lg font-medium">{name}</p>
         </div>
+        <p className="text-lg font-medium">{artistName}</p>
         <p className="text-gray-600 text-sm truncate">{description}</p>
         <p className="text-tomato text-xl font-semibold mt-2">${price}</p>
       </div>
