@@ -13,11 +13,10 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
     agreeTerms: false,
   });
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState(""); // State for the success message
-  const [welcomeMessage, setWelcomeMessage] = useState(""); // State for welcome message after login
+  const [successMessage, setSuccessMessage] = useState("");
+  const [welcomeMessage, setWelcomeMessage] = useState("");
   const navigate = useNavigate();
 
-  // Define schemas for login and signup
   const loginSchema = z.object({
     username: z.string().min(1, "Username is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
@@ -44,8 +43,8 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMessage(""); // Reset success message on form submit
-    setWelcomeMessage(""); // Reset welcome message
+    setSuccessMessage("");
+    setWelcomeMessage("");
 
     try {
       const schema = formState === "Sign Up" ? signupSchema : loginSchema;
@@ -62,7 +61,7 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
               username: formData.username,
               email: formData.email,
               password: formData.password,
-              roles: ["artist"], // Add the 'artist' role during sign up
+              roles: ["artist"],
             }
           : { username: formData.username, password: formData.password };
 
@@ -70,29 +69,27 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
         headers: { "Content-Type": "application/json" },
       });
 
-      
       if (response.status === 200) {
-        // Save JWT token in sessionStorage
-        const token = response.data.accessToken; // Adjust based on your response structure
+        const token = response.data.accessToken;
         if (token) {
-          console.log(
-            "Login successful. JWT Token received:", token
-          );
-          localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in sessionStorage
+          localStorage.setItem("accessToken", JSON.stringify(token));
         }
 
         if (formState === "Sign Up") {
-          setSuccessMessage("Artist registered successfully!"); // Show success message
+          setSuccessMessage("Artist registered successfully!");
           setTimeout(() => {
             navigate("/artist-profile", {
-              state: { username: formData.username, email: formData.email }, // Pass username and email
+              state: { username: formData.username, email: formData.email },
             });
-          }, 2000); // Navigate after 2 seconds
+          }, 2000);
         }
 
         if (formState === "Login") {
-          setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
-          setTimeout(() => navigate("/artist-profile"), 2000); // Navigate to artist profile after 2 seconds
+          setWelcomeMessage(`Welcome back, ${formData.username}!`);
+          setTimeout(
+            () => navigate(`/artist-detail/${formData.username}`),
+            2000
+          );
         }
       }
     } catch (error) {
@@ -123,18 +120,15 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
           />
         </div>
 
-        {/* Success Message */}
         {successMessage && (
           <div className="text-sm text-green-500 mb-4">{successMessage}</div>
         )}
 
-        {/* Welcome Back Message (for login) */}
         {welcomeMessage && (
           <div className="text-sm text-blue-500 mb-4">{welcomeMessage}</div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username Field */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">
               Username
@@ -152,7 +146,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
             )}
           </div>
 
-          {/* Email Field (Only for Sign Up) */}
           {formState === "Sign Up" && (
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700">Email</label>
@@ -170,7 +163,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
             </div>
           )}
 
-          {/* Password Field */}
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">
               Password
@@ -188,7 +180,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
             )}
           </div>
 
-          {/* Checkbox Field */}
           <div className="flex items-start gap-2 text-xs mt-3">
             <input
               type="checkbox"
@@ -207,12 +198,10 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
             <p className="text-xs text-red-500">{errors.agreeTerms}</p>
           )}
 
-          {/* General Error */}
           {errors.general && (
             <p className="text-sm text-center text-red-500">{errors.general}</p>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-sky-800 text-white py-2 rounded font-medium hover:bg-sky-950 transition"
@@ -221,7 +210,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
           </button>
         </form>
 
-        {/* Toggle Between Login and Sign Up */}
         <div className="text-center mt-4">
           <p className="text-sm">
             {formState === "Login"
