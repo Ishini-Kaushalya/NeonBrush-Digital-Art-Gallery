@@ -1,6 +1,8 @@
 import React from "react";
 import { assets } from "../assets/Common/assets";
-
+import { FaWhatsapp } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
 const Footer = () => {
   return (
     <div
@@ -17,11 +19,24 @@ const Footer = () => {
             Our platform makes it easy to find and purchase art that resonates
             with you, and to support the artists who create it.
           </p>
-          <div className="flex space-x-4">
+          {/* <div className="flex space-x-4">
             <img className="w-10" src={assets.facebook_icon} alt="Facebook" />
             <img className="w-10" src={assets.twitter_icon} alt="Twitter" />
             <img className="w-10" src={assets.linkedin_icon} alt="LinkedIn" />
           </div>
+        </div> */}
+        <div className="flex space-x-4">
+  {/* Social Media Links */}
+  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+    <FaFacebook  className="w-10 h-10" />
+  </a>
+  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+    <FaTwitter className="w-10 h-10" />
+  </a>
+  <a href="https://wa.me/+947744567890" target="_blank" rel="noopener noreferrer">
+    <FaWhatsapp className="w-10 h-10" />
+  </a>
+</div>
         </div>
 
         {/* Center Content */}
