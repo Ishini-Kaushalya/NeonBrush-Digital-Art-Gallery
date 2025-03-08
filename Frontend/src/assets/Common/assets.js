@@ -16,14 +16,14 @@ import artist_1 from "./artist_1.png"
 import artist_bg1 from "./artist_bg_1.jpg"
 
 import search_icon from "./search_icon.png";
-import illustration from "./illustration.jpeg";
-import anime from "./anime.jpeg";
-import doodling from "./doodling.jpeg";
-import geometric from "./geometric.jpeg";
-import pointilism from "./pointilism.jpeg";
+import canvas from "./canvas.jpg";
+import acrylic from "./acrylic.jpg";
+import oil from "./oil.jpg";
+import pastel from "./pastel.jpg";
+import pencil from "./pencil.jpg";
 import charcoal from "./charcoal.jpeg";
-import typography from "./typography.jpeg";
-import painting from "./painting.jpeg";
+import ink from "./ink.jpg";
+import watercolor from "./watercolor.jpg";
 
 import image_SigninSelection1 from "./image_46.png";
 import image_SigninSelection2 from "./image_47.jpg";
@@ -77,36 +77,36 @@ export const assets = {
 
 export const menu_list = [
   {
-    menu_name: "Illustration",
-    menu_image: illustration,
+    menu_name: "Canvas",
+    menu_image: canvas,
   },
   {
-    menu_name: "Anime",
-    menu_image: anime,
+    menu_name: "Acrylic",
+    menu_image: acrylic,
   },
   {
-    menu_name: "Doodling",
-    menu_image: doodling,
+    menu_name: "Ink",
+    menu_image: ink,
   },
   {
-    menu_name: "Geometric",
-    menu_image: geometric,
+    menu_name: "Oil",
+    menu_image: oil,
   },
   {
-    menu_name: "Pointilism",
-    menu_image: pointilism,
+    menu_name: "Pastel",
+    menu_image: pastel,
   },
   {
     menu_name: "Charcoal",
     menu_image: charcoal,
   },
   {
-    menu_name: "Typography",
-    menu_image: typography,
+    menu_name: "Pencil",
+    menu_image: pencil,
   },
   {
-    menu_name: "Painting",
-    menu_image: painting,
+    menu_name: "Watercolor",
+    menu_image: watercolor,
   },
 ];
 
