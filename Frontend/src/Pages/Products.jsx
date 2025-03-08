@@ -52,7 +52,6 @@ const Products = () => {
             key={art.artId}
             id={art.artId}
             name={art.title}
-            artistName={art.userName}
             price={art.price}
             description={art.description}
             imageId={art.imageId}
