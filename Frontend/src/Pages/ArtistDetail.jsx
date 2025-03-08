@@ -11,8 +11,9 @@ const ArtistDetail = () => {
   const [artworks, setArtworks] = useState([]); // State to store the artist's artworks
   const [loading, setLoading] = useState(true); // State to track loading status
   const [error, setError] = useState(""); // State to handle errors
+  const [isArtist, setIsArtist] = useState(false); // State to check if the logged-in user is an artist
 
-  // Fetch artist details, image, and artworks from the backend
+  // Fetch artist details, image, artworks, and user role from the backend
   useEffect(() => {
     const fetchArtistDetails = async () => {
       try {
@@ -24,6 +25,17 @@ const ArtistDetail = () => {
           setLoading(false);
           return;
         }
+
+        // Fetch the current user's role
+        const roleResponse = await axios.get(
+          `http://localhost:8080/api/user/role`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setIsArtist(roleResponse.data.includes("ROLE_ARTIST")); // Check if the user is an artist
 
         // Fetch artist details
         const artistResponse = await axios.get(
@@ -110,6 +122,16 @@ const ArtistDetail = () => {
       >
         Back
       </button>
+
+      {/* Add Art Button (Visible only for artists) */}
+      {isArtist && (
+        <button
+          className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mb-4"
+          onClick={() => navigate("/add-art")}
+        >
+          Add Art
+        </button>
+      )}
 
       {/* Content Area */}
       <div
