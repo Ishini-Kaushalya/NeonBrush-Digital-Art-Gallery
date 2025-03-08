@@ -110,6 +110,12 @@ const ArtistDetail = () => {
       >
         Back
       </button>
+      <button
+        className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mb-4"
+        onClick={() => navigate("/add-art")}
+      >
+        Add Art
+      </button>
 
       {/* Content Area */}
       <div
