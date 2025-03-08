@@ -43,7 +43,7 @@ const AdminLoginPopup = ({ setShowLogin }) => {
 
       if (response.status === 200) {
         setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
-        setTimeout(() => navigate("/admin-dashboard"), 2000); // Navigate to admin dashboard after 2 seconds
+        setTimeout(() => navigate("/admin"), 2000); // Navigate to admin dashboard after 2 seconds
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
