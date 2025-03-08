@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios"; // Import axios for making HTTP requests
-import { artist_arts } from "../assets/Common/assets"; // Import artist_arts array
+import axios from "axios";
+import ArtItem from "../Components/ArtItem"; // Import the ArtItem component
 
 const ArtistDetail = () => {
   const { id } = useParams(); // Get the artist's ID or username from the URL
   const navigate = useNavigate();
   const [artist, setArtist] = useState(null);
-  const [imageUrl, setImageUrl] = useState(""); // State to store the image URL
+  const [imageUrl, setImageUrl] = useState(""); // State to store the artist's image URL
+  const [artworks, setArtworks] = useState([]); // State to store the artist's artworks
   const [loading, setLoading] = useState(true); // State to track loading status
   const [error, setError] = useState(""); // State to handle errors
 
-  // Fetch artist details and image from the backend
+  // Fetch artist details, image, and artworks from the backend
   useEffect(() => {
     const fetchArtistDetails = async () => {
       try {
@@ -29,21 +30,21 @@ const ArtistDetail = () => {
           `http://localhost:8080/api/artist/username/${id}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         const artistData = artistResponse.data;
         setArtist(artistData);
 
-        // Fetch the image from GridFS using the imageId
+        // Fetch the artist's image from GridFS using the imageId
         if (artistData.imageId) {
           const imageResponse = await axios.get(
             `http://localhost:8080/api/artist/image/${artistData.imageId}`,
             {
-              responseType: "blob", // Fetch the image as a blob
+              responseType: "blob",
               headers: {
-                Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
+                Authorization: `Bearer ${token}`,
               },
             }
           );
@@ -52,6 +53,17 @@ const ArtistDetail = () => {
           const imageUrl = URL.createObjectURL(imageResponse.data);
           setImageUrl(imageUrl);
         }
+
+        // Fetch the artist's artworks
+        const artworksResponse = await axios.get(
+          `http://localhost:8080/api/gallery/user/${artistData.userName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setArtworks(artworksResponse.data); // Store the fetched artworks
       } catch (error) {
         console.error("Error fetching artist details:", error);
         if (error.response?.status === 401) {
@@ -89,9 +101,6 @@ const ArtistDetail = () => {
     return <div>Artist not found!</div>;
   }
 
-  // Filter artworks for the selected artist
-  const filteredArts = artist_arts.filter((art) => art.artist_id === id);
-  
   return (
     <div className="artist-detail container mx-auto mt-16 p-4">
       {/* Back Button */}
@@ -131,21 +140,21 @@ const ArtistDetail = () => {
         </div>
       </div>
 
-      
       {/* Artist's Artworks */}
-      {filteredArts.length > 0 ? (
+      {artworks.length > 0 ? (
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Artworks</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {filteredArts.map((art) => (
-              <div key={art._id} className="p-4 bg-white shadow-lg rounded-lg">
-                <img
-                  src={art.image}
-                  alt={art.name}
-                  className="w-full h-60 object-cover rounded-lg"
-                />
-                <h3 className="mt-2 text-lg font-semibold">{art.name}</h3>
-              </div>
+            {artworks.map((art) => (
+              <ArtItem
+                key={art._id}
+                id={art._id}
+                name={art.title}
+                price={art.price}
+                description={art.description}
+                imageId={art.imageId}
+                onClick={() => navigate(`/art/${art._id}`)} // Navigate to artwork detail page
+              />
             ))}
           </div>
         </div>
