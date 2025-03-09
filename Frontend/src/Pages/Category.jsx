@@ -68,7 +68,7 @@ const Category = () => {
 
   // Function to navigate to ArtDetail page
   const navigateToArtDetail = (artId) => {
-    navigate(`/art-detail/${artId}`);
+    navigate(`/art-detail/${artId}`); // Make sure artId is included in the URL
   };
 
   if (loading) {
@@ -98,8 +98,10 @@ const Category = () => {
                 />
               )}
               <h2 className="text-lg font-semibold mt-2">{artwork.title}</h2>
-              <p className="text-gray-600">{artwork.description}</p>
-              <p className="text-blue-600 font-bold">${artwork.price}</p>
+              <p className="text-gray-600 flex justify-between font-semibold">
+                <span>{artwork.userName}</span>
+                <span>${artwork.price}</span>
+              </p>
             </div>
           ))
         ) : (
