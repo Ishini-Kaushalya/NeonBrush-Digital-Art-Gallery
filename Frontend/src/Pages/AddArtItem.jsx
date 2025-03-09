@@ -275,7 +275,7 @@ const AddArtItem = () => {
               <option value="pastel">Pastel</option>
               <option value="oil">Oil</option>
               <option value="ink">Ink</option>
-              <option value="water color">Water Color</option>
+              <option value="watercolor">Water Color</option>
               <option value="canvas">Canvas</option>
               <option value="charcoal">Charcoal</option>
               <option value="acrylic">Acrylic</option>
