@@ -280,33 +280,6 @@ const ArtistProfile = () => {
             >
               Submit
             </button>
-            <button
-              className={`px-6 py-2 rounded-full ${
-                isProfileComplete
-                  ? "bg-sky-800 text-white  hover:bg-sky-950"
-                  : "bg-gray-400 text-gray-200 cursor-not-allowed"
-              }`}
-              onClick={() => navigate("/add-art")}
-            >
-              Add Art
-            </button>
-            <button
-              className={`px-6 py-2 rounded-full ${
-                isProfileComplete
-                  ? "bg-sky-800 text-white hover:bg-sky-950"
-                  : "bg-gray-400 text-gray-200 cursor-not-allowed"
-              }`}
-              onClick={() => {
-                const artistName = document.querySelector(
-                  "input[name='firstName']"
-                ).value;
-                if (artistName) {
-                  navigate(`/artist-detail/${artistName}`);
-                }
-              }}
-            >
-              See My Profile
-            </button>
           </div>
         </div>
       </form>

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../Context/StoreContext";
 import { MdArrowBackIos } from "react-icons/md";
 import { FaCartPlus } from "react-icons/fa";
-import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
 
 const ArtDetail = () => {
@@ -109,10 +109,10 @@ const ArtDetail = () => {
               className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-lg"
             />
             <button
-              className="absolute top-4 right-4 text-white text-3xl font-bold"
+              className="absolute top-4 right-4  text-3xl font-bold"
               onClick={() => setFullImage(false)}
             >
-              <IoCloseCircleOutline />
+              <IoMdCloseCircle />
             </button>
           </div>
         </div>

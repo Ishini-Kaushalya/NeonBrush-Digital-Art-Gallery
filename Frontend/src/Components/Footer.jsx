@@ -38,11 +38,13 @@ const Footer = () => {
         <div className="flex flex-col items-start gap-5">
           <h2 className="text-white">Company</h2>
           <ul className="space-y-2">
-            <li className="cursor-pointer">Home</li>
+            <li className="cursor-pointer">
+            <Link to="/">Home</Link>
+            </li>
             <li className="cursor-pointer">
             <Link to="/aboutUs">About Us</Link>
             </li>
-            <li className="cursor-pointer">Delivery</li>
+            {/* <li className="cursor-pointer">Delivery</li> */}
             <li className="cursor-pointer">Privacy policy</li>
           </ul>
         </div>
