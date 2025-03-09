@@ -1,15 +1,52 @@
 import React, { useContext } from "react";
 import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Cart = () => {
-  const { cartItems, art_list, removeFromCart, getTotalCartAmount } =
+  const { cartItems, removeFromCart, getTotalCartAmount } =
     useContext(StoreContext);
 
+  const [images, setImages] = useState({});
+  const quantity = 1;
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const imagesData = {};
+      for (const item of cartItems) {
+        try {
+          // Retrieve the JWT token from localStorage
+          const token = JSON.parse(localStorage.getItem("accessToken"));
+          if (!token) {
+            console.error("User not authenticated");
+            return;
+          }
+
+          const response = await axios.get(
+            `http://localhost:8080/api/gallery/image/${item.imageId}`,
+            {
+              responseType: "blob",
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the request header
+              },
+            }
+          );
+          imagesData[item.imageId] = URL.createObjectURL(response.data);
+        } catch (error) {
+          console.error("Error fetching image:", error);
+        }
+      }
+      setImages(imagesData);
+    };
+
+    fetchImages();
+  }, [cartItems]);
+  console.log(cartItems);
   const navigate = useNavigate();
   // Function to handle navigation to the payment page
   const handleProceedToCheckout = () => {
-    console.log({ cartItems });
     navigate("/payment"); // Navigate to Payment page
   };
   return (
@@ -24,22 +61,24 @@ const Cart = () => {
           <p>Remove</p>
         </div>
         <hr className='border-gray-300' />
-        {art_list.map((item) => {
-          if (cartItems[item._id] > 0) {
+        {cartItems.length === 0 ? (
+          <p>No items in the cart</p>
+        ) : (
+          cartItems.map((item, index) => {
             return (
-              <div key={item._id} className='space-y-4'>
+              <div key={item.artId} className='space-y-4'>
                 <div className='grid grid-cols-6 items-center text-black text-sm'>
                   <img
-                    src={item.image}
+                    src={images[item.imageId]}
                     alt={item.name}
                     className='w-12 h-12 object-cover'
                   />
-                  <p>{item.name}</p>
+                  <p>{item.title}</p>
                   <p>Rs.{item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p>Rs.{item.price * cartItems[item._id]}</p>
+                  <p>{quantity}</p>
+                  <p>Rs.{item.price * quantity}</p>
                   <p
-                    onClick={() => removeFromCart(item._id)}
+                    onClick={() => removeFromCart(item.artId)}
                     className='cursor-pointer text-red-600 font-semibold'
                   >
                     x
@@ -48,9 +87,8 @@ const Cart = () => {
                 <hr className='border-gray-300' />
               </div>
             );
-          }
-          return null;
-        })}
+          })
+        )}
       </div>
 
       <div className='mt-20 flex flex-col lg:flex-row gap-12'>
@@ -75,14 +113,12 @@ const Cart = () => {
         </div>
         {/* Button to navigate to the payment page */}
         <div className='flex-1 space-y-4 relative'>
-          {cartItems.length > 0 && (
-            <button
-              onClick={handleProceedToCheckout}
-              className='absolute right-4 bottom-2 bg-sky-800 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-sky-950'
-            >
-              PROCEED TO CHECKOUT
-            </button>
-          )}
+          <button
+            onClick={handleProceedToCheckout}
+            className='absolute right-4 bottom-2 bg-sky-800 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-sky-950'
+          >
+            PROCEED TO CHECKOUT
+          </button>
         </div>
       </div>
     </div>
