@@ -10,8 +10,6 @@ const AdminLoginPopup = ({ setShowLogin }) => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState(""); // State for the success message
-  const [welcomeMessage, setWelcomeMessage] = useState(""); // State for welcome message after login
   const navigate = useNavigate();
 
   // Define schema for login
@@ -29,8 +27,6 @@ const AdminLoginPopup = ({ setShowLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMessage(""); // Reset success message on form submit
-    setWelcomeMessage(""); // Reset welcome message
 
     try {
       loginSchema.parse(formData);
@@ -42,8 +38,9 @@ const AdminLoginPopup = ({ setShowLogin }) => {
       });
 
       if (response.status === 200) {
-        setWelcomeMessage(`Welcome back, ${formData.username}!`); // Set the welcome message
-        setTimeout(() => navigate("/admin-dashboard"), 2000); // Navigate to admin dashboard after 2 seconds
+        // Close the popup and navigate to the admin dashboard
+        setShowLogin(false);
+        navigate("/admin");
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -72,16 +69,6 @@ const AdminLoginPopup = ({ setShowLogin }) => {
             className="w-6 h-6 cursor-pointer text-gray-600 hover:text-red-500"
           />
         </div>
-
-        {/* Success Message */}
-        {successMessage && (
-          <div className="text-sm text-green-500 mb-4">{successMessage}</div>
-        )}
-
-        {/* Welcome Back Message (for login) */}
-        {welcomeMessage && (
-          <div className="text-sm text-blue-500 mb-4">{welcomeMessage}</div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username Field */}
