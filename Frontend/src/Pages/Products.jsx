@@ -53,8 +53,8 @@ const Products = () => {
 
   return (
     <div>
-      <h1 className='text-2xl font-bold text-center mt-4'>
-        {category} Artworks
+      <h1 className='text-2xl font-bold text-center mt-20'>
+        {category !=="All"&&`${category} Artworks`} 
       </h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6'>
         {filteredArts.map((art) => (

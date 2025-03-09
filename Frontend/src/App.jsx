@@ -20,7 +20,6 @@ import Admin from "./Pages/Admin";
 import ShowArtist from "./Pages/ShowArtist";
 import AboutUS from "./Components/AboutUs";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
-import Category from "./Pages/Category";
 import Delivery from "./Pages/Delivery";
 
 
@@ -67,7 +66,6 @@ const App = () => {
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/aboutUs" element={<AboutUS />} />
-          <Route path="/category/:categoryName" element={<Category />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/show-artist" element={<ShowArtist />} />
           <Route path="/delivery" element={<Delivery/>}/>
