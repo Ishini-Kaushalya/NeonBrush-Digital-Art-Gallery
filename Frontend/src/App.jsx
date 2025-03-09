@@ -19,6 +19,7 @@ import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPop
 import Admin from "./Pages/Admin";
 import ShowArtist from "./Pages/ShowArtist";
 import AboutUS from "./Components/AboutUs";
+import PrivacyPolicy from "./Components/PrivacyPolicy";
 
 
 const App = () => {
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/aboutUs" element={<AboutUS />} />
+          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/show-artist" element={<ShowArtist />} />
         </Routes>
       </div>
