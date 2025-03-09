@@ -5,7 +5,16 @@ import axios from "axios";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    // Retrieve cart from localStorage on app load
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  useEffect(() => {
+    // Save cart to localStorage whenever it updates
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = async (artId) => {
     try {
@@ -41,33 +50,15 @@ const StoreContextProvider = (props) => {
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => {
-      const updatedCart = { ...prev };
-      // Check if the item exists in the cart
-      if (updatedCart[itemId]) {
-        if (updatedCart[itemId].quantity > 1) {
-          // If quantity is greater than 1, reduce by 1
-          updatedCart[itemId].quantity -= 1;
-        } else {
-          // If quantity is 1, remove the item completely
-          delete updatedCart[itemId];
-        }
-      }
+    setCartItems((prevCart) => {
+      const updatedCart = prevCart.filter((item) => item.artId !== itemId);
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // Persist cart
       return updatedCart;
     });
   };
 
   const getTotalCartAmount = () => {
-    let totalAmount = 0;
-    for (const itemId in cartItems) {
-      if (cartItems[itemId] > 0) {
-        const itemInfo = art_list.find((product) => product._id === itemId);
-        if (itemInfo) {
-          totalAmount += itemInfo.price * cartItems[itemId];
-        }
-      }
-    }
-    return totalAmount;
+    return cartItems.reduce((total, item) => total + item.price, 0);
   };
 
   const getCartSize = () => {
