@@ -70,6 +70,10 @@ const StoreContextProvider = (props) => {
     return totalAmount;
   };
 
+  const getCartSize = () => {
+    return cartItems.length;
+  };
+
   useEffect(() => {
     console.log(cartItems);
   }, [cartItems]);
@@ -80,6 +84,7 @@ const StoreContextProvider = (props) => {
     addToCart,
     removeFromCart,
     getTotalCartAmount,
+    getCartSize,
   };
 
   return (

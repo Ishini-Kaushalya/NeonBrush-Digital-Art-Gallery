@@ -8,7 +8,7 @@ import axios from "axios";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
-  const { getTotalCartAmount } = useContext(StoreContext);
+  const { getCartSize } = useContext(StoreContext);
   const [isArtist, setIsArtist] = useState(false); // State to check if the user is an artist
   const [loading, setLoading] = useState(true); // State to track loading status
   const location = useLocation();
@@ -70,13 +70,13 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex justify-between items-center px-24 py-5 mb-[-40px]">
-      <Link to="/">
-        <img src={assets.logo} alt="Logo" className="w-[80px]" />
+    <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
+      <Link to='/'>
+        <img src={assets.logo} alt='Logo' className='w-[80px]' />
       </Link>
-      <ul className="flex gap-12 text-[#49557e] text-lg">
+      <ul className='flex gap-12 text-[#49557e] text-lg'>
         <Link
-          to="/"
+          to='/'
           onClick={() => setMenu("home")}
           className={`cursor-pointer ${
             menu === "home" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -85,7 +85,7 @@ const Navbar = () => {
           Home
         </Link>
         <Link
-          to="/products"
+          to='/products'
           onClick={() => setMenu("menu")}
           className={`cursor-pointer ${
             menu === "arts" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -94,7 +94,7 @@ const Navbar = () => {
           All Arts
         </Link>
         <Link
-          to="/contact-us"
+          to='/contact-us'
           onClick={() => setMenu("contact-us")}
           className={`cursor-pointer ${
             menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -104,7 +104,7 @@ const Navbar = () => {
         </Link>
         {/* Add Artists Link */}
         <Link
-          to="/show-artist"
+          to='/show-artist'
           onClick={() => setMenu("artists")}
           className={`cursor-pointer ${
             menu === "artists" ? "border-b-2 pb-1 border-[#38bdf8]" : ""
@@ -114,28 +114,28 @@ const Navbar = () => {
         </Link>
       </ul>
 
-      <div className="flex items-center gap-10">
-        <div className="relative">
-          <Link to="/cart" className="cursor-pointer">
-            <TbBasketFilled className="w-[30px] h-[30px] text-gray-700" />
+      <div className='flex items-center gap-10'>
+        <div className='relative'>
+          <Link to='/cart' className='cursor-pointer'>
+            <TbBasketFilled className='w-[30px] h-[30px] text-gray-700' />
           </Link>
           <div
             className={
-              getTotalCartAmount() === 0
+              getCartSize() === 0
                 ? ""
                 : "absolute top-[-8px] right-[-8px] w-[10px] h-[10px] bg-[#38bdf8] rounded-full"
             }
           ></div>
         </div>
-        <Link to="/sign-in">
-          <button className="bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]">
+        <Link to='/sign-in'>
+          <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]'>
             Sign in
           </button>
         </Link>
         {/* Conditionally render the Artist Profile button */}
         {isArtist && (
-          <Link to="/artist-profile" className="cursor-pointer">
-            <FaUserCircle className="w-[30px] h-[30px] text-gray-700" />
+          <Link to='/artist-profile' className='cursor-pointer'>
+            <FaUserCircle className='w-[30px] h-[30px] text-gray-700' />
           </Link>
         )}
       </div>
