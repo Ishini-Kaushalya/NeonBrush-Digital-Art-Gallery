@@ -21,17 +21,29 @@ const Footer = () => {
             with you, and to support the artists who create it.
           </p>
           <div className="flex space-x-4">
-  {/* Social Media Links */}
-  <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-    <FaFacebook className="w-10 h-10" />
-  </a>
-  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-    <FaTwitter className="w-10 h-10" />
-  </a>
-  <a href="https://wa.me/+947744567890" target="_blank" rel="noopener noreferrer">
-    <FaWhatsapp className="w-10 h-10" />
-  </a>
-</div>
+            {/* Social Media Links */}
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook className="w-10 h-10" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaTwitter className="w-10 h-10" />
+            </a>
+            <a
+              href="https://wa.me/+947744567890"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaWhatsapp className="w-10 h-10" />
+            </a>
+          </div>
         </div>
 
         {/* Center Content */}
@@ -39,13 +51,15 @@ const Footer = () => {
           <h2 className="text-white">Company</h2>
           <ul className="space-y-2">
             <li className="cursor-pointer">
-            <Link to="/">Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li className="cursor-pointer">
-            <Link to="/aboutUs">About Us</Link>
+              <Link to="/aboutUs">About Us</Link>
             </li>
             {/* <li className="cursor-pointer">Delivery</li> */}
-            <li className="cursor-pointer">Privacy policy</li>
+            <li className="cursor-pointer">
+              <Link to="/privacyPolicy">Privacy Policy</Link>
+            </li>
           </ul>
         </div>
 
