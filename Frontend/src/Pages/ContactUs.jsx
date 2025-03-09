@@ -80,7 +80,6 @@ const ContactUs = () => {
       alert("Error submitting the form. Please try again.");
     }
   };
-
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-sky-100 shadow-lg rounded-lg">
       <div className="text-black flex justify-between items-center px-6 py-4 rounded-t-lg">
