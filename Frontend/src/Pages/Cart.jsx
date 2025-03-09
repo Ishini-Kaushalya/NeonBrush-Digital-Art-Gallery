@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Cart = () => {
@@ -11,13 +10,13 @@ const Cart = () => {
 
   const [images, setImages] = useState({});
   const quantity = 1;
+  const packingFee = 50; // Set a packing fee
 
   useEffect(() => {
     const fetchImages = async () => {
       const imagesData = {};
       for (const item of cartItems) {
         try {
-          // Retrieve the JWT token from localStorage
           const token = JSON.parse(localStorage.getItem("accessToken"));
           if (!token) {
             console.error("User not authenticated");
@@ -29,7 +28,7 @@ const Cart = () => {
             {
               responseType: "blob",
               headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the request header
+                Authorization: `Bearer ${token}`,
               },
             }
           );
@@ -43,12 +42,13 @@ const Cart = () => {
 
     fetchImages();
   }, [cartItems]);
-  console.log(cartItems);
+
   const navigate = useNavigate();
-  // Function to handle navigation to the payment page
+
   const handleProceedToCheckout = () => {
-    navigate("/payment"); // Navigate to Payment page
+    navigate("/payment");
   };
+
   return (
     <div className='mt-24 px-4'>
       <div className='space-y-4'>
@@ -102,16 +102,15 @@ const Cart = () => {
             <hr className='border-gray-300' />
             <div className='flex justify-between'>
               <p>Packing</p>
-              <p>Rs.{0}</p>
+              <p>Rs.{cartItems.length > 0 ? packingFee : 0}</p>
             </div>
             <hr className='border-gray-300' />
             <div className='flex justify-between font-bold'>
               <p>Total</p>
-              <p>Rs.{getTotalCartAmount()}</p>
+              <p>Rs.{getTotalCartAmount() + (cartItems.length > 0 ? packingFee : 0)}</p>
             </div>
           </div>
         </div>
-        {/* Button to navigate to the payment page */}
         <div className='flex-1 space-y-4 relative'>
           {cartItems.length > 0 && (
             <button
