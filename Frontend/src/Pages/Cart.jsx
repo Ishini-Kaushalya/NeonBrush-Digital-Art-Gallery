@@ -113,12 +113,14 @@ const Cart = () => {
         </div>
         {/* Button to navigate to the payment page */}
         <div className='flex-1 space-y-4 relative'>
-          <button
-            onClick={handleProceedToCheckout}
-            className='absolute right-4 bottom-2 bg-sky-800 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-sky-950'
-          >
-            PROCEED TO CHECKOUT
-          </button>
+          {cartItems.length > 0 && (
+            <button
+              onClick={handleProceedToCheckout}
+              className='absolute right-4 bottom-2 bg-sky-800 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-sky-950'
+            >
+              PROCEED TO CHECKOUT
+            </button>
+          )}
         </div>
       </div>
     </div>
