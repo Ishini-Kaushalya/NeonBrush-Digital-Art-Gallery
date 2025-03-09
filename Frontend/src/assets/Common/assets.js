@@ -77,35 +77,35 @@ export const assets = {
 
 export const menu_list = [
   {
-    menu_name: "Canvas",
+    menu_name: "canvas",
     menu_image: canvas,
   },
   {
-    menu_name: "Acrylic",
+    menu_name: "acrylic",
     menu_image: acrylic,
   },
   {
-    menu_name: "Ink",
+    menu_name: "ink",
     menu_image: ink,
   },
   {
-    menu_name: "Oil",
+    menu_name: "oil",
     menu_image: oil,
   },
   {
-    menu_name: "Pastel",
+    menu_name: "pastel",
     menu_image: pastel,
   },
   {
-    menu_name: "Charcoal",
+    menu_name: "charcoal",
     menu_image: charcoal,
   },
   {
-    menu_name: "Pencil",
+    menu_name: "pencil",
     menu_image: pencil,
   },
   {
-    menu_name: "Watercolor",
+    menu_name: "watercolor",
     menu_image: watercolor,
   },
 ];

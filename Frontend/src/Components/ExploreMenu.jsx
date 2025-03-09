@@ -1,7 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { menu_list } from "../assets/Common/assets";
 
 const ExploreMenu = ({ category, setCategory }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleCategoryClick = (categoryName) => {
+    setCategory(categoryName); // Update the selected category
+    navigate(`/category/${categoryName}`); // Navigate to the category page
+  };
+
   return (
     <div
       className="flex flex-col text-center gap-6 mt-5 mb-[-70px] px-5"
@@ -24,7 +32,7 @@ const ExploreMenu = ({ category, setCategory }) => {
       <div className="flex justify-center items-center gap-5 text-center my-5 overflow-x-auto scrollbar-hide">
         {menu_list.map((item, index) => (
           <div
-            onClick={() => setCategory(item.menu_name)} // Set the category here
+            onClick={() => handleCategoryClick(item.menu_name)} // Navigate on click
             key={index}
             className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${
               category === item.menu_name ? "opacity-100" : "opacity-80"
