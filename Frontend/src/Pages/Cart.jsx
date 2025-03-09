@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import { IoMdCloseCircle } from "react-icons/io";
 
 const Cart = () => {
   const { cartItems, removeFromCart, getTotalCartAmount } =
@@ -82,7 +81,7 @@ const Cart = () => {
                     onClick={() => removeFromCart(item.artId)}
                     className='cursor-pointer text-red-600 font-semibold'
                   >
-                    <IoMdCloseCircle className="text-2xl" />
+                    x
                   </p>
                 </div>
                 <hr className='border-gray-300' />
