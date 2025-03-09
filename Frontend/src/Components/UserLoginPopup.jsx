@@ -79,16 +79,26 @@ const UserLoginPopup = ({ setShowLogin }) => {
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
+        // Handle validation errors
         const fieldErrors = {};
         error.errors.forEach((err) => {
           fieldErrors[err.path[0]] = err.message;
         });
         setErrors(fieldErrors);
+      } else if (error.response) {
+        // Handle backend errors
+        const errorMessage = error.response.data;
+
+        if (errorMessage === "Incorrect username") {
+          setErrors({ username: "Incorrect username" });
+        } else if (errorMessage === "Incorrect password") {
+          setErrors({ password: "Incorrect password" });
+        } else {
+          setErrors({ general: errorMessage });
+        }
       } else {
         setErrors({
-          general:
-            error.response?.data?.message ||
-            "An error occurred. Please try again.",
+          general: "An error occurred. Please try again.",
         });
       }
     }
