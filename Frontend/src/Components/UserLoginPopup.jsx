@@ -13,8 +13,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
     agreeTerms: false,
   });
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
-  const [welcomeMessage, setWelcomeMessage] = useState("");
   const navigate = useNavigate();
 
   // Define schemas for login and signup
@@ -44,8 +42,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMessage("");
-    setWelcomeMessage("");
 
     try {
       const schema = formState === "Sign Up" ? signupSchema : loginSchema;
@@ -78,15 +74,8 @@ const UserLoginPopup = ({ setShowLogin }) => {
           localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in localStorage
         }
 
-        if (formState === "Sign Up") {
-          setSuccessMessage("User registered successfully!");
-          setTimeout(() => navigate("/products"), 2000);
-        }
-
-        if (formState === "Login") {
-          setWelcomeMessage(`Welcome back, ${formData.username}!`);
-          setTimeout(() => navigate("/products"), 2000);
-        }
+        setShowLogin(false);
+        navigate("/products");
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -115,14 +104,6 @@ const UserLoginPopup = ({ setShowLogin }) => {
             className="w-6 h-6 cursor-pointer text-gray-600 hover:text-red-500"
           />
         </div>
-
-        {successMessage && (
-          <div className="text-sm text-green-500 mb-4">{successMessage}</div>
-        )}
-
-        {welcomeMessage && (
-          <div className="text-sm text-blue-500 mb-4">{welcomeMessage}</div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col">

@@ -13,8 +13,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
     agreeTerms: false,
   });
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
-  const [welcomeMessage, setWelcomeMessage] = useState("");
   const navigate = useNavigate();
 
   const loginSchema = z.object({
@@ -43,8 +41,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setSuccessMessage("");
-    setWelcomeMessage("");
 
     try {
       const schema = formState === "Sign Up" ? signupSchema : loginSchema;
@@ -75,21 +71,19 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
           localStorage.setItem("accessToken", JSON.stringify(token));
         }
 
+        // Close the popup
+        setShowLogin(false);
+
         if (formState === "Sign Up") {
-          setSuccessMessage("Artist registered successfully!");
-          setTimeout(() => {
-            navigate("/artist-profile", {
-              state: { username: formData.username, email: formData.email },
-            });
-          }, 2000);
+          // Directly navigate to the artist profile page
+          navigate("/artist-profile", {
+            state: { username: formData.username, email: formData.email },
+          });
         }
 
         if (formState === "Login") {
-          setWelcomeMessage(`Welcome back, ${formData.username}!`);
-          setTimeout(
-            () => navigate(`/artist-detail/${formData.username}`),
-            2000
-          );
+          // Directly navigate to the artist detail page
+          navigate(`/artist-detail/${formData.username}`);
         }
       }
     } catch (error) {
@@ -119,14 +113,6 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
             className="w-6 h-6 cursor-pointer text-gray-600 hover:text-red-500"
           />
         </div>
-
-        {successMessage && (
-          <div className="text-sm text-green-500 mb-4">{successMessage}</div>
-        )}
-
-        {welcomeMessage && (
-          <div className="text-sm text-blue-500 mb-4">{welcomeMessage}</div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col">
