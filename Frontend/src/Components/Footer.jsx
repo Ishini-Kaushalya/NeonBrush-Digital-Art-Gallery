@@ -56,7 +56,7 @@ const Footer = () => {
             <li className="cursor-pointer">
               <Link to="/aboutUs">About Us</Link>
             </li>
-            {/* <li className="cursor-pointer">Delivery</li> */}
+            <li className="cursor-pointer"><Link to="/delivery">Delivery</Link></li>
             <li className="cursor-pointer">
               <Link to="/privacyPolicy">Privacy Policy</Link>
             </li>
