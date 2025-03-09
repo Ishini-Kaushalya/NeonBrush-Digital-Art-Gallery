@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GalleryServiceImpl implements GalleryService {
@@ -70,7 +71,11 @@ public class GalleryServiceImpl implements GalleryService {
     public void deleteArtItem(String artId) {
         galleryRepository.deleteById(artId);
     }
-
+    @Override
+    public void deleteArtItemByTitle(String title) {
+        Optional<Gallery> gallery = galleryRepository.findByTitle(title);
+        gallery.ifPresent(value -> galleryRepository.delete(value));
+    }
     @Override
     public List<Gallery> getArtItemsByCategory(String category) {
         return galleryRepository.findByCategory(category);

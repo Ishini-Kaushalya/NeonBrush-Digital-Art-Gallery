@@ -66,7 +66,11 @@ public class GalleryController {
         galleryService.deleteArtItem(artId);
         return ResponseEntity.noContent().build();
     }
-
+    @DeleteMapping("/title/{title}")
+    public ResponseEntity<Void> deleteArtItemByTitle(@PathVariable String title) {
+        galleryService.deleteArtItemByTitle(title);
+        return ResponseEntity.noContent().build();
+    }
     @GetMapping("/image/{imageId}")
     public ResponseEntity<byte[]> getImage(@PathVariable String imageId) {
         try {

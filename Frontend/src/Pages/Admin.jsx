@@ -7,12 +7,14 @@ const AdminPage = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch artists and artworks from the backend
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("accessToken"));
         console.log("Token:", token); // Log the token for debugging
 
+        // Fetch artists
         const artistsResponse = await axios.get(
           "http://localhost:8080/api/artist",
           {
@@ -21,6 +23,7 @@ const AdminPage = () => {
         );
         setArtistList(artistsResponse.data);
 
+        // Fetch artworks
         const artworksResponse = await axios.get(
           "http://localhost:8080/api/gallery",
           {
@@ -29,6 +32,7 @@ const AdminPage = () => {
         );
         setArtList(artworksResponse.data);
 
+        // Fetch messages (if any)
         const storedMessages =
           JSON.parse(localStorage.getItem("adminMessages")) || [];
         setMessages(storedMessages);
@@ -42,35 +46,45 @@ const AdminPage = () => {
     fetchData();
   }, []);
 
-  const deleteArtist = async (id) => {
+  // Delete an artist by username
+  const deleteArtist = async (username) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this artist?"
     );
     if (confirmDelete) {
       try {
         const token = JSON.parse(localStorage.getItem("accessToken"));
-        await axios.delete(`http://localhost:8080/api/artist/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setArtistList((prev) => prev.filter((artist) => artist._id !== id));
-        setArtList((prev) => prev.filter((art) => art.userName !== id));
+        await axios.delete(
+          `http://localhost:8080/api/artist/username/${username}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        // Remove the deleted artist from the artist list
+        setArtistList((prev) =>
+          prev.filter((artist) => artist.userName !== username)
+        );
+        // Remove artworks associated with the deleted artist
+        setArtList((prev) => prev.filter((art) => art.userName !== username));
       } catch (error) {
         console.error("Error deleting artist:", error);
       }
     }
   };
 
-  const deleteArt = async (artId) => {
+  // Delete an artwork by title
+  const deleteArt = async (title) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this artwork?"
     );
     if (confirmDelete) {
       try {
         const token = JSON.parse(localStorage.getItem("accessToken"));
-        await axios.delete(`http://localhost:8080/api/gallery/${artId}`, {
+        await axios.delete(`http://localhost:8080/api/gallery/title/${title}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setArtList((prev) => prev.filter((art) => art._id !== artId));
+        // Remove the deleted artwork from the art list
+        setArtList((prev) => prev.filter((art) => art.title !== title));
       } catch (error) {
         console.error("Error deleting artwork:", error);
       }
@@ -108,7 +122,7 @@ const AdminPage = () => {
                 {artist.userName}
               </span>
               <button
-                onClick={() => deleteArtist(artist._id)}
+                onClick={() => deleteArtist(artist.userName)} // Call deleteArtist with artist username
                 className="bg-red-500 text-white px-4 py-1 rounded"
               >
                 Delete
@@ -129,7 +143,7 @@ const AdminPage = () => {
                 {art.title}
               </span>
               <button
-                onClick={() => deleteArt(art._id)}
+                onClick={() => deleteArt(art.title)} // Call deleteArt with artwork title
                 className="bg-red-500 text-white px-4 py-1 rounded"
               >
                 Delete
@@ -138,7 +152,6 @@ const AdminPage = () => {
           ))}
         </ul>
       </div>
-      
     </div>
   );
 };

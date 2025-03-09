@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface GalleryRepository extends MongoRepository<Gallery, String> {
@@ -12,4 +13,5 @@ public interface GalleryRepository extends MongoRepository<Gallery, String> {
 
     // Custom method to find art items by category
     List<Gallery> findByCategory(String category);
+    Optional<Gallery> findByTitle(String title);
 }

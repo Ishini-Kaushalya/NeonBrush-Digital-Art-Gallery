@@ -48,7 +48,11 @@ public class ArtistController {
         artistService.deleteArtist(id);
         return ResponseEntity.noContent().build();
     }
-
+    @DeleteMapping("/username/{userName}")
+    public ResponseEntity<Void> deleteArtistByUserName(@PathVariable String userName) {
+        artistService.deleteArtistByUserName(userName);
+        return ResponseEntity.noContent().build();
+    }
     @GetMapping("/username/{userName}")
     public ResponseEntity<Artist> getArtistByUserName(@PathVariable String userName) {
         Optional<Artist> artist = artistService.getArtistByUserName(userName);
