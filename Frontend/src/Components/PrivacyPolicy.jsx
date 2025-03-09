@@ -89,7 +89,7 @@ const PrivacyPolicy = () => {
               <b>7. Contact Us</b>
             </h4>
             If you have questions or concerns about this Privacy Policy or your
-            data, please contact us at contact@neonbrush.com
+            data,please contact us at contact@neonbrush.com
           </p>
         </div>
       </div>

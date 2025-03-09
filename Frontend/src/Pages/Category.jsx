@@ -8,12 +8,11 @@ const Category = () => {
   const [imageUrls, setImageUrls] = useState({}); // State to store image URLs
   const [loading, setLoading] = useState(true); // State to handle loading
   const [error, setError] = useState(null); // State to handle errors
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize navigate function
 
   useEffect(() => {
     const fetchArtworks = async () => {
       try {
-        // Retrieve the JWT token from localStorage
         const token = JSON.parse(localStorage.getItem("accessToken"));
 
         // Fetch artworks for the selected category
@@ -24,11 +23,9 @@ const Category = () => {
           }
         );
 
-        // Set the fetched artworks
         setArtworks(response.data);
         setLoading(false);
 
-        // Fetch images for each artwork
         const urls = {};
         for (const artwork of response.data) {
           if (artwork.imageId) {
@@ -66,11 +63,6 @@ const Category = () => {
     fetchArtworks();
   }, [categoryName]);
 
-  // Function to navigate to ArtDetail page
-  const navigateToArtDetail = (artId) => {
-    navigate(`/art-detail/${artId}`); // Make sure artId is included in the URL
-  };
-
   if (loading) {
     return <div className="text-center py-5">Loading...</div>;
   }
@@ -87,7 +79,19 @@ const Category = () => {
           artworks.map((artwork) => (
             <div
               key={artwork.artId}
-              onClick={() => navigateToArtDetail(artwork.artId)} // Navigate to ArtDetail page
+              onClick={() =>
+                navigate("/art-detail", {
+                  state: {
+                    _id: artwork.artId,
+                    name: artwork.title,
+                    description: artwork.description,
+                    price: artwork.price,
+                    imageId: artwork.imageId,
+                    userName: artwork.userName,
+                    size: artwork.size,
+                  },
+                })
+              }
               className="border p-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
             >
               {artwork.imageId && (
