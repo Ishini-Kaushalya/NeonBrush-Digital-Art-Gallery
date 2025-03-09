@@ -36,7 +36,7 @@ const StoreContextProvider = (props) => {
         const artDetails = response.data;
 
         // Check if item is already in cart to avoid duplicates
-        const existingItem = cartItems.find((item) => item._id === artId);
+        const existingItem = cartItems.find((item) => item.artId === artId);
         if (existingItem) {
           console.warn("Item is already in cart.");
           return;

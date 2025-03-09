@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../Context/StoreContext";
 import { MdArrowBackIos } from "react-icons/md";
-import { FaCartPlus } from "react-icons/fa";
+import { FaCartArrowDown, FaCartPlus } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
 
@@ -11,9 +11,10 @@ const ArtDetail = () => {
   const navigate = useNavigate();
   const { _id, name, description, price, imageId, userName, size } =
     location.state || {};
-  const { addToCart } = useContext(StoreContext);
+  const { addToCart, cartItems } = useContext(StoreContext);
   const [fullImage, setFullImage] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
+  const isAdded = cartItems.some((item) => item.artId === _id);
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -84,11 +85,25 @@ const ArtDetail = () => {
           <div className='flex space-x-4'>
             {/* Add to Cart Button */}
             <button
-              className='bg-sky-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-gray-800 transition duration-300 flex items-center'
+              className={`${
+                isAdded
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-black hover:bg-gray-800"
+              } text-white py-2 px-6 rounded-lg shadow-md transition duration-300 flex items-center`}
               onClick={handleAddToCart}
+              disabled={isAdded}
             >
-              <FaCartPlus className='mr-2' />
-              Add to Cart
+              {isAdded ? (
+                <>
+                  <FaCartArrowDown className='mr-2' />
+                  Added to Cart
+                </>
+              ) : (
+                <>
+                  <FaCartPlus className='mr-2' />
+                  Add to Cart
+                </>
+              )}
             </button>
 
             {/* Back Button */}
