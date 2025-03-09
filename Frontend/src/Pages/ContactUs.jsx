@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { z } from "zod"; // Import Zod
 
 const ContactUs = () => {
   const [fullName, setFullName] = useState("");
@@ -8,17 +7,6 @@ const ContactUs = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
-  // Zod validation schema
-  const contactSchema = z.object({
-    userName: z.string().min(1, "Full Name is required."),
-    email: z.string().email("Invalid email address."),
-    phoneNumber: z
-      .string()
-      .length(10, "Phone number must be 10 digits.")
-      .regex(/^[0-9]+$/, "Phone number must contain only numbers."),
-    message: z.string().min(1, "Message is required."),
-  });
 
   useEffect(() => {
     // Retrieve user data from localStorage or sessionStorage
@@ -29,20 +17,16 @@ const ContactUs = () => {
     if (storedEmail) setEmail(storedEmail); // Prefill the email if available
   }, []);
 
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^[0-9]{10}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate using Zod
-    const result = contactSchema.safeParse({
-      userName: fullName,
-      email: email,
-      phoneNumber: phoneNumber,
-      message: message,
-    });
-
-    if (!result.success) {
-      // Show the first error message
-      setError(result.error.errors[0].message);
+    if (!validatePhoneNumber(phoneNumber)) {
+      setError("Phone number must be 10 digits.");
       return;
     }
 
@@ -76,7 +60,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-sky-100 shadow-lg rounded-lg">
+    <div className="max-w-4xl mx-auto mt-10 bg-sky-200 shadow-lg rounded-lg">
       <div className="text-black flex justify-between items-center px-6 py-4 rounded-t-lg">
         <h1 className="text-2xl font-semibold">Contact Us</h1>
       </div>
