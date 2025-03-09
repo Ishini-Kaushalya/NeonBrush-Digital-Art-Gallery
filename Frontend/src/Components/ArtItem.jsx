@@ -63,7 +63,7 @@ const ArtItem = ({
         </div>
         <p className="text-lg font-medium">{artistName}</p>
         <p className="text-gray-600 text-sm truncate">{description}</p>
-        <p className="text-tomato text-xl font-semibold mt-2">${price}</p>
+        <p className="text-tomato text-xl font-semibold mt-2">Rs.{price}</p>
       </div>
     </div>
   );
