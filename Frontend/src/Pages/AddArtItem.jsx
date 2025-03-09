@@ -4,7 +4,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import { MdArrowBackIos } from "react-icons/md";
 import { z } from "zod";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 const artSchema = z.object({
   userName: z.string().min(1, "Username is required"),
   title: z.string().min(1, "Title is required"),
@@ -350,39 +350,43 @@ const AddArtItem = () => {
         </form>
       </div>
       <div className="p-8">
-        <h2 className="text-xl font-semibold mb-4">Added Art Items</h2>
         {artItems.length === 0 ? (
           <p className="text-gray-600">No items added yet.</p>
         ) : (
-          <ul className="space-y-4">
-            {artItems.map((item) => (
-              <li
-                key={item.artId}
-                className="flex items-center space-x-4 p-4 border rounded-lg bg-white"
-              >
-                {item.imageId && (
-                  <img
-                    src={`http://localhost:8080/api/gallery/image/${item.imageId}`}
-                    alt={item.title}
-                    className="w-16 h-16 object-cover rounded-lg"
-                  />
-                )}
-                <div className="flex-grow">
-                  <h3 className="text-lg font-medium">{item.title}</h3>
-                  <p className="text-sm text-gray-600">{item.description}</p>
-                  <p className="text-sm text-gray-500">
-                    {item.category} | {item.size} | ${item.price}
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleRemove(artItems.indexOf(item))}
-                  className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
+          <p>
+  <Link to="/products" className="text-blue-500 hover:text-sky-900">
+    See Arts
+  </Link>
+</p>
+          // <ul className="space-y-4">
+          //   {artItems.map((item) => (
+          //     <li
+          //       key={item.artId}
+          //       className="flex items-center space-x-4 p-4 border rounded-lg bg-white"
+          //     >
+          //       {item.imageId && (
+          //         <img
+          //           src={`http://localhost:8080/api/gallery/image/${item.imageId}`}
+          //           alt={item.title}
+          //           className="w-16 h-16 object-cover rounded-lg"
+          //         />
+          //       )}
+          //       {/* <div className="flex-grow">
+          //         <h3 className="text-lg font-medium">{item.title}</h3>
+          //         <p className="text-sm text-gray-600">{item.description}</p>
+          //         <p className="text-sm text-gray-500">
+          //           {item.category} | {item.size} | ${item.price}
+          //         </p>
+          //       </div> */}
+          //       {/* <button
+          //         onClick={() => handleRemove(artItems.indexOf(item))}
+          //         className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+          //       >
+          //         Remove
+          //       </button> */}
+          //     </li>
+          //   ))}
+          // </ul>
         )}
       </div>
     </div>
