@@ -30,6 +30,11 @@ public class ArtistServiceImpl implements ArtistService {
     public Artist createArtist(Artist artist) {
         return artistRepository.save(artist);
     }
+    @Override
+    public void deleteArtistByUserName(String userName) {
+        Optional<Artist> artist = artistRepository.findByUserName(userName);
+        artist.ifPresent(value -> artistRepository.delete(value));
+    }
 
     @Override
     public List<Artist> getAllArtists() {

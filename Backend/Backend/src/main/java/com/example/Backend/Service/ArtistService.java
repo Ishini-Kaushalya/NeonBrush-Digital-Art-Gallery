@@ -10,7 +10,7 @@ public interface ArtistService {
     Artist createArtist(Artist artist);
 
     List<Artist> getAllArtists();
-
+    void deleteArtistByUserName(String userName);
     Artist updateArtist(String id, Artist artist);
 
     void deleteArtist(String id);
