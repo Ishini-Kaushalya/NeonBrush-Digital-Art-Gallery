@@ -123,18 +123,13 @@ const ArtistDetail = () => {
         Back
       </button>
        {/* Add Art Button */}
-       <button
-        className="bg-sky-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 ml-4"
-        onClick={() => navigate("/add-art")}
-      >
-        Add Art
-      </button>
+       
 
 
       {/* Add Art Button (Visible only for artists) */}
       {isArtist && (
         <button
-          className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mb-4"
+          className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 ml-4"
           onClick={() => navigate("/add-art")}
         >
           Add Art
