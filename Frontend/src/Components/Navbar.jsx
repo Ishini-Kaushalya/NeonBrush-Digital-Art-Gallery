@@ -93,15 +93,7 @@ const Navbar = () => {
         >
           All Arts
         </Link>
-        <Link
-          to='/contact-us'
-          onClick={() => setMenu("contact-us")}
-          className={`cursor-pointer ${
-            menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
-          }`}
-        >
-          Contact us
-        </Link>
+       
         {/* Add Artists Link */}
         <Link
           to='/show-artist'
@@ -111,6 +103,15 @@ const Navbar = () => {
           }`}
         >
           Artists
+        </Link>
+        <Link
+          to='/contact-us'
+          onClick={() => setMenu("contact-us")}
+          className={`cursor-pointer ${
+            menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
+          }`}
+        >
+          Contact us
         </Link>
       </ul>
 
