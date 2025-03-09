@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { z } from "zod"; // Import Zod
 
 const ContactUs = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({}); // Object to store errors for each field
+
+  // Zod validation schema
+  const contactSchema = z.object({
+    fullName: z.string().min(1, { message: "Full Name is required." }),
+    email: z.string().email({ message: "Invalid email address." }),
+    phoneNumber: z
+      .string()
+      .min(10, { message: "Phone number must be 10 digits." })
+      .max(10, { message: "Phone number must be 10 digits." })
+      .regex(/^[0-9]+$/, { message: "Phone number must contain only numbers." }),
+    message: z.string().min(1, { message: "Message is required." }),
+  });
 
   useEffect(() => {
     // Retrieve user data from localStorage or sessionStorage
@@ -17,25 +30,33 @@ const ContactUs = () => {
     if (storedEmail) setEmail(storedEmail); // Prefill the email if available
   }, []);
 
-  const validatePhoneNumber = (phone) => {
-    const phoneRegex = /^[0-9]{10}$/;
-    return phoneRegex.test(phone);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validatePhoneNumber(phoneNumber)) {
-      setError("Phone number must be 10 digits.");
+    // Validate using Zod
+    const result = contactSchema.safeParse({
+      fullName,
+      email,
+      phoneNumber,
+      message,
+    });
+
+    if (!result.success) {
+      // Collect errors in the errors object
+      const fieldErrors = result.error.errors.reduce((acc, err) => {
+        acc[err.path[0]] = err.message; // Store error messages for each field
+        return acc;
+      }, {});
+      setErrors(fieldErrors); // Update state with errors
       return;
     }
 
     try {
       const contactData = {
-        userName: fullName,
-        email: email,
-        phoneNumber: phoneNumber,
-        message: message,
+        fullName,
+        email,
+        phoneNumber,
+        message,
       };
 
       const response = await axios.post(
@@ -52,15 +73,15 @@ const ContactUs = () => {
         setEmail("");
         setPhoneNumber("");
         setMessage("");
+        setErrors({}); // Clear errors on successful submission
       }
     } catch (error) {
       console.error("Error submitting the form!", error);
       alert("Error submitting the form. Please try again.");
     }
   };
-
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-sky-200 shadow-lg rounded-lg">
+    <div className="max-w-4xl mx-auto mt-10 bg-sky-100 shadow-lg rounded-lg">
       <div className="text-black flex justify-between items-center px-6 py-4 rounded-t-lg">
         <h1 className="text-2xl font-semibold">Contact Us</h1>
       </div>
@@ -80,6 +101,7 @@ const ContactUs = () => {
               placeholder="Your Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
+            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
           </div>
           <div>
             <label className="block text-gray-600 text-sm font-medium">
@@ -92,6 +114,7 @@ const ContactUs = () => {
               placeholder="Your Email"
               className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
           <div>
             <label className="block text-gray-600 text-sm font-medium">
@@ -104,7 +127,7 @@ const ContactUs = () => {
               placeholder="Your Phone Number"
               className="mt-1 w-full px-4 py-2 border rounded-lg"
             />
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+            {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>}
           </div>
           <div className="md:col-span-2">
             <label className="block text-gray-600 text-sm font-medium">
@@ -117,6 +140,7 @@ const ContactUs = () => {
               rows="4"
               className="mt-1 w-full px-4 py-2 border rounded-lg"
             ></textarea>
+            {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
           </div>
           <div className="flex justify-end gap-4 mt-6">
             <button
