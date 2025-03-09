@@ -57,6 +57,11 @@ const StoreContextProvider = (props) => {
     });
   };
 
+  const clearCart = () => {
+    setCartItems([]); // This will reset the cart items to an empty array
+    localStorage.removeItem("cartItems"); // Optionally clear from localStorage as well
+  };
+
   const getTotalCartAmount = () => {
     return cartItems.reduce((total, item) => total + item.price, 0);
   };
@@ -74,6 +79,7 @@ const StoreContextProvider = (props) => {
     cartItems,
     addToCart,
     removeFromCart,
+    clearCart,
     getTotalCartAmount,
     getCartSize,
   };
