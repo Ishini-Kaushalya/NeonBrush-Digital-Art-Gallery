@@ -56,6 +56,29 @@ const PaymentPage = () => {
         totalAmount: getTotalCartAmount(),
       };
       await axios.post("http://localhost:8080/api/payment", payload);
+
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+      if (!token) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      console.log(token);
+      // Extract artIds from the cart items
+      const purchasedArtIds = cartItems.map((item) => item.artId);
+      console.log(purchasedArtIds);
+
+      // Send request to delete purchased items from the database
+      await axios.post(
+        "http://localhost:8080/api/gallery/deletePurchased",
+        {
+          artIds: purchasedArtIds,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
       // Clear cart items from the state
       clearCart();
       setMessage("Payment Successful! Redirecting...");
