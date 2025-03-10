@@ -5,9 +5,14 @@ import { jsPDF } from "jspdf";
 import { assets } from "../assets/Common/assets.js";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 
-const PaymentReceipt = () => {
+const PaymentReceipt = ({paymentDetails}) => {
+  if (!paymentDetails) return null; 
   const { cartItems, getTotalCartAmount } = useContext(StoreContext);
   const navigate = useNavigate();
+  
+  const packingFee = 50; // Fixed packing fee
+  const totalAmount = getTotalCartAmount() + packingFee;
+  const currentDate = new Date().toLocaleDateString();
 
   // Function to download PDF
   const downloadPDF = () => {
@@ -20,21 +25,31 @@ const PaymentReceipt = () => {
     doc.addImage(assets.logo, "PNG", logoX, 20, logoWidth, 20);
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16); // Reduced font size
-    doc.text("Payment Receipt", pageWidth / 2, 45, null, null, "center"); // Centered
+    doc.setFontSize(16); 
+    doc.text("Payment Receipt", pageWidth / 2, 45, null, null, "center");
 
     let y = 60;
     const marginLeft = 20;
     const marginRight = 180;
 
-    // Table headers (bold and increased font size)
+    // User details
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Date: ${currentDate}`, marginLeft, y);
+    y += 8;
+    doc.text(`Name: ${paymentDetails.userName}`, marginLeft, y);
+    y += 8;
+    doc.text(`Address: ${paymentDetails.address}`, marginLeft, y);
+    y += 12;
+
+    // Table headers
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.text("Items", marginLeft, y);
     doc.text("Price", marginRight, y, null, null, "right");
     y += 10;
 
-    doc.setFont("helvetica", "normal"); // Reset font for item listing
+    doc.setFont("helvetica", "normal");
 
     // List of items
     cartItems.forEach((item) => {
@@ -43,16 +58,21 @@ const PaymentReceipt = () => {
       y += 10;
     });
 
-    // Add a line before total
+    // Packing fee
+    doc.setFont("helvetica", "bold");
+    doc.text("Packing Fee", marginLeft, y);
+    doc.text(`Rs.${packingFee}`, marginRight, y, null, null, "right");
+    y += 10;
+
+    // Line before total
     doc.setLineWidth(0.5);
     doc.line(marginLeft, y, marginRight, y);
     y += 10;
 
-    // Total amount (bold)
-    doc.setFont("helvetica", "bold");
+    // Total amount
     doc.setFontSize(14);
     doc.text("Total", marginLeft, y);
-    doc.text(`Rs.${getTotalCartAmount()}`, marginRight, y, null, null, "right");
+    doc.text(`Rs.${totalAmount}`, marginRight, y, null, null, "right");
     y += 10;
 
     // Additional line after total
@@ -86,6 +106,10 @@ const PaymentReceipt = () => {
       </div>
 
       <div className='mt-6 space-y-4'>
+        <p className="text-gray-600 text-sm">Date: {currentDate}</p>
+        <p className="text-gray-600 text-sm">Name: {paymentDetails.userName}</p>
+        <p className="text-gray-600 text-sm">Email: {paymentDetails.address}</p>
+
         <div className='flex justify-between text-lg font-bold border-b pb-2'>
           <p className='text-left text-xl'>Items</p>
           <p className='text-right text-xl'>Price</p>
@@ -100,12 +124,17 @@ const PaymentReceipt = () => {
           </div>
         ))}
 
+        <div className='flex justify-between py-2 border-b'>
+          <p className='text-left text-gray-700 font-semibold'>Packing Fee</p>
+          <p className='text-right text-gray-900 font-semibold'>Rs.{packingFee}</p>
+        </div>
+
         {/* Line before total */}
         <hr className='border-t-2 my-4' />
 
         <div className='flex justify-between text-lg font-bold'>
           <p className='text-left'>Total</p>
-          <p className='text-right'>Rs.{getTotalCartAmount()}</p>
+          <p className='text-right'>Rs.{totalAmount}</p>
         </div>
 
         {/* Additional line after total */}

@@ -90,7 +90,7 @@ const PaymentPage = () => {
   };
   // If payment is successful, render the receipt
   if (paymentSuccess) {
-    return <PaymentReceipt />;
+    return <PaymentReceipt paymentDetails={paymentDetails}/>;
   }
 
   return (
