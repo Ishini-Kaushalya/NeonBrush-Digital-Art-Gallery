@@ -5,19 +5,14 @@ import { jsPDF } from "jspdf";
 import { assets } from "../assets/Common/assets.js";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 
-const PaymentReceipt = () => {
+const PaymentReceipt = ({paymentDetails}) => {
+  if (!paymentDetails) return null; 
   const { cartItems, getTotalCartAmount } = useContext(StoreContext);
   const navigate = useNavigate();
   
   const packingFee = 50; // Fixed packing fee
   const totalAmount = getTotalCartAmount() + packingFee;
   const currentDate = new Date().toLocaleDateString();
-
-  // Dummy user details (can be replaced with actual user info)
-  const userDetails = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-  };
 
   // Function to download PDF
   const downloadPDF = () => {
@@ -42,9 +37,9 @@ const PaymentReceipt = () => {
     doc.setFont("helvetica", "normal");
     doc.text(`Date: ${currentDate}`, marginLeft, y);
     y += 8;
-    doc.text(`Name: ${userDetails.name}`, marginLeft, y);
+    doc.text(`Name: ${paymentDetails.userName}`, marginLeft, y);
     y += 8;
-    doc.text(`Email: ${userDetails.email}`, marginLeft, y);
+    doc.text(`Address: ${paymentDetails.address}`, marginLeft, y);
     y += 12;
 
     // Table headers
@@ -112,8 +107,8 @@ const PaymentReceipt = () => {
 
       <div className='mt-6 space-y-4'>
         <p className="text-gray-600 text-sm">Date: {currentDate}</p>
-        <p className="text-gray-600 text-sm">Name: {userDetails.name}</p>
-        <p className="text-gray-600 text-sm">Email: {userDetails.email}</p>
+        <p className="text-gray-600 text-sm">Name: {paymentDetails.userName}</p>
+        <p className="text-gray-600 text-sm">Email: {paymentDetails.address}</p>
 
         <div className='flex justify-between text-lg font-bold border-b pb-2'>
           <p className='text-left text-xl'>Items</p>
