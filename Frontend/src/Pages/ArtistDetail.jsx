@@ -113,6 +113,20 @@ const ArtistDetail = () => {
     return <div>Artist not found!</div>;
   }
 
+  const handleArtClick = (art) => {
+    const formattedArt = {
+      _id: art.artId, // Ensuring ArtDetail receives _id
+      name: art.title,
+      description: art.description,
+      price: art.price,
+      imageId: art.imageId,
+      userName: art.userName,
+      size: art.size,
+    };
+
+    navigate("/art-detail", { state: formattedArt });
+  };
+
   return (
     <div className="artist-detail container mx-auto mt-16 p-4">
       {/* Back Button */}
@@ -178,7 +192,7 @@ const ArtistDetail = () => {
                 price={art.price}
                 description={art.description}
                 imageId={art.imageId}
-                onClick={() => navigate(`/art/${art._id}`)} // Navigate to artwork detail page
+                onClick={() => handleArtClick(art)} // Navigate to artwork detail page
               />
             ))}
           </div>
