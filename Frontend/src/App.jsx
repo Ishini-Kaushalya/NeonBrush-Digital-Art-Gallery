@@ -19,7 +19,7 @@ import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPop
 import Admin from "./Pages/Admin";
 import ShowArtist from "./Pages/ShowArtist";
 import AboutUS from "./Pages/AboutUs";
-import PrivacyPolicy from "./Components/PrivacyPolicy";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Delivery from "./Pages/Delivery";
 import PaymentReceipt from "./Pages/PaymentReceipt";
 

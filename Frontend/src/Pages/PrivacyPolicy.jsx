@@ -5,8 +5,17 @@ import { assets } from "../assets/Common/assets"; // Import assets
 const PrivacyPolicy = () => {
   return (
     <>
-      <div className="max-w-6xl mx-auto p-10 pt-20 bg-white rounded-lg flex flex-col items-center text-center gap-10">
+      <div className="max-w-6xl mx-auto p-10 pt-20 bg-white rounded-lg flex flex-col md:flex-row items-center gap-10">
+        {/* Left Side - Image */}
+        <div className="w-full md:w-2/5 flex justify-end md:ml-auto">
+          <img
+            src={assets.image_SigninSelection2}
+            alt="Privacy Policy"
+            className="w-full max-w-4xl h-[500px] object-cover rounded-lg" // Increased width and height
+          />
+        </div>
 
+        {/* Right Side - Content */}
         <div className="w-full md:w-4/5 text-center p-10">
           <h1 className="text-gray-900 font-bold text-3xl md:text-4xl mb-6">
             Privacy Policy
@@ -89,7 +98,7 @@ const PrivacyPolicy = () => {
               <b>7. Contact Us</b>
             </h4>
             If you have questions or concerns about this Privacy Policy or your
-            data,please contact us at contact@neonbrush.com
+            data, please contact us at contact@neonbrush.com
           </p>
         </div>
       </div>
