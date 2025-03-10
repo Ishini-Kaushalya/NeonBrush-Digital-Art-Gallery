@@ -21,6 +21,7 @@ import ShowArtist from "./Pages/ShowArtist";
 import AboutUS from "./Components/AboutUs";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
 import Delivery from "./Pages/Delivery";
+import PaymentReceipt from "./Pages/PaymentReceipt";
 
 
 const App = () => {
@@ -69,6 +70,8 @@ const App = () => {
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/show-artist" element={<ShowArtist />} />
           <Route path="/delivery" element={<Delivery/>}/>
+          <Route path="/receipt" element={<PaymentReceipt/>}/>
+
         </Routes>
       </div>
       <Footer />

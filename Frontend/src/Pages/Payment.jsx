@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { z } from "zod";
+import PaymentReceipt from "./PaymentReceipt";
 
 const paymentSchema = z.object({
   nameOnCard: z.string().min(1, "Name on Card is required"),
@@ -26,6 +27,7 @@ const PaymentPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
+  const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment status
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -56,10 +58,15 @@ const PaymentPage = () => {
         totalAmount: getTotalCartAmount(),
       };
       await axios.post("http://localhost:8080/api/payment", payload);
+      setPaymentSuccess(true);
       // Clear cart items from the state
-      clearCart();
+
       setMessage("Payment Successful! Redirecting...");
-      setTimeout(() => navigate("/products"), 2000);
+      setTimeout(() => {
+        clearCart(); // Clear the cart after a short delay
+        navigate("/products");
+      }, 6000);
+      //setTimeout(() => navigate("/products"), 2000);
     } catch (error) {
       console.error("Payment error:", error);
       alert("Payment failed. Please try again.");
@@ -81,6 +88,10 @@ const PaymentPage = () => {
   const handleBack = () => {
     navigate(-1);
   };
+  // If payment is successful, render the receipt
+  if (paymentSuccess) {
+    return <PaymentReceipt />;
+  }
 
   return (
     <div className='max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8'>
