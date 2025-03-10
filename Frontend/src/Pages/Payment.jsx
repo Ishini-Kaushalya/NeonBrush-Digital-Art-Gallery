@@ -135,8 +135,9 @@ const PaymentPage = () => {
               name='expirationDate'
               value={paymentDetails.expirationDate}
               onChange={handleChange}
-              className='w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300'
-            />
+              min={new Date().toISOString().split("T")[0]} // Prevent past dates
+  className='w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300'
+/>
             {errors.expirationDate && (
               <p className='text-red-500 text-sm'>{errors.expirationDate}</p>
             )}
