@@ -12,8 +12,16 @@ const Products = () => {
 
   useEffect(() => {
     const fetchArtItems = async () => {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+
+      // Check if the token is present
+      if (!token) {
+        // Redirect to login page if token is not present
+        navigate("/sign-in");
+        return;
+      }
+
       try {
-        const token = JSON.parse(localStorage.getItem("accessToken"));
         const response = await axios.get("http://localhost:8080/api/gallery", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -26,7 +34,7 @@ const Products = () => {
     };
 
     fetchArtItems();
-  }, []);
+  }, [navigate]);
 
   const filteredArts =
     category === "All"
@@ -53,10 +61,10 @@ const Products = () => {
 
   return (
     <div>
-      <h1 className='text-2xl font-bold text-center mt-20'>
-        {category !=="All"&&`${category} Artworks`} 
+      <h1 className="text-2xl font-bold text-center mt-20">
+        {category !== "All" && `${category} Artworks`}
       </h1>
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6'>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {filteredArts.map((art) => (
           <ArtItem
             key={art.artId}

@@ -9,8 +9,16 @@ const ShowArtist = () => {
 
   useEffect(() => {
     const fetchArtists = async () => {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+
+      // Check if the token is present
+      if (!token) {
+        // Redirect to sign-in page if token is not present
+        navigate("/sign-in");
+        return; // Stop further execution
+      }
+
       try {
-        const token = JSON.parse(localStorage.getItem("accessToken"));
         const response = await fetch("http://localhost:8080/api/artist", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -53,7 +61,7 @@ const ShowArtist = () => {
     };
 
     fetchArtists();
-  }, []);
+  }, [navigate]); // Add `navigate` to the dependency array
 
   // Function to navigate to ArtistDetail using username
   const navigateToArtistDetailFromList = (userName) => {
