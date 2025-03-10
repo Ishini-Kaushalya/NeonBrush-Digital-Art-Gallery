@@ -18,7 +18,7 @@ import ArtistLoginPopup from './Components/ArtistLoginPopup'; // Import ArtistLo
 import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPopup
 import Admin from "./Pages/Admin";
 import ShowArtist from "./Pages/ShowArtist";
-import AboutUS from "./Components/AboutUs";
+import AboutUS from "./Pages/AboutUs";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
 import Delivery from "./Pages/Delivery";
 import PaymentReceipt from "./Pages/PaymentReceipt";
