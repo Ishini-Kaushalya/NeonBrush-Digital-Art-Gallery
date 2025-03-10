@@ -64,7 +64,8 @@ const PaymentPage = () => {
       setMessage("Payment Successful! Redirecting...");
       setTimeout(() => {
         clearCart(); // Clear the cart after a short delay
-      }, 3000);
+        navigate("/products");
+      }, 6000);
       //setTimeout(() => navigate("/products"), 2000);
     } catch (error) {
       console.error("Payment error:", error);
