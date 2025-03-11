@@ -21,7 +21,6 @@ const ArtistProfile = () => {
     firstName: z.string().min(1, "First Name is required"),
     userName: z.string().min(1, "Username is required"),
     lastName: z.string().min(1, "Last Name is required"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
     email: z.string().email("Invalid email address"),
     description: z
       .string()
@@ -62,7 +61,6 @@ const ArtistProfile = () => {
     formData.append("firstName", event.target.firstName.value);
     formData.append("userName", event.target.userName.value);
     formData.append("lastName", event.target.lastName.value);
-    formData.append("password", event.target.password.value);
     formData.append("email", event.target.email.value);
     formData.append("description", event.target.description.value);
 
@@ -78,7 +76,6 @@ const ArtistProfile = () => {
         firstName: event.target.firstName.value,
         userName: event.target.userName.value,
         lastName: event.target.lastName.value,
-        password: event.target.password.value,
         email: event.target.email.value,
         description: event.target.description.value,
       });
@@ -209,22 +206,6 @@ const ArtistProfile = () => {
             />
             {errors.lastName && (
               <p className="text-red-500 text-sm">{errors.lastName}</p>
-            )}
-          </div>
-
-          {/* Password */}
-          <div>
-            <label className="block text-gray-600 text-sm font-medium">
-              Password
-            </label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Your password"
-              className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
             )}
           </div>
 
