@@ -186,6 +186,21 @@ const AddArtItem = () => {
   const handleBack = () => {
     navigate(-1);
   };
+  const handleAddArt = () => {
+    const newNotification = {
+      artistName: username, // From artist profile
+      artTitle: artTitle,   // From add art form
+      timestamp: new Date().toLocaleTimeString(),
+    };
+  
+    // Store in localStorage
+    const existingNotifications = JSON.parse(localStorage.getItem("notifications")) || [];
+    existingNotifications.push(newNotification);
+    localStorage.setItem("notifications", JSON.stringify(existingNotifications));
+  
+    alert("Art added successfully!"); // Confirmation for artist
+  };
+  
 
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg">
