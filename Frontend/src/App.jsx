@@ -4,7 +4,6 @@ import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
 import SignInSelection from "./Pages/SignInSelection";
 import { useState } from "react";
-
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import ArtDetail from "./Pages/ArtDetail";
@@ -23,6 +22,7 @@ import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Delivery from "./Pages/Delivery";
 import PaymentReceipt from "./Pages/PaymentReceipt";
 import Notification from "./Pages/Notification";
+import OrderDetail from "./Pages/OrderDetail";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -39,17 +39,17 @@ const App = () => {
           <UserLoginPopup setShowLogin={setShowLogin} />
         ))}
 
-      <div className="app">
+      <div className='app'>
         {/* Navbar with login control */}
         <Navbar setShowLogin={setShowLogin} setLoginType={setLoginType} />
 
         {/* Define all the routes */}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/products' element={<Products />} />
+          <Route path='/cart' element={<Cart />} />
           <Route
-            path="/sign-in"
+            path='/sign-in'
             element={
               <SignInSelection
                 setShowLogin={setShowLogin}
@@ -57,23 +57,24 @@ const App = () => {
               />
             }
           />
-          <Route path="/art-detail" element={<ArtDetail />} />{" "}
-          <Route path="/artist-detail/:id" element={<ArtistDetail />} />
-          <Route path="/contact-us" element={<ContactUs />} />{" "}
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/artist-profile" element={<ArtistProfile />} />
-          <Route path="/add-art" element={<AddArtItem />} />{" "}
+          <Route path='/art-detail' element={<ArtDetail />} />{" "}
+          <Route path='/artist-detail/:id' element={<ArtistDetail />} />
+          <Route path='/contact-us' element={<ContactUs />} />{" "}
+          <Route path='/payment' element={<PaymentPage />} />
+          <Route path='/artist-profile' element={<ArtistProfile />} />
+          <Route path='/add-art' element={<AddArtItem />} />{" "}
           {/* Add Art Item Route */}
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/aboutUs" element={<AboutUS />} />
-          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
-          <Route path="/show-artist" element={<ShowArtist />} />
-          <Route path="/delivery" element={<Delivery />} />
-          <Route path="/receipt" element={<PaymentReceipt />} />
-          <Route path="/notifications" element={<Notification />} />
-          <Route path="/UserLoginPopup" element={<UserLoginPopup />} />
-          <Route path="/ArtistLoginPopup" element={<ArtistLoginPopup />} />
+          <Route path='/payment' element={<PaymentPage />} />
+          <Route path='/admin' element={<Admin />} />
+          <Route path='/aboutUs' element={<AboutUS />} />
+          <Route path='/privacyPolicy' element={<PrivacyPolicy />} />
+          <Route path='/show-artist' element={<ShowArtist />} />
+          <Route path='/delivery' element={<Delivery />} />
+          <Route path='/receipt' element={<PaymentReceipt />} />
+          <Route path='/notifications' element={<Notification />} />
+          <Route path='/UserLoginPopup' element={<UserLoginPopup />} />
+          <Route path='/ArtistLoginPopup' element={<ArtistLoginPopup />} />
+          <Route path='/order-detail' element={<OrderDetail />} />
         </Routes>
       </div>
       <Footer />
