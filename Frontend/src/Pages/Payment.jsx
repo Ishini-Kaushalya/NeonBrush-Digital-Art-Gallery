@@ -64,7 +64,20 @@ const PaymentPage = () => {
         return;
       }
       const purchasedArtIds = cartItems.map((item) => item.artId);
+      for (const item of cartItems) {
+        const artistUsername = item.userName;
+        const message = `Your artwork "${item.title}" has been purchased!`;
+        await axios.post(
+          "http://localhost:8080/api/notifications",
+          { artistUsername, message },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
+
       // Send request to delete purchased items from the database
+      
       await axios.post(
         `http://localhost:8080/api/gallery/deletePurchased?artIds=${purchasedArtIds.join(
           "&artIds="

@@ -70,6 +70,8 @@ const Navbar = () => {
       setMenu("sign-in");
     } else if (location.pathname === "/artist-profile") {
       setMenu("artist-profile");
+    } else if (location.pathname === "/notifications") {
+      setMenu("notifications");
     }
   }, [location.pathname]);
 
@@ -118,6 +120,18 @@ const Navbar = () => {
         >
           Contact us
         </Link>
+        {/* Conditionally render Notification button for artists */}
+        {isArtist && (
+          <Link
+            to="/notifications"
+            onClick={() => setMenu("notifications")}
+            className={`cursor-pointer ${
+              menu === "notifications" ? "border-b-2 pb-1 border-sky-600" : ""
+            }`}
+          >
+            Notification
+          </Link>
+        )}
         {/* Add Artists Link */}
         <Link
           to="/show-artist"
