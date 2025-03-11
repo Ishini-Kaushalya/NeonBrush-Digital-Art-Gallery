@@ -34,11 +34,23 @@ const AdminLoginPopup = ({ setShowLogin }) => {
 
       const apiEndpoint = "http://localhost:8080/api/auth/signin";
 
-      const response = await axios.post(apiEndpoint, formData, {
+      const payload = {
+        username: formData.username,
+        password: formData.password,
+      };
+
+      const response = await axios.post(apiEndpoint, payload, {
         headers: { "Content-Type": "application/json" },
       });
 
       if (response.status === 200) {
+        // Save JWT token in localStorage
+        const token = response.data.accessToken; // Adjust based on your response structure
+        if (token) {
+          console.log("Login successful. JWT Token received:", token);
+          localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in localStorage
+        }
+
         // Close the popup and navigate to the admin dashboard
         setShowLogin(false);
         navigate("/admin");
@@ -75,7 +87,7 @@ const AdminLoginPopup = ({ setShowLogin }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md relative">
         <div className="flex justify-between items-center text-black mb-4">
-          <h2 className="text-lg font-medium">Login</h2>
+          <h2 className="text-lg font-medium">Admin Login</h2>
           <IoCloseCircleOutline
             onClick={() => setShowLogin(false)}
             className="w-6 h-6 cursor-pointer text-gray-600 hover:text-red-500"
