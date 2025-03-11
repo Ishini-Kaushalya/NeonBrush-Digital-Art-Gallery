@@ -16,7 +16,7 @@ public class Payment {
     private String cardNumber;
     private String expirationDate;
     private String CVV;
-    private Map<String, Integer> cartItems; // Key: Item ID, Value: Quantity
+    private Map<String, Object> cartAsObject; // Key: Item ID, Value: Quantity
     private double totalAmount;
 
     public String getPayment_id() {
@@ -75,12 +75,12 @@ public class Payment {
         this.CVV = CVV;
     }
 
-    public Map<String, Integer> getCartItems() {
-        return cartItems;
+    public Map<String, Object> getCartAsObject() {
+        return cartAsObject;
     }
 
-    public void setCartItems(Map<String, Integer> cartItems) {
-        this.cartItems = cartItems;
+    public void setCartAsObject(Map<String, Object> cartAsObject) {
+        this.cartAsObject = cartAsObject;
     }
 
     public double getTotalAmount() {
