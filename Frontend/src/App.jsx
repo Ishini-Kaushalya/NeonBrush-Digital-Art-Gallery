@@ -10,19 +10,19 @@ import Footer from "./Components/Footer";
 import ArtDetail from "./Pages/ArtDetail";
 import ArtistDetail from "./Pages/ArtistDetail";
 import ContactUs from "./Pages/ContactUs";
-import PaymentPage from './Pages/Payment';
-import ArtistProfile from './Pages/ArtistProfile';
-import AddArtItem from './Pages/AddArtItem'; // Import AddArtItem page
-import AdminLoginPopup from './Components/AdminLoginPopup';
-import ArtistLoginPopup from './Components/ArtistLoginPopup'; // Import ArtistLoginPopup
-import UserLoginPopup from './Components/UserLoginPopup'; // Import UserLoginPopup
+import PaymentPage from "./Pages/Payment";
+import ArtistProfile from "./Pages/ArtistProfile";
+import AddArtItem from "./Pages/AddArtItem"; // Import AddArtItem page
+import AdminLoginPopup from "./Components/AdminLoginPopup";
+import ArtistLoginPopup from "./Components/ArtistLoginPopup"; // Import ArtistLoginPopup
+import UserLoginPopup from "./Components/UserLoginPopup"; // Import UserLoginPopup
 import Admin from "./Pages/Admin";
 import ShowArtist from "./Pages/ShowArtist";
 import AboutUS from "./Pages/AboutUs";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Delivery from "./Pages/Delivery";
 import PaymentReceipt from "./Pages/PaymentReceipt";
-
+import Notification from "./Pages/Notification";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -69,9 +69,9 @@ const App = () => {
           <Route path="/aboutUs" element={<AboutUS />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/show-artist" element={<ShowArtist />} />
-          <Route path="/delivery" element={<Delivery/>}/>
-          <Route path="/receipt" element={<PaymentReceipt/>}/>
-
+          <Route path="/delivery" element={<Delivery />} />
+          <Route path="/receipt" element={<PaymentReceipt />} />
+          <Route path="/notifications" element={<Notification />} />
         </Routes>
       </div>
       <Footer />
