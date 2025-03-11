@@ -72,6 +72,8 @@ const App = () => {
           <Route path="/delivery" element={<Delivery />} />
           <Route path="/receipt" element={<PaymentReceipt />} />
           <Route path="/notifications" element={<Notification />} />
+          <Route path="/UserLoginPopup" element={<UserLoginPopup />} />
+          <Route path="/ArtistLoginPopup" element={<ArtistLoginPopup />} />
         </Routes>
       </div>
       <Footer />
