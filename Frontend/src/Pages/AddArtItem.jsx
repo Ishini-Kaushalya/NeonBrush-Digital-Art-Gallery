@@ -245,21 +245,23 @@ const AddArtItem = () => {
             )}
           </div>
           <div>
-            <label className="block text-gray-600 text-sm font-medium">
-              Art Size
-            </label>
-            <input
-              type="text"
-              name="size"
-              value={artDetails.size}
-              onChange={handleInputChange}
-              placeholder="Art size"
-              className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-            />
-            {errors.size && (
-              <p className="text-red-500 text-sm mt-1">{errors.size}</p>
-            )}
-          </div>
+  <label className="block text-gray-600 text-sm font-medium">
+    Art Size
+  </label>
+  <input
+    type="text"
+    name="size"
+    value={artDetails.size}
+    onChange={handleInputChange}
+    placeholder="Enter size as (width cm, height cm)"
+    pattern="^\d+(\.\d{1,2})? cm, \d+(\.\d{1,2})? cm$"
+
+    className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+  />
+  {errors.size && (
+    <p className="text-red-500 text-sm mt-1">{errors.size}</p>
+  )}
+</div>
           <div className="md:col-span-2">
             <label className="block text-gray-600 text-sm font-medium">
               Description
