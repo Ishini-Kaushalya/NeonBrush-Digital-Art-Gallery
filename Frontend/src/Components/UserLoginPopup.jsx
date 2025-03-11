@@ -67,15 +67,27 @@ const UserLoginPopup = ({ setShowLogin }) => {
       });
 
       if (response.status === 200) {
-        // Save JWT token in localStorage
-        const token = response.data.accessToken; // Adjust based on your response structure
-        if (token) {
-          console.log("Login successful. JWT Token received:", token);
-          localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in localStorage
-        }
+        if (formState === "Sign Up") {
+          // After successful sign-up, switch to login form
+          setFormState("Login");
+          // Clear the form data except for the username
+          setFormData({
+            ...formData,
+            email: "",
+            password: "",
+            agreeTerms: false,
+          });
+        } else {
+          // Save JWT token in localStorage
+          const token = response.data.accessToken; // Adjust based on your response structure
+          if (token) {
+            console.log("Login successful. JWT Token received:", token);
+            localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in localStorage
+          }
 
-        setShowLogin(false);
-        navigate("/products");
+          setShowLogin(false);
+          navigate("/products");
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
