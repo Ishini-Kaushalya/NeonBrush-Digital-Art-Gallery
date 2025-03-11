@@ -105,15 +105,7 @@ const AdminPage = () => {
     );
   };
 
-  // Handle adding art item to the bottom section
-  const handleArtItemAdd = (artDetails, artistName) => {
-    const newArtItem = {
-      artistName: artistName,
-      title: artDetails.title,
-      date: new Date().toLocaleDateString(), // Current date
-    };
-    setAddedArtItems((prevItems) => [...prevItems, newArtItem]);
-  };
+  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -189,23 +181,7 @@ const AdminPage = () => {
         </ul>
       </div>
 
-      {/* Added Art Section at the Bottom */}
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-2">Recently Added Art Items</h2>
-        <ul className="space-y-4">
-          {addedArtItems.map((item, index) => (
-            <li
-              key={index}
-              className="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-between items-center"
-            >
-              <span className="text-lg font-semibold text-gray-800">
-                {item.artistName} - {item.title}
-              </span>
-              <span className="text-sm text-gray-500">{item.date}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      
     </div>
   );
 };
