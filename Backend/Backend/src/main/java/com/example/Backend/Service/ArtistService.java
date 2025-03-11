@@ -17,7 +17,7 @@ public interface ArtistService {
 
     Optional<Artist> getArtistByUserName(String userName);
 
-    Artist addArtist(String firstName, String lastName, String userName, String email, String password,
+    Artist addArtist(String firstName, String lastName, String userName, String email,
                      String description, MultipartFile profileImage);
 
     Artist getArtistById(String artistId);

@@ -66,11 +66,10 @@ public class ArtistController {
             @RequestParam("lastName") String lastName,
             @RequestParam("userName") String userName,
             @RequestParam("email") String email,
-            @RequestParam("password") String password,
             @RequestParam("description") String description,
             @RequestParam(value = "image", required = false) MultipartFile profileImage) {
         try {
-            artistService.addArtist(firstName, lastName, userName, email, password, description, profileImage);
+            artistService.addArtist(firstName, lastName, userName, email, description, profileImage);
             return ResponseEntity.ok("Artist added successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to add artist: " + e.getMessage());

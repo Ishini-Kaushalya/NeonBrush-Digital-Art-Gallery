@@ -61,14 +61,14 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist addArtist(String firstName, String lastName, String userName, String email, String password,
+    public Artist addArtist(String firstName, String lastName, String userName, String email,
                             String description, MultipartFile profileImage) {
         Artist artist = new Artist();
         artist.setFirstName(firstName);
         artist.setLastName(lastName);
         artist.setUserName(userName);
         artist.setEmail(email);
-        artist.setPassword(password); // You should hash the password before saving
+         // You should hash the password before saving
         artist.setDescription(description);
 
         if (profileImage != null && !profileImage.isEmpty()) {
