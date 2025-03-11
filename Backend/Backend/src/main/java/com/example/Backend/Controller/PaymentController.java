@@ -1,12 +1,14 @@
 package com.example.Backend.Controller;
 
 import com.example.Backend.Model.Payment;
+import com.example.Backend.Service.NotificationService;
 import com.example.Backend.Service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -16,6 +18,9 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     // Create a payment
     @PostMapping
     public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
@@ -23,6 +28,16 @@ public class PaymentController {
             // Log the received payload for debugging
             System.out.println("Received Payment: " + payment);
             Payment createdPayment = paymentService.createPayment(payment);
+
+            // Send notifications to artists
+            Map<String, Object> cartAsObject = payment.getCartAsObject();
+            for (Map.Entry<String, Object> entry : cartAsObject.entrySet()) {
+                Map<String, Object> item = (Map<String, Object>) entry.getValue();
+                String artistUsername = (String) item.get("userName");
+                String message = "Your artwork '" + item.get("title") + "' has been purchased!";
+                notificationService.createNotification(artistUsername, message);
+            }
+
             return ResponseEntity.ok(createdPayment);
         } catch (Exception e) {
             System.err.println("Error creating payment: " + e.getMessage());
