@@ -20,10 +20,12 @@ public class PaymentController {
     @PostMapping
     public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
         try {
-            // Process the payment without JWT authentication
+            // Log the received payload for debugging
+            System.out.println("Received Payment: " + payment);
             Payment createdPayment = paymentService.createPayment(payment);
             return ResponseEntity.ok(createdPayment);
         } catch (Exception e) {
+            System.err.println("Error creating payment: " + e.getMessage());
             return ResponseEntity.status(400).body(null);
         }
     }
@@ -56,4 +58,3 @@ public class PaymentController {
         return ResponseEntity.noContent().build();
     }
 }
-
