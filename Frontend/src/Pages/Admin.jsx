@@ -188,7 +188,6 @@ const AdminPage = () => {
           ))}
         </ul>
       </div>
-
       {/* Added Art Section at the Bottom */}
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-2">Recently Added Art Items</h2>
