@@ -254,7 +254,7 @@ const AddArtItem = () => {
     value={artDetails.size}
     onChange={handleInputChange}
     placeholder="Enter size as (width cm, height cm)"
-    pattern="^\d+(\.\d{1,2})? cm, \d+(\.\d{1,2})? cm$"
+   
 
     className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
   />
