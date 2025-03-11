@@ -7,8 +7,10 @@ import { TbBasketFilled } from "react-icons/tb";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useRef } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
+  const [loggedInUsername, setLoggedInUsername] = useState();
   const [menu, setMenu] = useState("home");
   const { getCartSize } = useContext(StoreContext);
   const [isArtist, setIsArtist] = useState(false); // State to check if the user is an artist
@@ -48,6 +50,9 @@ const Navbar = () => {
           setIsArtist(false); // Assume the user is not an artist if no token is found
           return;
         }
+        const decodedToken = jwtDecode(token);
+        const username = decodedToken.sub || decodedToken.username; // Adjust based on your token structure
+        setLoggedInUsername(username);
 
         // Fetch the user's role
         const roleResponse = await axios.get(
@@ -78,7 +83,10 @@ const Navbar = () => {
       setMenu("home");
     } else if (location.pathname === "/products") {
       setMenu("arts");
-    } else if (location.pathname === "/contact-us") {
+    } else if (
+      location.pathname === "/contact-us" &&
+      loggedInUsername !== "admin"
+    ) {
       setMenu("contact-us");
     } else if (location.pathname === "/cart") {
       setMenu("cart");
@@ -88,8 +96,13 @@ const Navbar = () => {
       setMenu("artist-profile");
     } else if (location.pathname === "/notifications") {
       setMenu("notifications");
+    } else if (
+      location.pathname === "/order-detail" &&
+      loggedInUsername === "admin"
+    ) {
+      setMenu("order-details");
     }
-  }, [location.pathname]);
+  }, [location.pathname, loggedInUsername]);
 
   // Handle sign out
   const handleSignOut = () => {
@@ -134,19 +147,33 @@ const Navbar = () => {
         >
           All Arts
         </Link>
-        <Link
-          to='/contact-us'
-          onClick={() => setMenu("contact-us")}
-          className={`cursor-pointer ${
-            menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
-          }`}
-        >
-          Contact us
-        </Link>
+        {loggedInUsername === "admin" && (
+          <Link
+            to='/order-detail'
+            onClick={() => setMenu("order-details")}
+            className={`cursor-pointer ${
+              menu === "order-details" ? "border-b-2 pb-1 border-sky-600" : ""
+            }`}
+          >
+            Order Details
+          </Link>
+        )}
+        {loggedInUsername !== "admin" && (
+          <Link
+            to='/contact-us'
+            onClick={() => setMenu("contact-us")}
+            className={`cursor-pointer ${
+              menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
+            }`}
+          >
+            Contact us
+          </Link>
+        )}
+
         {/* Conditionally render Notification button for artists */}
         {isArtist && (
           <Link
-            to="/notifications"
+            to='/notifications'
             onClick={() => setMenu("notifications")}
             className={`cursor-pointer ${
               menu === "notifications" ? "border-b-2 pb-1 border-sky-600" : ""

@@ -9,7 +9,6 @@ const OrderList = () => {
   const [selectedArt, setSelectedArt] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isArtist, setIsArtist] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +19,6 @@ const OrderList = () => {
         if (!token) {
           console.error("No token found, please login first.");
           setIsArtist(false);
-          setIsAdmin(false);
           return;
         }
 
@@ -39,11 +37,9 @@ const OrderList = () => {
 
         const roles = roleResponse.data;
         setIsArtist(roles.includes("ROLE_ARTIST"));
-        setIsAdmin(roles.includes("ROLE_ADMIN"));
       } catch (error) {
         console.error("Error fetching user role:", error);
         setIsArtist(false);
-        setIsAdmin(false);
       } finally {
         setLoading(false);
       }
@@ -68,7 +64,7 @@ const OrderList = () => {
 
   useEffect(() => {
     if (!loading) {
-      if (isAdmin) {
+      if (loggedInUsername === "admin") {
         setFilteredOrders(orders); // Admin sees all orders
       } else if (isArtist) {
         const artistOrders = orders.filter((order) =>
@@ -79,7 +75,7 @@ const OrderList = () => {
         setFilteredOrders(artistOrders);
       }
     }
-  }, [orders, isArtist, isAdmin, loading]);
+  }, [orders, isArtist, loggedInUsername, loading]);
 
   const handleSelectArt = (art, order) => {
     setSelectedArt(art);
@@ -90,7 +86,7 @@ const OrderList = () => {
     <div className='p-4'>
       <h2 className='text-2xl font-bold mb-4'>
         {" "}
-        {isAdmin ? "All Orders" : "Your Sold Arts"}
+        {loggedInUsername === "admin" ? "All Orders" : "Your Sold Arts"}
       </h2>
       {filteredOrders.length > 0 ? (
         <div>
