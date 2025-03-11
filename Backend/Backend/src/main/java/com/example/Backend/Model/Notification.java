@@ -9,10 +9,10 @@ public class Notification {
 
     @Id
     private String id;
-    private String artistUsername; // Username of the artist
-    private String message; // Notification message
-    private Date createdAt; // Timestamp of the notification
-    private boolean isRead; // Whether the notification has been read
+    private String artistUsername;
+    private String message;
+    private Date createdAt;
+    private boolean isRead;
 
     // Getters and Setters
     public String getId() {
