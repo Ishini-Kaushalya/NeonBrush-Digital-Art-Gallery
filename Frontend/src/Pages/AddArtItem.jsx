@@ -186,6 +186,21 @@ const AddArtItem = () => {
   const handleBack = () => {
     navigate(-1);
   };
+  const handleAddArt = () => {
+    const newNotification = {
+      artistName: username, // From artist profile
+      artTitle: artTitle,   // From add art form
+      timestamp: new Date().toLocaleTimeString(),
+    };
+  
+    // Store in localStorage
+    const existingNotifications = JSON.parse(localStorage.getItem("notifications")) || [];
+    existingNotifications.push(newNotification);
+    localStorage.setItem("notifications", JSON.stringify(existingNotifications));
+  
+    alert("Art added successfully!"); // Confirmation for artist
+  };
+  
 
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg">
@@ -358,35 +373,7 @@ const AddArtItem = () => {
     See Arts
   </Link>
 </p>
-          // <ul className="space-y-4">
-          //   {artItems.map((item) => (
-          //     <li
-          //       key={item.artId}
-          //       className="flex items-center space-x-4 p-4 border rounded-lg bg-white"
-          //     >
-          //       {item.imageId && (
-          //         <img
-          //           src={`http://localhost:8080/api/gallery/image/${item.imageId}`}
-          //           alt={item.title}
-          //           className="w-16 h-16 object-cover rounded-lg"
-          //         />
-          //       )}
-          //       {/* <div className="flex-grow">
-          //         <h3 className="text-lg font-medium">{item.title}</h3>
-          //         <p className="text-sm text-gray-600">{item.description}</p>
-          //         <p className="text-sm text-gray-500">
-          //           {item.category} | {item.size} | ${item.price}
-          //         </p>
-          //       </div> */}
-          //       {/* <button
-          //         onClick={() => handleRemove(artItems.indexOf(item))}
-          //         className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-          //       >
-          //         Remove
-          //       </button> */}
-          //     </li>
-          //   ))}
-          // </ul>
+    
         )}
       </div>
     </div>

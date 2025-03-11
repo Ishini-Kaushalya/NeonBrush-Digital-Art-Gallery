@@ -4,8 +4,9 @@ import axios from "axios";
 const AdminPage = () => {
   const [artistList, setArtistList] = useState([]);
   const [artList, setArtList] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [addedArtItems, setAddedArtItems] = useState([]);
 
   // Fetch artists and artworks from the backend
   useEffect(() => {
@@ -35,7 +36,7 @@ const AdminPage = () => {
         // Fetch messages (if any)
         const storedMessages =
           JSON.parse(localStorage.getItem("adminMessages")) || [];
-        setMessages(storedMessages);
+        setNotifications(storedMessages);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -91,25 +92,51 @@ const AdminPage = () => {
     }
   };
 
-  const handleArtSubmission = (artDetails, artistId) => {
-    const message = {
-      content: `New artwork submitted by artist ${artistId}: ${artDetails.title}`,
-      timestamp: new Date().toLocaleString(),
-    };
-    setMessages((prevMessages) => {
-      const updatedMessages = [...prevMessages, message];
-      localStorage.setItem("adminMessages", JSON.stringify(updatedMessages));
-      return updatedMessages;
-    });
+  // Remove notification when clicking OK
+  const removeNotification = (id) => {
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter((notification) => notification.id !== id)
+    );
+    localStorage.setItem(
+      "adminMessages",
+      JSON.stringify(
+        notifications.filter((notification) => notification.id !== id)
+      )
+    );
   };
+
+  
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
       <h1 className="text-2xl font-bold text-center mb-4">Admin Dashboard</h1>
+
+      {/* Notifications (show in top-right corner) */}
+      <div className="absolute top-4 right-4 z-10">
+        {notifications.length > 0 &&
+          notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className="bg-green-500 text-white p-4 rounded-lg shadow-lg mb-2 transition-all duration-300 ease-in-out opacity-100"
+            >
+              <strong>{notification.content}</strong>
+              <div className="text-xs text-gray-200">
+                {notification.timestamp}
+              </div>
+              <button
+                onClick={() => removeNotification(notification.id)} // Remove only the clicked notification
+                className="bg-blue-500 text-white px-4 py-1 rounded mt-2"
+              >
+                OK
+              </button>
+            </div>
+          ))}
+      </div>
+
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-2">Manage Artists</h2>
         <ul className="space-y-4">
@@ -131,6 +158,7 @@ const AdminPage = () => {
           ))}
         </ul>
       </div>
+
       <div>
         <h2 className="text-xl font-semibold mb-2">Manage Artworks</h2>
         <ul className="space-y-4">
@@ -152,6 +180,8 @@ const AdminPage = () => {
           ))}
         </ul>
       </div>
+
+      
     </div>
   );
 };
