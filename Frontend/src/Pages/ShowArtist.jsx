@@ -5,6 +5,7 @@ import axios from "axios";
 const ShowArtist = () => {
   const [artists, setArtists] = useState([]);
   const [imageUrls, setImageUrls] = useState({});
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +58,8 @@ const ShowArtist = () => {
         setImageUrls(urls);
       } catch (error) {
         console.error("Error fetching artists:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -72,30 +75,38 @@ const ShowArtist = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <div className='w-10 h-10 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin'></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center mt-16">
+    <div className='p-6'>
+      <h2 className='text-2xl font-semibold text-gray-800 mb-6 text-center mt-16'>
         See Your Favorite Artists
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
         {artists.map((artist) => (
           <div
             key={artist.artistId}
             onClick={() => navigateToArtistDetailFromList(artist.userName)} // Use artist.userName instead of artist.artistId
-            className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+            className='bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer'
           >
-            <div className="flex flex-col items-center text-center">
+            <div className='flex flex-col items-center text-center'>
               {artist.imageId && (
                 <img
                   src={imageUrls[artist.artistId]}
                   alt={artist.userName}
-                  className="w-24 h-24 rounded-full object-cover mb-4"
+                  className='w-24 h-24 rounded-full object-cover mb-4'
                 />
               )}
-              <h3 className="text-xl font-semibold text-gray-800">
+              <h3 className='text-xl font-semibold text-gray-800'>
                 {artist.userName}
               </h3>
-              <p className="text-gray-600 mt-2">{artist.description}</p>
+              <p className='text-gray-600 mt-2'>{artist.description}</p>
             </div>
           </div>
         ))}

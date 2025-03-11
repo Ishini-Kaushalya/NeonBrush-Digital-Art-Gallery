@@ -56,15 +56,19 @@ const Products = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <div className='w-16 h-16 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin'></div>
+      </div>
+    );
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-center mt-20">
+      <h1 className='text-2xl font-bold text-center mt-20'>
         {category !== "All" && `${category} Artworks`}
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6'>
         {filteredArts.map((art) => (
           <ArtItem
             key={art.artId}
