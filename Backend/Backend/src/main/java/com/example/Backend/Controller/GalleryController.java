@@ -93,4 +93,12 @@ public class GalleryController {
         List<Gallery> galleries = galleryService.getArtItemsByCategory(category);
         return ResponseEntity.ok(galleries);
     }
+
+    // Clear cart items from the database by artIds after purchase
+    @PostMapping("/deletePurchased")
+    public ResponseEntity<Void> deletePurchasedItems(@RequestParam List<String> artIds) {
+        galleryService.deletePurchasedItems(artIds);
+        return ResponseEntity.noContent().build();
+    }
+
 }
