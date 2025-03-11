@@ -5,6 +5,9 @@ import { FaUserCircle } from "react-icons/fa";
 import { StoreContext } from "../Context/StoreContext.jsx";
 import { TbBasketFilled } from "react-icons/tb";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { useRef } from "react";
+
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
@@ -15,7 +18,19 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+const dropdownRef = useRef(null);
 
+// Close dropdown when clicking outside
+useEffect(() => {
+  function handleClickOutside(event) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
 
   // Check if the user is signed in on component mount
   useEffect(() => {
@@ -85,6 +100,9 @@ const Navbar = () => {
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+  const closeDropdown = () => {
+    setDropdownOpen(false);
   };
   
   if (loading) {
@@ -165,32 +183,40 @@ const Navbar = () => {
                   className="w-[30px] h-[30px] text-gray-700 cursor-pointer"
                   onClick={toggleDropdown}
                 />
-                {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-300 z-10 w-48">
-                    <ul className="flex flex-col">
-                      <li>
-                        <Link to="/artist-profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          My Profile
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/artist-artworks" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          My Artworks
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/add-art" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          Add Art
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          See Orders
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
+{dropdownOpen && (
+  <motion.div
+    ref={dropdownRef}
+    initial={{ x: 100, opacity: 0 }}
+    animate={{ x: 0, opacity: 1 }}
+    exit={{ x: 100, opacity: 0 }}
+    transition={{ duration: 0.3, ease: "easeOut" }}
+    className="absolute right-0 top-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-300 z-10 w-48"
+  >
+    <ul className="flex flex-col">
+      <li>
+        <Link to="/artist-profile" onClick={closeDropdown}  className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+          My Profile
+        </Link>
+      </li>
+      <li>
+        <Link to="/artist-artworks" onClick={closeDropdown}  className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+          My Artworks
+        </Link>
+      </li>
+      <li>
+        <Link to="/add-art" onClick={closeDropdown}  className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+          Add Art
+        </Link>
+      </li>
+      <li>
+        <Link to="/orders" onClick={closeDropdown}  className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+          See Orders
+        </Link>
+      </li>
+    </ul>
+  </motion.div>
+)}
+
               </div>
             )}
           </>

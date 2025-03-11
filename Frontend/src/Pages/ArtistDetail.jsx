@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ArtItem from "../Components/ArtItem"; // Import the ArtItem component
+import { IoChevronBackCircleOutline } from "react-icons/io5";
+
 
 const ArtistDetail = () => {
   const { id } = useParams(); // Get the artist's ID or username from the URL
@@ -115,13 +117,8 @@ const ArtistDetail = () => {
 
   return (
     <div className="artist-detail container mx-auto mt-16 p-4">
-      {/* Back Button */}
-      <button
-        className="bg-sky-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 mb-4"
-        onClick={() => navigate(-1)}
-      >
-        Back
-      </button>
+     
+
        {/* Add Art Button */}
 
       {/* Content Area */}
@@ -158,9 +155,9 @@ const ArtistDetail = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Artworks</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {artworks.map((art) => (
+            {artworks.map((art,index) => (
               <ArtItem
-                key={art._id}
+                key={art._id || index}
                 id={art._id}
                 name={art.title}
                 price={art.price}
@@ -174,6 +171,13 @@ const ArtistDetail = () => {
       ) : (
         <p className="text-gray-600">No artworks available for this artist.</p>
       )}
+       {/* Back Button */}
+       <button
+  className="text-black py-4 px-8 text-xl rounded-lg shadow-md hover:bg-gray-800 hover:text-white mb-4"
+  onClick={() => navigate(-1)}
+>
+  <IoChevronBackCircleOutline className="mr-2 text-3xl" />
+</button>
     </div>
   );
 };
