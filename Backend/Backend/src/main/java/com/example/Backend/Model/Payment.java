@@ -3,6 +3,7 @@ package com.example.Backend.Model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.Map;
 
 @Document(collection = "payment")
@@ -18,6 +19,7 @@ public class Payment {
     private String CVV;
     private Map<String, Object> cartAsObject; // Key: Item ID, Value: Quantity
     private double totalAmount;
+    private Date createdAt; // New field to store the creation timestamp
 
     public String getPayment_id() {
         return payment_id;
@@ -89,5 +91,13 @@ public class Payment {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
