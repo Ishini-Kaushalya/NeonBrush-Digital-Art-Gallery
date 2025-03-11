@@ -33,6 +33,7 @@ const AddArtItem = () => {
 
   const [artItems, setArtItems] = useState([]);
   const [errors, setErrors] = useState({});
+  const [imageSelected, setImageSelected] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,6 +73,7 @@ const AddArtItem = () => {
         ...prevDetails,
         image: files[0],
       }));
+      setImageSelected(true);
     }
   };
 
@@ -86,6 +88,7 @@ const AddArtItem = () => {
       image: null,
     });
     setErrors({});
+    setImageSelected(false);
   };
 
   const handleAdd = async (e) => {
@@ -125,6 +128,7 @@ const AddArtItem = () => {
       );
 
       setArtItems((prevItems) => [...prevItems, response.data]);
+      alert("Art Adding Successful");
 
       // Send a notification to the admin
       const message = {
@@ -135,6 +139,7 @@ const AddArtItem = () => {
 
       handleClear();
     } catch (validationError) {
+      
       if (validationError.errors) {
         const formattedErrors = validationError.errors.reduce((acc, error) => {
           acc[error.path[0]] = error.message;
@@ -327,11 +332,11 @@ const AddArtItem = () => {
                 onChange={handleImageChange}
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
-              <button
+               <button
                 type="button"
                 className="mt-1 w-full px-6 py-3 text-gray-500 bg-sky-200 border rounded-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-300"
               >
-                <RiImageAddFill className="mr-2" /> Choose Image
+                <RiImageAddFill className="mr-2" /> {imageSelected ? "Image Added" : "Choose Image"}
               </button>
             </div>
             {errors.image && (
@@ -369,9 +374,7 @@ const AddArtItem = () => {
           <p className="text-gray-600">No items added yet.</p>
         ) : (
           <p>
-  <Link to="/products" className="text-blue-500 hover:text-sky-900">
-    See Arts
-  </Link>
+ 
 </p>
     
         )}
