@@ -11,7 +11,6 @@ public class Artist {
     private String lastName;
     private String userName;
     private String email;
-    private String password;
     private String description;
     private String imageId; // Stores the GridFS file ID
 
@@ -54,14 +53,6 @@ public class Artist {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getDescription() {
