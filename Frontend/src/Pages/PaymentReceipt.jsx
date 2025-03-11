@@ -5,14 +5,13 @@ import { jsPDF } from "jspdf";
 import { assets } from "../assets/Common/assets.js";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 
-const PaymentReceipt = ({paymentDetails}) => {
-  if (!paymentDetails) return null; 
-  const { cartItems, getTotalCartAmount } = useContext(StoreContext);
+const PaymentReceipt = ({ order }) => {
+  if (!order) return null;
   const navigate = useNavigate();
-  
+
   const packingFee = 50; // Fixed packing fee
-  const totalAmount = getTotalCartAmount() + packingFee;
-  const currentDate = new Date().toLocaleDateString();
+  const totalAmount = order.totalAmount + packingFee;
+  const currentDate = order.date;
 
   // Function to download PDF
   const downloadPDF = () => {
@@ -25,7 +24,7 @@ const PaymentReceipt = ({paymentDetails}) => {
     doc.addImage(assets.logo, "PNG", logoX, 20, logoWidth, 20);
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16); 
+    doc.setFontSize(16);
     doc.text("Payment Receipt", pageWidth / 2, 45, null, null, "center");
 
     let y = 60;
@@ -37,9 +36,9 @@ const PaymentReceipt = ({paymentDetails}) => {
     doc.setFont("helvetica", "normal");
     doc.text(`Date: ${currentDate}`, marginLeft, y);
     y += 8;
-    doc.text(`Name: ${paymentDetails.userName}`, marginLeft, y);
+    doc.text(`Name: ${order.userName}`, marginLeft, y);
     y += 8;
-    doc.text(`Address: ${paymentDetails.address}`, marginLeft, y);
+    doc.text(`Address: ${order.address}`, marginLeft, y);
     y += 12;
 
     // Table headers
@@ -52,7 +51,7 @@ const PaymentReceipt = ({paymentDetails}) => {
     doc.setFont("helvetica", "normal");
 
     // List of items
-    cartItems.forEach((item) => {
+    order.items.forEach((item) => {
       doc.text(item.title, marginLeft, y);
       doc.text(`Rs.${item.price}`, marginRight, y, null, null, "right");
       y += 10;
@@ -106,16 +105,16 @@ const PaymentReceipt = ({paymentDetails}) => {
       </div>
 
       <div className='mt-6 space-y-4'>
-        <p className="text-gray-600 text-sm">Date: {currentDate}</p>
-        <p className="text-gray-600 text-sm">Name: {paymentDetails.userName}</p>
-        <p className="text-gray-600 text-sm">Email: {paymentDetails.address}</p>
+        <p className='text-gray-600 text-sm'>Date: {currentDate}</p>
+        <p className='text-gray-600 text-sm'>Name: {order.userName}</p>
+        <p className='text-gray-600 text-sm'>Email: {order.address}</p>
 
         <div className='flex justify-between text-lg font-bold border-b pb-2'>
           <p className='text-left text-xl'>Items</p>
           <p className='text-right text-xl'>Price</p>
         </div>
 
-        {cartItems.map((item) => (
+        {order.items.map((item) => (
           <div key={item.artId} className='flex justify-between py-2 border-b'>
             <p className='text-left text-gray-700'>{item.title}</p>
             <p className='text-right text-gray-900 font-semibold'>
@@ -126,7 +125,9 @@ const PaymentReceipt = ({paymentDetails}) => {
 
         <div className='flex justify-between py-2 border-b'>
           <p className='text-left text-gray-700 font-semibold'>Packing Fee</p>
-          <p className='text-right text-gray-900 font-semibold'>Rs.{packingFee}</p>
+          <p className='text-right text-gray-900 font-semibold'>
+            Rs.{packingFee}
+          </p>
         </div>
 
         {/* Line before total */}
