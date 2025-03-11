@@ -70,10 +70,10 @@ const PaymentPage = () => {
 
       // Send request to delete purchased items from the database
       await axios.post(
-        "http://localhost:8080/api/gallery/deletePurchased",
-        {
-          artIds: purchasedArtIds,
-        },
+        `http://localhost:8080/api/gallery/deletePurchased?artIds=${purchasedArtIds.join(
+          "&artIds="
+        )}`,
+        null,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
