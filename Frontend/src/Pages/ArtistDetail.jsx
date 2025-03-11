@@ -113,25 +113,11 @@ const ArtistDetail = () => {
     return <div>Artist not found!</div>;
   }
 
-  const handleArtClick = (art) => {
-    const formattedArt = {
-      _id: art.artId, // Ensuring ArtDetail receives _id
-      name: art.title,
-      description: art.description,
-      price: art.price,
-      imageId: art.imageId,
-      userName: art.userName,
-      size: art.size,
-    };
-
-    navigate("/art-detail", { state: formattedArt });
-  };
-
   return (
     <div className="artist-detail container mx-auto mt-16 p-4">
       {/* Back Button */}
       <button
-        className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 mb-4"
+        className="bg-sky-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 mb-4"
         onClick={() => navigate(-1)}
       >
         Back
@@ -143,7 +129,7 @@ const ArtistDetail = () => {
       {/* Add Art Button (Visible only for artists) */}
       {isArtist && (
         <button
-          className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 ml-4"
+          className="bg-sky-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 ml-4"
           onClick={() => navigate("/add-art")}
         >
           Add Art
@@ -178,6 +164,13 @@ const ArtistDetail = () => {
           <p className="text-lg text-white">{artist.description}</p>
         </div>
       </div>
+       {/* "See Orders" Button aligned with Artist's Name */}
+  <button
+    className="bg-white font-bold text-black py-2 px-6 rounded-lg shadow-md hover:text-sky-600 ml-auto mt-4" // Add mt-4 for vertical spacing
+    onClick={() => navigate(`/orders/${artist.userName}`)} // Navigate to the artist's orders page
+  >
+    See Orders
+  </button>
 
       {/* Artist's Artworks */}
       {artworks.length > 0 ? (
@@ -192,7 +185,7 @@ const ArtistDetail = () => {
                 price={art.price}
                 description={art.description}
                 imageId={art.imageId}
-                onClick={() => handleArtClick(art)} // Navigate to artwork detail page
+                onClick={() => navigate(`/art/${art._id}`)} // Navigate to artwork detail page
               />
             ))}
           </div>
