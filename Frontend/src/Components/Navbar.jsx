@@ -10,6 +10,7 @@ const Navbar = () => {
   const [menu, setMenu] = useState("home");
   const { getCartSize } = useContext(StoreContext);
   const [isArtist, setIsArtist] = useState(false); // State to check if the user is an artist
+  const [isAdmin, setIsAdmin] = useState(false); // State to check if the user is an admin
   const [loading, setLoading] = useState(true); // State to track loading status
   const [isSignedIn, setIsSignedIn] = useState(false); // State to track authentication status
   const location = useLocation();
@@ -30,6 +31,7 @@ const Navbar = () => {
         if (!token) {
           console.error("No token found, please login first.");
           setIsArtist(false); // Assume the user is not an artist if no token is found
+          setIsAdmin(false); // Assume the user is not an admin if no token is found
           return;
         }
 
@@ -45,9 +47,12 @@ const Navbar = () => {
 
         // Check if the user is an artist
         setIsArtist(roleResponse.data.includes("ROLE_ARTIST"));
+        // Check if the user is an admin
+        setIsAdmin(roleResponse.data.includes("ROLE_ADMIN"));
       } catch (error) {
         console.error("Error fetching user role:", error);
         setIsArtist(false); // Assume the user is not an artist if there's an error
+        setIsAdmin(false); // Assume the user is not an admin if there's an error
       } finally {
         setLoading(false); // Set loading to false after the request completes
       }
@@ -78,6 +83,7 @@ const Navbar = () => {
     localStorage.removeItem("accessToken"); // Remove the token from localStorage
     setIsSignedIn(false); // Update authentication status
     setIsArtist(false); // Reset artist status
+    setIsAdmin(false); // Reset admin status
     navigate("/"); // Redirect to home page
   };
 
@@ -109,15 +115,18 @@ const Navbar = () => {
         >
           All Arts
         </Link>
-        <Link
-          to="/contact-us"
-          onClick={() => setMenu("contact-us")}
-          className={`cursor-pointer ${
-            menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
-          }`}
-        >
-          Contact us
-        </Link>
+        {/* Conditionally render Contact Us link if the user is not an admin */}
+        {!isAdmin && (
+          <Link
+            to="/contact-us"
+            onClick={() => setMenu("contact-us")}
+            className={`cursor-pointer ${
+              menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
+            }`}
+          >
+            Contact us
+          </Link>
+        )}
         {/* Add Artists Link */}
         <Link
           to="/show-artist"
