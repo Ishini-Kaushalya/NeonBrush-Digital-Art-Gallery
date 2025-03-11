@@ -5,6 +5,8 @@ import { FaUserCircle } from "react-icons/fa";
 import { StoreContext } from "../Context/StoreContext.jsx";
 import { TbBasketFilled } from "react-icons/tb";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { useRef } from "react";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
@@ -14,6 +16,20 @@ const Navbar = () => {
   const [isSignedIn, setIsSignedIn] = useState(false); // State to track authentication status
   const location = useLocation();
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Check if the user is signed in on component mount
   useEffect(() => {
@@ -83,18 +99,25 @@ const Navbar = () => {
     navigate("/"); // Redirect to home page
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
+
   if (loading) {
     return <div>Loading...</div>; // Show a loading spinner or message
   }
 
   return (
-    <div className="flex justify-between items-center px-24 py-5 mb-[-40px]">
-      <Link to="/">
-        <img src={assets.logo} alt="Logo" className="w-[80px]" />
+    <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
+      <Link to='/'>
+        <img src={assets.logo} alt='Logo' className='w-[80px]' />
       </Link>
-      <ul className="flex gap-12 text-[#49557e] text-lg">
+      <ul className='flex gap-12 text-[#49557e] text-lg'>
         <Link
-          to="/"
+          to='/'
           onClick={() => setMenu("home")}
           className={`cursor-pointer ${
             menu === "home" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -103,7 +126,7 @@ const Navbar = () => {
           Home
         </Link>
         <Link
-          to="/products"
+          to='/products'
           onClick={() => setMenu("menu")}
           className={`cursor-pointer ${
             menu === "arts" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -112,7 +135,7 @@ const Navbar = () => {
           All Arts
         </Link>
         <Link
-          to="/contact-us"
+          to='/contact-us'
           onClick={() => setMenu("contact-us")}
           className={`cursor-pointer ${
             menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -134,7 +157,7 @@ const Navbar = () => {
         )}
         {/* Add Artists Link */}
         <Link
-          to="/show-artist"
+          to='/show-artist'
           onClick={() => setMenu("artists")}
           className={`cursor-pointer ${
             menu === "artists" ? "border-b-2 pb-1 border-[#38bdf8]" : ""
@@ -144,10 +167,10 @@ const Navbar = () => {
         </Link>
       </ul>
 
-      <div className="flex items-center gap-10">
-        <div className="relative">
-          <Link to="/cart" className="cursor-pointer">
-            <TbBasketFilled className="w-[30px] h-[30px] text-gray-700" />
+      <div className='flex items-center gap-10'>
+        <div className='relative'>
+          <Link to='/cart' className='cursor-pointer'>
+            <TbBasketFilled className='w-[30px] h-[30px] text-gray-700' />
           </Link>
           <div
             className={
@@ -162,20 +185,72 @@ const Navbar = () => {
           <>
             <button
               onClick={handleSignOut}
-              className="bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]"
+              className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]'
             >
               Sign Out
             </button>
             {/* Conditionally render the Artist Profile button */}
             {isArtist && (
-              <Link to="/artist-profile" className="cursor-pointer">
-                <FaUserCircle className="w-[30px] h-[30px] text-gray-700" />
-              </Link>
+              <div className='relative'>
+                <FaUserCircle
+                  className='w-[30px] h-[30px] text-gray-700 cursor-pointer'
+                  onClick={toggleDropdown}
+                />
+                {dropdownOpen && (
+                  <motion.div
+                    ref={dropdownRef}
+                    initial={{ x: 100, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: 100, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className='absolute right-0 top-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-300 z-10 w-48'
+                  >
+                    <ul className='flex flex-col'>
+                      <li>
+                        <Link
+                          to='/artist-profile'
+                          onClick={closeDropdown}
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
+                        >
+                          My Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to='/artist-artworks'
+                          onClick={closeDropdown}
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
+                        >
+                          My Artworks
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to='/add-art'
+                          onClick={closeDropdown}
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
+                        >
+                          Add Art
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to='/order-detail'
+                          onClick={closeDropdown}
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
+                        >
+                          See Orders
+                        </Link>
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
+              </div>
             )}
           </>
         ) : (
-          <Link to="/sign-in">
-            <button className="bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]">
+          <Link to='/sign-in'>
+            <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]'>
               Sign In
             </button>
           </Link>
