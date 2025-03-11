@@ -14,6 +14,7 @@ const ArtDetail = () => {
   const { addToCart, cartItems } = useContext(StoreContext);
   const [fullImage, setFullImage] = useState(false);
   const [imageSrc, setImageSrc] = useState(null);
+  const [loading, setLoading] = useState(true);
   const isAdded = cartItems.some((item) => item.artId === _id);
 
   useEffect(() => {
@@ -36,6 +37,8 @@ const ArtDetail = () => {
         setImageSrc(`data:image/jpeg;base64,${base64Image}`);
       } catch (error) {
         console.error("Error fetching image:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -57,7 +60,11 @@ const ArtDetail = () => {
       <div className='art-detail-page container mx-auto mt-16 flex flex-col md:flex-row space-y-8 md:space-y-0'>
         {/* Left Side: Image */}
         <div className='w-full md:w-1/2 flex justify-center items-center relative'>
-          {imageSrc ? (
+          {loading ? (
+            <div className='flex justify-center items-center'>
+              <div className='w-10 h-10 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin'></div>
+            </div>
+          ) : imageSrc ? (
             <img
               src={imageSrc}
               alt={name}
@@ -65,7 +72,7 @@ const ArtDetail = () => {
               onClick={() => setFullImage(true)}
             />
           ) : (
-            <div>Loading image...</div>
+            <div className='text-gray-500'>Image not available</div>
           )}
         </div>
 
