@@ -80,4 +80,8 @@ public class GalleryServiceImpl implements GalleryService {
     public List<Gallery> getArtItemsByCategory(String category) {
         return galleryRepository.findByCategory(category);
     }
+    @Override
+    public void deletePurchasedItems(List<String> artIds) {
+        galleryRepository.deleteAllById(artIds);
+    }
 }
