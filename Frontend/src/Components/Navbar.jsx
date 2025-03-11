@@ -14,6 +14,8 @@ const Navbar = () => {
   const [isSignedIn, setIsSignedIn] = useState(false); // State to track authentication status
   const location = useLocation();
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
 
   // Check if the user is signed in on component mount
   useEffect(() => {
@@ -81,6 +83,10 @@ const Navbar = () => {
     navigate("/"); // Redirect to home page
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+  
   if (loading) {
     return <div>Loading...</div>; // Show a loading spinner or message
   }
@@ -154,9 +160,38 @@ const Navbar = () => {
             </button>
             {/* Conditionally render the Artist Profile button */}
             {isArtist && (
-              <Link to="/artist-profile" className="cursor-pointer">
-                <FaUserCircle className="w-[30px] h-[30px] text-gray-700" />
-              </Link>
+              <div className="relative">
+                <FaUserCircle
+                  className="w-[30px] h-[30px] text-gray-700 cursor-pointer"
+                  onClick={toggleDropdown}
+                />
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-300 z-10 w-48">
+                    <ul className="flex flex-col">
+                      <li>
+                        <Link to="/artist-profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          My Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/artist-artworks" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          My Artworks
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/add-art" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          Add Art
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          See Orders
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             )}
           </>
         ) : (

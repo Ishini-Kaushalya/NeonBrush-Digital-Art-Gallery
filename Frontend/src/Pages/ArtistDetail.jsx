@@ -123,18 +123,6 @@ const ArtistDetail = () => {
         Back
       </button>
        {/* Add Art Button */}
-       
-
-
-      {/* Add Art Button (Visible only for artists) */}
-      {isArtist && (
-        <button
-          className="bg-sky-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 ml-4"
-          onClick={() => navigate("/add-art")}
-        >
-          Add Art
-        </button>
-      )}
 
       {/* Content Area */}
       <div
@@ -164,13 +152,6 @@ const ArtistDetail = () => {
           <p className="text-lg text-white">{artist.description}</p>
         </div>
       </div>
-       {/* "See Orders" Button aligned with Artist's Name */}
-  <button
-    className="bg-white font-bold text-black py-2 px-6 rounded-lg shadow-md hover:text-sky-600 ml-auto mt-4" // Add mt-4 for vertical spacing
-    onClick={() => navigate(`/orders/${artist.userName}`)} // Navigate to the artist's orders page
-  >
-    See Orders
-  </button>
 
       {/* Artist's Artworks */}
       {artworks.length > 0 ? (
