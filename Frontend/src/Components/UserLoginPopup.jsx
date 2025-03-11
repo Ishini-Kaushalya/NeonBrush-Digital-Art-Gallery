@@ -5,17 +5,17 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import { z } from "zod";
 
 const UserLoginPopup = ({ setShowLogin }) => {
-  const [formState, setFormState] = useState("Login");
+  const [formState, setFormState] = useState("Login"); // Tracks whether the form is in "Login" or "Sign Up" mode
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
     agreeTerms: false,
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({}); // Stores validation errors
   const navigate = useNavigate();
 
-  // Define schemas for login and signup
+  // Define schemas for login and signup using Zod
   const loginSchema = z.object({
     username: z.string().min(1, "Username is required"),
     password: z.string().min(6, "Password must be at least 6 characters"),
@@ -33,42 +33,48 @@ const UserLoginPopup = ({ setShowLogin }) => {
       .refine((val) => val, "You must agree to the terms and privacy policy"),
   });
 
+  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
-    setErrors({ ...errors, [name]: "" });
+    setErrors({ ...errors, [name]: "" }); // Clear errors for the updated field
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
+    setErrors({}); // Clear previous errors
 
     try {
+      // Validate form data using the appropriate schema
       const schema = formState === "Sign Up" ? signupSchema : loginSchema;
       schema.parse(formData);
 
+      // Determine the API endpoint based on the form state
       const apiEndpoint =
         formState === "Sign Up"
           ? "http://localhost:8080/api/auth/signup"
           : "http://localhost:8080/api/auth/signin";
 
+      // Prepare the payload for the API request
       const payload =
         formState === "Sign Up"
           ? {
               username: formData.username,
               email: formData.email,
               password: formData.password,
-              roles: ["user"],
+              roles: ["user"], // Assign the "user" role
             }
           : { username: formData.username, password: formData.password };
 
+      // Send the request to the backend
       const response = await axios.post(apiEndpoint, payload, {
         headers: { "Content-Type": "application/json" },
       });
 
       if (response.status === 200) {
         if (formState === "Sign Up") {
-          // After successful sign-up, switch to login form
+          // After successful sign-up, switch to the login form
           setFormState("Login");
           // Clear the form data except for the username
           setFormData({
@@ -78,13 +84,14 @@ const UserLoginPopup = ({ setShowLogin }) => {
             agreeTerms: false,
           });
         } else {
-          // Save JWT token in localStorage
+          // Save the JWT token in localStorage
           const token = response.data.accessToken; // Adjust based on your response structure
           if (token) {
             console.log("Login successful. JWT Token received:", token);
-            localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token in localStorage
+            localStorage.setItem("accessToken", JSON.stringify(token)); // Store the token
           }
 
+          // Close the login popup and navigate to the products page
           setShowLogin(false);
           navigate("/products");
         }
