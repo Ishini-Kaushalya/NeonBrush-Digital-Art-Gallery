@@ -29,6 +29,7 @@ const PaymentPage = () => {
   const [message, setMessage] = useState("");
   const [order, setOrder] = useState();
   const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment status
+  const packingFee = 50;
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -56,7 +57,7 @@ const PaymentPage = () => {
       const payload = {
         ...paymentDetails,
         cartAsObject,
-        totalAmount: getTotalCartAmount(),
+        totalAmount: getTotalCartAmount() + packingFee,
       };
       await axios.post("http://localhost:8080/api/payment", payload);
       const token = JSON.parse(localStorage.getItem("accessToken"));

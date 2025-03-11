@@ -114,8 +114,8 @@ const PaymentReceipt = ({ order }) => {
           <p className='text-right text-xl'>Price</p>
         </div>
 
-        {order.items.map((item) => (
-          <div key={item.artId} className='flex justify-between py-2 border-b'>
+        {order.items.map((item, index) => (
+          <div key={index} className='flex justify-between py-2 border-b'>
             <p className='text-left text-gray-700'>{item.title}</p>
             <p className='text-right text-gray-900 font-semibold'>
               Rs.{item.price}
