@@ -82,6 +82,16 @@ const OrderList = () => {
     setSelectedOrder(order);
   };
 
+  // Function to format the date (order.createdAt)
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    // Check if the date is valid
+    if (isNaN(date)) {
+      return "Invalid Date";
+    }
+    return date.toLocaleString(); // Returns formatted date in the local format
+  };
+
   return (
     <div className='p-4'>
       <h2 className='text-2xl font-bold mb-4'>
@@ -96,8 +106,11 @@ const OrderList = () => {
                   <div key={art.artId} className='border p-4 mb-4'>
                     <h3 className='text-lg font-semibold'>{art.title}</h3>
                     <p>
-                      <strong>Price:</strong> Rs.
-                      {art.price}
+                      <strong>Price:</strong> Rs.{art.price}
+                    </p>
+                    {/* Use order.createdAt for the order date */}
+                    <p>
+                      <strong>Order Date:</strong> {formatDate(order.createdAt)}
                     </p>
                     <button
                       className='mt-2 px-4 py-2 bg-blue-500 text-white rounded-md'
@@ -130,6 +143,10 @@ const OrderList = () => {
             </p>
             <p>
               <strong>Amount Paid:</strong> Rs. {selectedArt.price}
+            </p>
+            {/* Use order.createdAt for the order date */}
+            <p>
+              <strong>Order Date:</strong> {formatDate(selectedOrder.createdAt)}
             </p>
             <button
               className='mt-4 px-4 py-2 bg-red-500 text-white rounded-md'
