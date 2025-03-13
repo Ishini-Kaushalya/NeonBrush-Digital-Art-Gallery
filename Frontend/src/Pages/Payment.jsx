@@ -28,6 +28,7 @@ const PaymentPage = () => {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment status
+  const [order, setOrder] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -112,14 +113,22 @@ const PaymentPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      const order = {
+        userName: paymentDetails.userName,
+        address: paymentDetails.address,
+        items: cartItems.map((item) => ({
+          title: item.title,
+          price: item.price,
+        })),
+        totalAmount: getTotalCartAmount(), // Include packing fee
+        date: new Date().toLocaleDateString(),
+      };
 
+      setOrder(order);
       setPaymentSuccess(true);
-      // Clear cart items from the state
 
       setMessage("Payment Successful! Redirecting...");
-      clearCart(); // Clear the cart after a short delay
-      navigate("/products");
-      //setTimeout(() => navigate("/products"), 2000);
+      clearCart(); // Clear the cart
     } catch (error) {
       console.error("Payment error:", error);
       alert("Payment failed. Please try again.");
@@ -143,7 +152,7 @@ const PaymentPage = () => {
   };
   // If payment is successful, render the receipt
   if (paymentSuccess) {
-    return <PaymentReceipt paymentDetails={paymentDetails} />;
+    return <PaymentReceipt order={order} />;
   }
 
   return (
