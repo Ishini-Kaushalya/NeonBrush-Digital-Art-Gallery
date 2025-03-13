@@ -136,6 +136,9 @@ const AddArtItem = () => {
         content: `New artwork titled "${artDetails.title}" has been added by an artist.`,
       };
       sendMessageToAdmin(message);
+      
+    // Navigate to the artist's detail page using their userName
+      navigate(`/artist-detail/${artDetails.userName}`);
 
       handleClear();
     } catch (validationError) {
