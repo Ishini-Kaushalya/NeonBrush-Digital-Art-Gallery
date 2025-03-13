@@ -11,18 +11,19 @@ import { jwtDecode } from "jwt-decode";
 const Navbar = () => {
   const [loggedInUsername, setLoggedInUsername] = useState();
   const [menu, setMenu] = useState("home");
-  const { getCartSize, clearCart } = useContext(StoreContext);
-  const [isArtist, setIsArtist] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [notification, setNotification] = useState("");
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [hasProfile, setHasProfile] = useState(false);
+  const { clearCart, getCartSize } = useContext(StoreContext);
+  const [isArtist, setIsArtist] = useState(false); // State to check if the user is an artist
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [isSignedIn, setIsSignedIn] = useState(false); // State to track authentication status
   const location = useLocation();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [notification, setNotification] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -34,11 +35,13 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Check if the user is signed in on component mount
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("accessToken"));
-    setIsSignedIn(!!token);
+    setIsSignedIn(!!token); // Set isSignedIn to true if token exists
   }, []);
 
+  // Fetch the current user's role and profile
   useEffect(() => {
     const fetchUserRoleAndProfile = async () => {
       try {
@@ -46,15 +49,14 @@ const Navbar = () => {
 
         if (!token) {
           console.error("No token found, please login first.");
-          setIsArtist(false);
+          setIsArtist(false); // Assume the user is not an artist if no token is found
           return;
         }
-
         const decodedToken = jwtDecode(token);
-        const username = decodedToken.sub || decodedToken.username;
+        const username = decodedToken.sub || decodedToken.username; // Adjust based on your token structure
         setLoggedInUsername(username);
 
-        // Fetch user role
+        // Fetch the user's role
         const roleResponse = await axios.get(
           "http://localhost:8080/api/user/role",
           {
@@ -63,9 +65,9 @@ const Navbar = () => {
             },
           }
         );
-        setIsArtist(roleResponse.data.includes("ROLE_ARTIST"));
 
-        // Check if the user has a profile
+        // Check if the user is an artist
+        setIsArtist(roleResponse.data.includes("ROLE_ARTIST"));
         if (roleResponse.data.includes("ROLE_ARTIST")) {
           try {
             const profileResponse = await axios.get(
@@ -76,10 +78,10 @@ const Navbar = () => {
                 },
               }
             );
-            setHasProfile(!!profileResponse.data);
+            setHasProfile(!!profileResponse.data); // Set hasProfile to true if profile exists
           } catch (error) {
             if (error.response?.status === 404) {
-              setHasProfile(false);
+              setHasProfile(false); // No profile found
             } else {
               console.error("Error fetching profile:", error);
             }
@@ -94,9 +96,10 @@ const Navbar = () => {
       }
     };
 
-    fetchUserRoleAndProfile();
+    fetchUserRoleAndProfile(); // Call the function
   }, []);
 
+  // Update menu state based on the current location (URL)
   useEffect(() => {
     if (location.pathname === "/") {
       setMenu("home");
@@ -123,19 +126,18 @@ const Navbar = () => {
     }
   }, [location.pathname, loggedInUsername]);
 
+  // Handle sign out
   const handleSignOut = () => {
-    localStorage.removeItem("accessToken");
-    setIsSignedIn(false);
-    setIsArtist(false);
-    setHasProfile(false);
+    localStorage.removeItem("accessToken"); // Remove the token from localStorage
+    setIsSignedIn(false); // Update authentication status
+    setIsArtist(false); // Reset artist status
     clearCart();
-    navigate("/");
+    navigate("/"); // Redirect to home page
   };
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
   const closeDropdown = () => {
     setDropdownOpen(false);
   };
@@ -156,8 +158,8 @@ const Navbar = () => {
         }
       );
       setNotification("Profile and all artworks deleted successfully!");
-      setHasProfile(false);
-      handleSignOut();
+      setHasProfile(false); // Update hasProfile state
+      handleSignOut(); // Sign out the user after deleting the profile
     } catch (error) {
       console.error("Error deleting profile:", error);
       setNotification("Failed to delete profile. Please try again.");
@@ -171,7 +173,7 @@ const Navbar = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Show a loading spinner or message
   }
 
   return (
@@ -220,6 +222,8 @@ const Navbar = () => {
             Contact us
           </Link>
         )}
+
+        {/* Conditionally render Notification button for artists */}
         {isArtist && (
           <Link
             to="/notifications"
@@ -231,6 +235,7 @@ const Navbar = () => {
             Notification
           </Link>
         )}
+        {/* Add Artists Link */}
         <Link
           to="/show-artist"
           onClick={() => setMenu("artists")}
@@ -255,6 +260,7 @@ const Navbar = () => {
             }
           ></div>
         </div>
+        {/* Conditionally render Sign In or Sign Out button */}
         {isSignedIn ? (
           <>
             <button
@@ -263,6 +269,7 @@ const Navbar = () => {
             >
               Sign Out
             </button>
+            {/* Conditionally render the Artist Profile button */}
             {isArtist && (
               <div className="relative">
                 <FaUserCircle
@@ -299,7 +306,7 @@ const Navbar = () => {
                           }`}
                           style={{
                             pointerEvents: hasProfile ? "none" : "auto",
-                          }}
+                          }} // Disable click if hasProfile is true
                         >
                           Create Profile
                         </Link>
