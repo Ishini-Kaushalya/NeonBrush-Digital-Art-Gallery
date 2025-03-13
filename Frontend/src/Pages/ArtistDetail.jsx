@@ -88,7 +88,7 @@ const ArtistDetail = () => {
         if (error.response?.status === 401) {
           setError("Unauthorized: Please log in again.");
         } else {
-          setError("An error occurred while fetching artist details.");
+          setError("Not yet create an account ? Create now.");
         }
       } finally {
         setLoading(false); // Set loading to false after the request completes
@@ -132,13 +132,13 @@ const ArtistDetail = () => {
 
   if (error) {
     return (
-      <div className='text-center mt-16'>
-        <p className='text-red-500'>{error}</p>
+      <div className="text-center mt-16">
+        <p className="text-red-500">{error}</p>
         <button
-          className='bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mt-4'
-          onClick={() => navigate("/login")} // Redirect to login page
+          className="bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mt-4"
+          onClick={() => navigate("/artist-profile")} // Redirect to login page
         >
-          Log In
+          Create Account
         </button>
       </div>
     );
@@ -231,13 +231,7 @@ const ArtistDetail = () => {
       ) : (
         <p className='text-gray-600'>No artworks available for this artist.</p>
       )}
-      {/* Back Button */}
-      <button
-        className='text-black py-4 px-8 text-xl rounded-lg shadow-md hover:bg-gray-800 hover:text-white mb-4'
-        onClick={() => navigate(-1)}
-      >
-        <IoChevronBackCircleOutline className='mr-2 text-3xl' />
-      </button>
+      
     </div>
   );
 };
