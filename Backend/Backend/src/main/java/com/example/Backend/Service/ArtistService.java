@@ -11,7 +11,9 @@ public interface ArtistService {
     Artist createArtist(Artist artist);
 
     List<Artist> getAllArtists();
+
     void deleteArtistByUserName(String userName);
+
     Artist updateArtist(String id, Artist artist);
 
     void deleteArtist(String id);
@@ -19,7 +21,7 @@ public interface ArtistService {
     Optional<Artist> getArtistByUserName(String userName);
 
     Artist addArtist(String firstName, String lastName, String userName, String email,
-                     String description, MultipartFile profileImage);
+            String description, MultipartFile profileImage);
 
     Artist getArtistById(String artistId);
 
