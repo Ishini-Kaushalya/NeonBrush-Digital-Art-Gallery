@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -29,6 +29,31 @@ const PaymentPage = () => {
   const [message, setMessage] = useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false); // Track payment status
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("accessToken"));
+        if (!token) {
+          console.error("User not authenticated");
+          return;
+        }
+
+        const response = await axios.get(
+          "http://localhost:8080/api/user/username",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setPaymentDetails((prev) => ({ ...prev, userName: response.data }));
+      } catch (error) {
+        console.error("Failed to fetch username:", error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,7 +134,7 @@ const PaymentPage = () => {
       cardNumber: "",
       expirationDate: "",
       CVV: "",
-      userName: "",
+      userName: paymentDetails.userName, // Keep the fetched username
       address: "",
     });
     setErrors({});
@@ -149,6 +174,7 @@ const PaymentPage = () => {
               value={paymentDetails[name]}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+              disabled={name === "userName"} // Disable the username field
             />
             {errors[name] && (
               <p className="text-red-500 text-sm">{errors[name]}</p>

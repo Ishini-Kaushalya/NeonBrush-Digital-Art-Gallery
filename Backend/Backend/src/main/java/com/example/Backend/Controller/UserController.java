@@ -29,4 +29,15 @@ public class UserController {
         // Return the roles
         return ResponseEntity.ok(roles);
     }
+
+    @GetMapping("/username")
+    public ResponseEntity<?> getUsername() {
+        // Get the authenticated user's details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        // Extract and return the username
+        String username = userDetails.getUsername();
+        return ResponseEntity.ok(username);
+    }
 }
