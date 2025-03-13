@@ -91,4 +91,40 @@ public class ArtistServiceImpl implements ArtistService {
     public Artist getArtistById(String artistId) {
         return artistRepository.findById(artistId).orElse(null);
     }
+
+    @Override
+    public void updateArtistByUserName(
+            String userName,
+            String firstName,
+            String lastName,
+            String email,
+            String description,
+            MultipartFile profileImage) throws IOException {
+        Optional<Artist> optionalArtist = artistRepository.findByUserName(userName);
+        if (optionalArtist.isPresent()) {
+            Artist artist = optionalArtist.get();
+
+            if (firstName != null) artist.setFirstName(firstName);
+            if (lastName != null) artist.setLastName(lastName);
+            if (email != null) artist.setEmail(email);
+            if (description != null) artist.setDescription(description);
+
+            if (profileImage != null && !profileImage.isEmpty()) {
+                // Delete the old image if it exists
+                if (artist.getImageId() != null) {
+                    GridFSBucket gridFSBucket = GridFSBuckets.create(mongoTemplate.getDb());
+                    gridFSBucket.delete(new ObjectId(artist.getImageId()));
+                }
+
+                // Upload the new image
+                GridFSBucket gridFSBucket = GridFSBuckets.create(mongoTemplate.getDb());
+                ObjectId imageId = gridFSBucket.uploadFromStream(profileImage.getOriginalFilename(), profileImage.getInputStream());
+                artist.setImageId(imageId.toString());
+            }
+
+            artistRepository.save(artist);
+        } else {
+            throw new RuntimeException("Artist not found with username: " + userName);
+        }
+    }
 }
