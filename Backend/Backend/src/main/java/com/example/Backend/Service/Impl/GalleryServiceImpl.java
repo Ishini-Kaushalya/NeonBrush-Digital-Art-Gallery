@@ -84,4 +84,9 @@ public class GalleryServiceImpl implements GalleryService {
     public void deletePurchasedItems(List<String> artIds) {
         galleryRepository.deleteAllById(artIds);
     }
+
+    @Override
+    public void deleteArtItemsByUserName(String userName) {
+        galleryRepository.deleteByUserName(userName); // Delete all artworks by username
+    }
 }

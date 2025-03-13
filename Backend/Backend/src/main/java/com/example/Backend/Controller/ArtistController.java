@@ -50,7 +50,7 @@ public class ArtistController {
     }
     @DeleteMapping("/username/{userName}")
     public ResponseEntity<Void> deleteArtistByUserName(@PathVariable String userName) {
-        artistService.deleteArtistByUserName(userName);
+        artistService.deleteArtistByUserName(userName); // This will delete both profile and artworks
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/username/{userName}")

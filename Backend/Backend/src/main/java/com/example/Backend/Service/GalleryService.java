@@ -16,4 +16,5 @@ public interface GalleryService {
     List<Gallery> getArtItemsByCategory(String category);
     void deleteArtItemByTitle(String title);
     void deletePurchasedItems(List<String> artIds);
+    void deleteArtItemsByUserName(String userName);
 }

@@ -3,6 +3,7 @@ package com.example.Backend.Service.Impl;
 import com.example.Backend.Model.Artist;
 import com.example.Backend.Repository.ArtistRepository;
 import com.example.Backend.Service.ArtistService;
+import com.example.Backend.Service.GalleryService;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
@@ -22,7 +23,8 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Autowired
     private ArtistRepository artistRepository;
-
+    @Autowired
+    private GalleryService galleryService;
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -32,8 +34,12 @@ public class ArtistServiceImpl implements ArtistService {
     }
     @Override
     public void deleteArtistByUserName(String userName) {
+        // Delete all artworks by the artist
+        galleryService.deleteArtItemsByUserName(userName);
+
+        // Delete the artist profile
         Optional<Artist> artist = artistRepository.findByUserName(userName);
-        artist.ifPresent(value -> artistRepository.delete(value));
+        artist.ifPresent(artistRepository::delete);
     }
 
     @Override
@@ -126,5 +132,10 @@ public class ArtistServiceImpl implements ArtistService {
         } else {
             throw new RuntimeException("Artist not found with username: " + userName);
         }
+    }
+
+    @Override
+    public void deleteArtItemsByUserName(String userName) {
+
     }
 }

@@ -30,4 +30,6 @@ public interface ArtistService {
             String email,
             String description,
             MultipartFile profileImage) throws IOException;
+
+     void deleteArtItemsByUserName(String userName);
 }
