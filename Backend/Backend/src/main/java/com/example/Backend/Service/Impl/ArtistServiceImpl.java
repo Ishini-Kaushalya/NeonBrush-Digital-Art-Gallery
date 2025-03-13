@@ -32,6 +32,7 @@ public class ArtistServiceImpl implements ArtistService {
     public Artist createArtist(Artist artist) {
         return artistRepository.save(artist);
     }
+
     @Override
     public void deleteArtistByUserName(String userName) {
         // Delete all artworks by the artist
@@ -68,7 +69,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Artist addArtist(String firstName, String lastName, String userName, String email,
-                            String description, MultipartFile profileImage) {
+            String description, MultipartFile profileImage) {
         Artist artist = new Artist();
         artist.setFirstName(firstName);
         artist.setLastName(lastName);
@@ -83,7 +84,8 @@ public class ArtistServiceImpl implements ArtistService {
                 GridFSUploadOptions options = new GridFSUploadOptions()
                         .metadata(new Document("contentType", profileImage.getContentType()));
 
-                ObjectId fileId = gridFSBucket.uploadFromStream(profileImage.getOriginalFilename(), profileImage.getInputStream(), options);
+                ObjectId fileId = gridFSBucket.uploadFromStream(profileImage.getOriginalFilename(),
+                        profileImage.getInputStream(), options);
                 artist.setImageId(fileId.toString()); // Store the GridFS file ID
             } catch (IOException e) {
                 e.printStackTrace();
@@ -110,10 +112,14 @@ public class ArtistServiceImpl implements ArtistService {
         if (optionalArtist.isPresent()) {
             Artist artist = optionalArtist.get();
 
-            if (firstName != null) artist.setFirstName(firstName);
-            if (lastName != null) artist.setLastName(lastName);
-            if (email != null) artist.setEmail(email);
-            if (description != null) artist.setDescription(description);
+            if (firstName != null)
+                artist.setFirstName(firstName);
+            if (lastName != null)
+                artist.setLastName(lastName);
+            if (email != null)
+                artist.setEmail(email);
+            if (description != null)
+                artist.setDescription(description);
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 // Delete the old image if it exists
@@ -124,7 +130,8 @@ public class ArtistServiceImpl implements ArtistService {
 
                 // Upload the new image
                 GridFSBucket gridFSBucket = GridFSBuckets.create(mongoTemplate.getDb());
-                ObjectId imageId = gridFSBucket.uploadFromStream(profileImage.getOriginalFilename(), profileImage.getInputStream());
+                ObjectId imageId = gridFSBucket.uploadFromStream(profileImage.getOriginalFilename(),
+                        profileImage.getInputStream());
                 artist.setImageId(imageId.toString());
             }
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { IoChevronBackCircleOutline } from "react-icons/io5";
 import ArtItem from "../Components/ArtItem";
 import { FaTrash } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
@@ -88,7 +87,7 @@ const ArtistDetail = () => {
         if (error.response?.status === 401) {
           setError("Unauthorized: Please log in again.");
         } else {
-          setError("An error occurred while fetching artist details.");
+          setError("Not yet create an account ? Create now.");
         }
       } finally {
         setLoading(false); // Set loading to false after the request completes
@@ -136,9 +135,9 @@ const ArtistDetail = () => {
         <p className='text-red-500'>{error}</p>
         <button
           className='bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-600 mt-4'
-          onClick={() => navigate("/login")} // Redirect to login page
+          onClick={() => navigate("/artist-profile")} // Redirect to login page
         >
-          Log In
+          Create Account
         </button>
       </div>
     );
@@ -164,8 +163,6 @@ const ArtistDetail = () => {
 
   return (
     <div className='artist-detail container mx-auto mt-16 p-4'>
-      
-
       {/* Content Area */}
       <div
         className='relative flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-8 bg-cover bg-center p-8 rounded-lg'
@@ -225,13 +222,6 @@ const ArtistDetail = () => {
       ) : (
         <p className='text-gray-600'>No artworks available for this artist.</p>
       )}
-      {/* Back Button */}
-      <button
-        className='text-black py-4 px-8 text-xl  hover:text-sky-500 mt-6 mb-4'
-        onClick={() => navigate(-1)}
-      >
-        <IoChevronBackCircleOutline className='mr-2 text-3xl' />
-      </button>
     </div>
   );
 };

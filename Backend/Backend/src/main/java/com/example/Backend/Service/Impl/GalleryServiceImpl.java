@@ -27,7 +27,8 @@ public class GalleryServiceImpl implements GalleryService {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public Gallery addArtItem(String userName, String title, String size, String description, String category, double price, MultipartFile image) {
+    public Gallery addArtItem(String userName, String title, String size, String description, String category,
+            double price, MultipartFile image) {
         Gallery gallery = new Gallery();
         gallery.setUserName(userName);
         gallery.setTitle(title);
@@ -42,7 +43,8 @@ public class GalleryServiceImpl implements GalleryService {
                 GridFSUploadOptions options = new GridFSUploadOptions()
                         .metadata(new Document("contentType", image.getContentType()));
 
-                ObjectId fileId = gridFSBucket.uploadFromStream(image.getOriginalFilename(), image.getInputStream(), options);
+                ObjectId fileId = gridFSBucket.uploadFromStream(image.getOriginalFilename(), image.getInputStream(),
+                        options);
                 gallery.setImageId(fileId.toString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,15 +73,18 @@ public class GalleryServiceImpl implements GalleryService {
     public void deleteArtItem(String artId) {
         galleryRepository.deleteById(artId);
     }
+
     @Override
     public void deleteArtItemByTitle(String title) {
         Optional<Gallery> gallery = galleryRepository.findByTitle(title);
         gallery.ifPresent(value -> galleryRepository.delete(value));
     }
+
     @Override
     public List<Gallery> getArtItemsByCategory(String category) {
         return galleryRepository.findByCategory(category);
     }
+
     @Override
     public void deletePurchasedItems(List<String> artIds) {
         galleryRepository.deleteAllById(artIds);

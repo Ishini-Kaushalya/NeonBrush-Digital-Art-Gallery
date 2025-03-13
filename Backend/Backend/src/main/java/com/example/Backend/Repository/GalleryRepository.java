@@ -13,6 +13,7 @@ public interface GalleryRepository extends MongoRepository<Gallery, String> {
 
     // Custom method to find art items by category
     List<Gallery> findByCategory(String category);
+
     Optional<Gallery> findByTitle(String title);
 
     void deleteByUserName(String userName);
