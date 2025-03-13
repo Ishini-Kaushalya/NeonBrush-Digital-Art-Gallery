@@ -18,13 +18,10 @@ const UserLoginPopup = ({ setShowLogin }) => {
   const navigate = useNavigate();
 
   // Define schemas for login and signup using Zod
-  const loginSchema = z.object({
-    username: z.string().min(1, "Username is required"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    agreeTerms: z
-      .boolean()
-      .refine((val) => val, "You must agree to the terms and privacy policy"),
-  });
+    const loginSchema = z.object({
+      username: z.string().min(1, "Username is required"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+       });
 
   const signupSchema = z.object({
     username: z.string().min(1, "Username is required"),
@@ -188,7 +185,9 @@ const UserLoginPopup = ({ setShowLogin }) => {
               <p className='text-xs text-red-500 mt-1'>{errors.password}</p>
             )}
           </div>
-
+            {/* Conditionally render the checkbox only for Sign Up */}
+{formState === "Sign Up" && (
+            <>
           <div className='flex items-start gap-2 text-xs mt-3'>
             <input
               type='checkbox'
@@ -204,16 +203,17 @@ const UserLoginPopup = ({ setShowLogin }) => {
             </p>
           </div>
           {errors.agreeTerms && (
-            <p className='text-xs text-red-500'>{errors.agreeTerms}</p>
+            <p className="text-xs text-red-500">{errors.agreeTerms}</p>
           )}
-
+          </>
+        )}
           {errors.general && (
-            <p className='text-sm text-center text-red-500'>{errors.general}</p>
+            <p className="text-sm text-center text-red-500">{errors.general}</p>
           )}
 
           <button
             type='submit'
-            className='w-full bg-sky-600 text-white py-2 rounded font-medium hover:bg-sky-950 transition'
+            className='w-full bg-sky-800 text-white py-2 rounded font-medium hover:bg-sky-950 transition'
           >
             {formState === "Sign Up" ? "Create Account" : "Login"}
           </button>
@@ -228,9 +228,14 @@ const UserLoginPopup = ({ setShowLogin }) => {
               onClick={() =>
                 setFormState(formState === "Login" ? "Sign Up" : "Login")
               }
-              className='text-sky-600 font-medium hover:underline'
+              className='text-sky-700 font-medium hover:underline'
             >
-              {formState === "Login" ? "Sign Up" : "Login"}
+            {/* Wrap "Sign Up" in a span with a custom class */}
+      {formState === "Login" ? (
+        <span className="text-lg">Sign Up</span> // Increase font size here
+      ) : (
+        "Login"
+      )}
             </button>
           </p>
         </div>
