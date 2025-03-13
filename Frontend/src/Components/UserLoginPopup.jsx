@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { z } from "zod";
+import { StoreContext } from "../Context/StoreContext";
 
 const UserLoginPopup = ({ setShowLogin }) => {
   const [formState, setFormState] = useState("Login"); // Tracks whether the form is in "Login" or "Sign Up" mode
@@ -12,6 +13,7 @@ const UserLoginPopup = ({ setShowLogin }) => {
     password: "",
     agreeTerms: false,
   });
+  const { clearCart } = useContext(StoreContext);
   const [errors, setErrors] = useState({}); // Stores validation errors
   const navigate = useNavigate();
 
@@ -93,6 +95,7 @@ const UserLoginPopup = ({ setShowLogin }) => {
 
           // Close the login popup and navigate to the products page
           setShowLogin(false);
+          clearCart();
           navigate("/products");
         }
       }
@@ -124,100 +127,100 @@ const UserLoginPopup = ({ setShowLogin }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md relative">
-        <div className="flex justify-between items-center text-black mb-4">
-          <h2 className="text-lg font-medium">{formState}</h2>
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
+      <div className='bg-white rounded-lg shadow-md p-6 w-full max-w-md relative'>
+        <div className='flex justify-between items-center text-black mb-4'>
+          <h2 className='text-lg font-medium'>{formState}</h2>
           <IoCloseCircleOutline
             onClick={() => setShowLogin(false)}
-            className="w-6 h-6 cursor-pointer text-gray-600 hover:text-red-500"
+            className='w-6 h-6 cursor-pointer text-gray-600 hover:text-red-500'
           />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">
+        <form onSubmit={handleSubmit} className='space-y-4'>
+          <div className='flex flex-col'>
+            <label className='text-sm font-medium text-gray-700'>
               Username
             </label>
             <input
-              type="text"
-              name="username"
-              placeholder="Enter your username"
-              className="border border-gray-300 p-2 rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              type='text'
+              name='username'
+              placeholder='Enter your username'
+              className='border border-gray-300 p-2 rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none'
               value={formData.username}
               onChange={handleInputChange}
             />
             {errors.username && (
-              <p className="text-xs text-red-500 mt-1">{errors.username}</p>
+              <p className='text-xs text-red-500 mt-1'>{errors.username}</p>
             )}
           </div>
 
           {formState === "Sign Up" && (
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700">Email</label>
+            <div className='flex flex-col'>
+              <label className='text-sm font-medium text-gray-700'>Email</label>
               <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                className="border border-gray-300 p-2 rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                type='email'
+                name='email'
+                placeholder='Enter your email'
+                className='border border-gray-300 p-2 rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none'
                 value={formData.email}
                 onChange={handleInputChange}
               />
               {errors.email && (
-                <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+                <p className='text-xs text-red-500 mt-1'>{errors.email}</p>
               )}
             </div>
           )}
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">
+          <div className='flex flex-col'>
+            <label className='text-sm font-medium text-gray-700'>
               Password
             </label>
             <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              className="border border-gray-300 p-2 rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              type='password'
+              name='password'
+              placeholder='Enter your password'
+              className='border border-gray-300 p-2 rounded focus:ring-2 focus:ring-indigo-500 focus:outline-none'
               value={formData.password}
               onChange={handleInputChange}
             />
             {errors.password && (
-              <p className="text-xs text-red-500 mt-1">{errors.password}</p>
+              <p className='text-xs text-red-500 mt-1'>{errors.password}</p>
             )}
           </div>
 
-          <div className="flex items-start gap-2 text-xs mt-3">
+          <div className='flex items-start gap-2 text-xs mt-3'>
             <input
-              type="checkbox"
-              name="agreeTerms"
-              className="mt-1 accent-indigo-600"
+              type='checkbox'
+              name='agreeTerms'
+              className='mt-1 accent-indigo-600'
               checked={formData.agreeTerms}
               onChange={handleInputChange}
             />
             <p>
               By continuing, I agree to the{" "}
-              <span className="font-medium">terms of use</span> &{" "}
-              <span className="font-medium">privacy policy</span>.
+              <span className='font-medium'>terms of use</span> &{" "}
+              <span className='font-medium'>privacy policy</span>.
             </p>
           </div>
           {errors.agreeTerms && (
-            <p className="text-xs text-red-500">{errors.agreeTerms}</p>
+            <p className='text-xs text-red-500'>{errors.agreeTerms}</p>
           )}
 
           {errors.general && (
-            <p className="text-sm text-center text-red-500">{errors.general}</p>
+            <p className='text-sm text-center text-red-500'>{errors.general}</p>
           )}
 
           <button
-            type="submit"
-            className="w-full bg-sky-600 text-white py-2 rounded font-medium hover:bg-sky-950 transition"
+            type='submit'
+            className='w-full bg-sky-600 text-white py-2 rounded font-medium hover:bg-sky-950 transition'
           >
             {formState === "Sign Up" ? "Create Account" : "Login"}
           </button>
         </form>
 
-        <div className="text-center mt-4">
-          <p className="text-sm">
+        <div className='text-center mt-4'>
+          <p className='text-sm'>
             {formState === "Login"
               ? "Don't have an account?"
               : "Already have an account?"}{" "}
@@ -225,7 +228,7 @@ const UserLoginPopup = ({ setShowLogin }) => {
               onClick={() =>
                 setFormState(formState === "Login" ? "Sign Up" : "Login")
               }
-              className="text-sky-600 font-medium hover:underline"
+              className='text-sky-600 font-medium hover:underline'
             >
               {formState === "Login" ? "Sign Up" : "Login"}
             </button>

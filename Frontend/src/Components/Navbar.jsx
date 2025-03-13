@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode";
 const Navbar = () => {
   const [loggedInUsername, setLoggedInUsername] = useState();
   const [menu, setMenu] = useState("home");
-  const { getCartSize } = useContext(StoreContext);
+  const { clearCart, getCartSize } = useContext(StoreContext);
   const [isArtist, setIsArtist] = useState(false); // State to check if the user is an artist
   const [loading, setLoading] = useState(true); // State to track loading status
   const [isSignedIn, setIsSignedIn] = useState(false); // State to track authentication status
@@ -109,6 +109,7 @@ const Navbar = () => {
     localStorage.removeItem("accessToken"); // Remove the token from localStorage
     setIsSignedIn(false); // Update authentication status
     setIsArtist(false); // Reset artist status
+    clearCart();
     navigate("/"); // Redirect to home page
   };
 
@@ -124,13 +125,13 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex justify-between items-center px-24 py-5 mb-[-40px]">
-      <Link to="/">
-        <img src={assets.logo} alt="Logo" className="w-[80px]" />
+    <div className='flex justify-between items-center px-24 py-5 mb-[-40px]'>
+      <Link to='/'>
+        <img src={assets.logo} alt='Logo' className='w-[80px]' />
       </Link>
-      <ul className="flex gap-12 text-[#49557e] text-lg">
+      <ul className='flex gap-12 text-[#49557e] text-lg'>
         <Link
-          to="/"
+          to='/'
           onClick={() => setMenu("home")}
           className={`cursor-pointer ${
             menu === "home" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -139,7 +140,7 @@ const Navbar = () => {
           Home
         </Link>
         <Link
-          to="/products"
+          to='/products'
           onClick={() => setMenu("menu")}
           className={`cursor-pointer ${
             menu === "arts" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -149,7 +150,7 @@ const Navbar = () => {
         </Link>
         {loggedInUsername === "admin" && (
           <Link
-            to="/order-detail"
+            to='/order-detail'
             onClick={() => setMenu("order-details")}
             className={`cursor-pointer ${
               menu === "order-details" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -160,7 +161,7 @@ const Navbar = () => {
         )}
         {loggedInUsername !== "admin" && (
           <Link
-            to="/contact-us"
+            to='/contact-us'
             onClick={() => setMenu("contact-us")}
             className={`cursor-pointer ${
               menu === "contact-us" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -173,7 +174,7 @@ const Navbar = () => {
         {/* Conditionally render Notification button for artists */}
         {isArtist && (
           <Link
-            to="/notifications"
+            to='/notifications'
             onClick={() => setMenu("notifications")}
             className={`cursor-pointer ${
               menu === "notifications" ? "border-b-2 pb-1 border-sky-600" : ""
@@ -184,7 +185,7 @@ const Navbar = () => {
         )}
         {/* Add Artists Link */}
         <Link
-          to="/show-artist"
+          to='/show-artist'
           onClick={() => setMenu("artists")}
           className={`cursor-pointer ${
             menu === "artists" ? "border-b-2 pb-1 border-[#38bdf8]" : ""
@@ -194,10 +195,10 @@ const Navbar = () => {
         </Link>
       </ul>
 
-      <div className="flex items-center gap-10">
-        <div className="relative">
-          <Link to="/cart" className="cursor-pointer">
-            <TbBasketFilled className="w-[30px] h-[30px] text-gray-700" />
+      <div className='flex items-center gap-10'>
+        <div className='relative'>
+          <Link to='/cart' className='cursor-pointer'>
+            <TbBasketFilled className='w-[30px] h-[30px] text-gray-700' />
           </Link>
           <div
             className={
@@ -212,15 +213,15 @@ const Navbar = () => {
           <>
             <button
               onClick={handleSignOut}
-              className="bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]"
+              className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]'
             >
               Sign Out
             </button>
             {/* Conditionally render the Artist Profile button */}
             {isArtist && (
-              <div className="relative">
+              <div className='relative'>
                 <FaUserCircle
-                  className="w-[30px] h-[30px] text-gray-700 cursor-pointer"
+                  className='w-[30px] h-[30px] text-gray-700 cursor-pointer'
                   onClick={toggleDropdown}
                 />
                 {dropdownOpen && (
@@ -230,41 +231,41 @@ const Navbar = () => {
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 100, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute right-0 top-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-300 z-10 w-48"
+                    className='absolute right-0 top-0 mt-2 bg-white shadow-lg rounded-lg border border-gray-300 z-10 w-48'
                   >
-                    <ul className="flex flex-col">
+                    <ul className='flex flex-col'>
                       <li>
                         <Link
-                          to="/artist-profile"
+                          to='/artist-profile'
                           onClick={closeDropdown}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
                         >
                           My Profile
                         </Link>
                       </li>
                       <li>
                         <Link
-                          to="/artist-artworks"
+                          to='/artist-artworks'
                           onClick={closeDropdown}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
                         >
                           My Artworks
                         </Link>
                       </li>
                       <li>
                         <Link
-                          to="/add-art"
+                          to='/add-art'
                           onClick={closeDropdown}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
                         >
                           Add Art
                         </Link>
                       </li>
                       <li>
                         <Link
-                          to="/order-detail"
+                          to='/order-detail'
                           onClick={closeDropdown}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          className='block px-4 py-2 text-gray-700 hover:bg-gray-100'
                         >
                           See Orders
                         </Link>
@@ -276,8 +277,8 @@ const Navbar = () => {
             )}
           </>
         ) : (
-          <Link to="/sign-in">
-            <button className="bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]">
+          <Link to='/sign-in'>
+            <button className='bg-transparent text-[#49557e] text-base border-2 border-tomato rounded-full py-2 px-7 cursor-pointer transition duration-300 ease-in-out hover:bg-[#f0f9ff] hover:border-[#49557e]'>
               Sign In
             </button>
           </Link>

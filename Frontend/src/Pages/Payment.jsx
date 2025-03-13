@@ -117,10 +117,8 @@ const PaymentPage = () => {
       // Clear cart items from the state
 
       setMessage("Payment Successful! Redirecting...");
-      setTimeout(() => {
-        clearCart(); // Clear the cart after a short delay
-        navigate("/products");
-      }, 10000);
+      clearCart(); // Clear the cart after a short delay
+      navigate("/products");
       //setTimeout(() => navigate("/products"), 2000);
     } catch (error) {
       console.error("Payment error:", error);
@@ -149,14 +147,14 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
-      <h2 className="text-2xl font-semibold text-black">Payment Details</h2>
+    <div className='max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8'>
+      <h2 className='text-2xl font-semibold text-black'>Payment Details</h2>
       {message && (
-        <p className="text-green-600 text-lg font-medium text-center mt-4">
+        <p className='text-green-600 text-lg font-medium text-center mt-4'>
           {message}
         </p>
       )}
-      <div className="payment-form space-y-6 mt-6">
+      <div className='payment-form space-y-6 mt-6'>
         {[
           { name: "userName", label: "Your Name" },
           { name: "address", label: "Your Address" },
@@ -164,70 +162,70 @@ const PaymentPage = () => {
           { name: "cardNumber", label: "Card Number" },
         ].map(({ name, label }) => (
           <div key={name}>
-            <label className="block text-gray-700 font-medium mb-1">
+            <label className='block text-gray-700 font-medium mb-1'>
               {label}
             </label>
             <input
-              type="text"
+              type='text'
               name={name}
               placeholder={label}
               value={paymentDetails[name]}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+              className='w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300'
               disabled={name === "userName"} // Disable the username field
             />
             {errors[name] && (
-              <p className="text-red-500 text-sm">{errors[name]}</p>
+              <p className='text-red-500 text-sm'>{errors[name]}</p>
             )}
           </div>
         ))}
-        <div className="flex space-x-4">
-          <div className="w-1/2">
-            <label className="block text-gray-700 font-medium mb-1">
+        <div className='flex space-x-4'>
+          <div className='w-1/2'>
+            <label className='block text-gray-700 font-medium mb-1'>
               Expiration Date
             </label>
             <input
-              type="date"
-              name="expirationDate"
+              type='date'
+              name='expirationDate'
               value={paymentDetails.expirationDate}
               onChange={handleChange}
               min={new Date().toISOString().split("T")[0]} // Prevent past dates
-              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+              className='w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300'
             />
             {errors.expirationDate && (
-              <p className="text-red-500 text-sm">{errors.expirationDate}</p>
+              <p className='text-red-500 text-sm'>{errors.expirationDate}</p>
             )}
           </div>
-          <div className="w-1/2">
-            <label className="block text-gray-700 font-medium mb-1">CVV</label>
+          <div className='w-1/2'>
+            <label className='block text-gray-700 font-medium mb-1'>CVV</label>
             <input
-              type="text"
-              name="CVV"
-              placeholder="CVV"
+              type='text'
+              name='CVV'
+              placeholder='CVV'
               value={paymentDetails.CVV}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+              className='w-full p-3 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-300'
             />
-            {errors.CVV && <p className="text-red-500 text-sm">{errors.CVV}</p>}
+            {errors.CVV && <p className='text-red-500 text-sm'>{errors.CVV}</p>}
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-8">
+      <div className='flex justify-between items-center mt-8'>
         <button
           onClick={handleBack}
-          className="text-black py-3 px-4 rounded-lg flex items-center justify-center focus:outline-none"
+          className='text-black py-3 px-4 rounded-lg flex items-center justify-center focus:outline-none'
         >
-          <IoChevronBackCircleOutline size={24} className="mr-2" />
+          <IoChevronBackCircleOutline size={24} className='mr-2' />
         </button>
         <button
           onClick={handleClear}
-          className="w-1/3 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-700"
+          className='w-1/3 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-700'
         >
           Clear
         </button>
         <button
           onClick={handlePayment}
-          className="w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950"
+          className='w-1/3 bg-sky-800 text-white py-3 rounded-lg hover:bg-sky-950'
         >
           Complete Payment
         </button>
