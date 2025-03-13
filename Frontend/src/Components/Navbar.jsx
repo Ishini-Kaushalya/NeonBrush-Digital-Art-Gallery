@@ -155,7 +155,7 @@ const Navbar = () => {
           },
         }
       );
-      setNotification("Profile deleted successfully!");
+      setNotification("Profile and all artworks deleted successfully!");
       setHasProfile(false); // Update hasProfile state
       handleSignOut(); // Sign out the user after deleting the profile
     } catch (error) {
@@ -231,7 +231,6 @@ const Navbar = () => {
             Notification
           </Link>
         )}
-        
         <Link
           to="/show-artist"
           onClick={() => setMenu("artists")}
@@ -241,7 +240,6 @@ const Navbar = () => {
         >
           Artists
         </Link>
-        
       </ul>
 
       <div className="flex items-center gap-10">
@@ -364,7 +362,8 @@ const Navbar = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <p className="mb-4">
-              Are you sure you want to delete your profile?
+              Are you sure you want to delete your profile and all associated
+              artworks?
             </p>
             <div className="flex justify-end">
               <button
