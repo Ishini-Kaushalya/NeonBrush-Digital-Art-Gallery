@@ -164,13 +164,7 @@ const ArtistDetail = () => {
 
   return (
     <div className='artist-detail container mx-auto mt-16 p-4'>
-      {/* Back Button */}
-      <button
-        className='bg-black text-white py-2 px-6 rounded-lg shadow-md hover:bg-sky-950 mb-4'
-        onClick={() => navigate(-1)}
-      >
-        Back
-      </button>
+      
 
       {/* Content Area */}
       <div
@@ -233,7 +227,7 @@ const ArtistDetail = () => {
       )}
       {/* Back Button */}
       <button
-        className='text-black py-4 px-8 text-xl rounded-lg shadow-md hover:bg-gray-800 hover:text-white mb-4'
+        className='text-black py-4 px-8 text-xl  hover:text-sky-500 mt-6 mb-4'
         onClick={() => navigate(-1)}
       >
         <IoChevronBackCircleOutline className='mr-2 text-3xl' />
