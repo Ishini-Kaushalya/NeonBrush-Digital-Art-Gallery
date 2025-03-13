@@ -20,6 +20,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(null); // State to store the artist's profile
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -39,9 +40,9 @@ const Navbar = () => {
     setIsSignedIn(!!token); // Set isSignedIn to true if token exists
   }, []);
 
-  // Fetch the current user's role
+  // Fetch the current user's role and profile image
   useEffect(() => {
-    const fetchUserRole = async () => {
+    const fetchUserRoleAndImage = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -66,15 +67,42 @@ const Navbar = () => {
 
         // Check if the user is an artist
         setIsArtist(roleResponse.data.includes("ROLE_ARTIST"));
-      } catch (error) {
-        console.error("Error fetching user role:", error);
+
+     // Fetch the artist's profile image
+     if (roleResponse.data.includes("ROLE_ARTIST")) {
+      const artistResponse = await axios.get(
+        `http://localhost:8080/api/artist/username/${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const artistData = artistResponse.data;
+          if (artistData.imageId) {
+            const imageResponse = await axios.get(
+              `http://localhost:8080/api/artist/image/${artistData.imageId}`,
+              {
+                responseType: "blob",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            // Convert the blob to a URL
+            const imageUrl = URL.createObjectURL(imageResponse.data);
+            setProfileImage(imageUrl);
+          }
+        }
+          } catch (error) {
+        console.error("Error fetching user role or profile image:", error);
         setIsArtist(false); // Assume the user is not an artist if there's an error
       } finally {
         setLoading(false); // Set loading to false after the request completes
       }
     };
 
-    fetchUserRole();
+    fetchUserRoleAndImage();
   }, []);
 
   // Update menu state based on the current location (URL)
@@ -220,10 +248,19 @@ const Navbar = () => {
             {/* Conditionally render the Artist Profile button */}
             {isArtist && (
               <div className='relative'>
-                <FaUserCircle
-                  className='w-[30px] h-[30px] text-gray-700 cursor-pointer'
-                  onClick={toggleDropdown}
-                />
+                 {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt='Profile'
+                    className='w-[50px] h-[50px] rounded-full cursor-pointer object-cover'
+                    onClick={toggleDropdown}
+                  />
+                ) : (
+                  <FaUserCircle
+                    className='w-[30px] h-[30px] text-gray-700 cursor-pointer'
+                    onClick={toggleDropdown}
+                  />
+                )}
                 {dropdownOpen && (
                   <motion.div
                     ref={dropdownRef}
