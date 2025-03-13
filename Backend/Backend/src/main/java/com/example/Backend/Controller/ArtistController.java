@@ -50,7 +50,7 @@ public class ArtistController {
     }
     @DeleteMapping("/username/{userName}")
     public ResponseEntity<Void> deleteArtistByUserName(@PathVariable String userName) {
-        artistService.deleteArtistByUserName(userName);
+        artistService.deleteArtistByUserName(userName); // This will delete both profile and artworks
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/username/{userName}")
@@ -98,6 +98,21 @@ public class ArtistController {
                     .body(imageBytes);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+    @PutMapping("/username/{userName}")
+    public ResponseEntity<String> updateArtistByUserName(
+            @PathVariable String userName,
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "image", required = false) MultipartFile profileImage) {
+        try {
+            artistService.updateArtistByUserName(userName, firstName, lastName, email, description, profileImage);
+            return ResponseEntity.ok("Artist updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to update artist: " + e.getMessage());
         }
     }
 }
