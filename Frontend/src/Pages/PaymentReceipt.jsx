@@ -1,18 +1,15 @@
-import React, { useContext } from "react";
-import { StoreContext } from "../Context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import { jsPDF } from "jspdf";
 import { assets } from "../assets/Common/assets.js";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 
-const PaymentReceipt = ({ paymentDetails }) => {
-  if (!paymentDetails) return null;
-  const { cartItems, getTotalCartAmount } = useContext(StoreContext);
+const PaymentReceipt = ({ order }) => {
+  if (!order) return null;
   const navigate = useNavigate();
 
   const packingFee = 50; // Fixed packing fee
-  const totalAmount = getTotalCartAmount() + packingFee;
-  const currentDate = new Date().toLocaleDateString();
+  const totalAmount = order.totalAmount + packingFee;
+  const currentDate = order.date;
 
   // Function to download PDF
   const downloadPDF = () => {
@@ -37,9 +34,9 @@ const PaymentReceipt = ({ paymentDetails }) => {
     doc.setFont("helvetica", "normal");
     doc.text(`Date: ${currentDate}`, marginLeft, y);
     y += 8;
-    doc.text(`Name: ${paymentDetails.userName}`, marginLeft, y);
+    doc.text(`Name: ${order.userName}`, marginLeft, y);
     y += 8;
-    doc.text(`Address: ${paymentDetails.address}`, marginLeft, y);
+    doc.text(`Address: ${order.address}`, marginLeft, y);
     y += 12;
 
     // Table headers
@@ -52,7 +49,7 @@ const PaymentReceipt = ({ paymentDetails }) => {
     doc.setFont("helvetica", "normal");
 
     // List of items
-    cartItems.forEach((item) => {
+    order.items.forEach((item) => {
       doc.text(item.title, marginLeft, y);
       doc.text(`Rs.${item.price}`, marginRight, y, null, null, "right");
       y += 10;
@@ -95,65 +92,65 @@ const PaymentReceipt = ({ paymentDetails }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8">
-      <div className="flex flex-col items-center mb-4">
+    <div className='max-w-2xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg p-8'>
+      <div className='flex flex-col items-center mb-4'>
         <img
           src={assets.logo}
-          alt="NeonBrush Logo"
-          className="w-10 h-10 mb-2"
+          alt='NeonBrush Logo'
+          className='w-10 h-10 mb-2'
         />
-        <h2 className="text-xl font-semibold text-black">Payment Receipt</h2>
+        <h2 className='text-xl font-semibold text-black'>Payment Receipt</h2>
       </div>
 
-      <div className="mt-6 space-y-4">
-        <p className="text-gray-600 text-sm">Date: {currentDate}</p>
-        <p className="text-gray-600 text-sm">Name: {paymentDetails.userName}</p>
-        <p className="text-gray-600 text-sm">Email: {paymentDetails.address}</p>
+      <div className='mt-6 space-y-4'>
+        <p className='text-gray-600 text-sm'>Date: {currentDate}</p>
+        <p className='text-gray-600 text-sm'>Name: {order.userName}</p>
+        <p className='text-gray-600 text-sm'>Email: {order.address}</p>
 
-        <div className="flex justify-between text-lg font-bold border-b pb-2">
-          <p className="text-left text-xl">Items</p>
-          <p className="text-right text-xl">Price</p>
+        <div className='flex justify-between text-lg font-bold border-b pb-2'>
+          <p className='text-left text-xl'>Items</p>
+          <p className='text-right text-xl'>Price</p>
         </div>
 
-        {cartItems.map((item) => (
-          <div key={item.artId} className="flex justify-between py-2 border-b">
-            <p className="text-left text-gray-700">{item.title}</p>
-            <p className="text-right text-gray-900 font-semibold">
+        {order.items.map((item, index) => (
+          <div key={index} className='flex justify-between py-2 border-b'>
+            <p className='text-left text-gray-700'>{item.title}</p>
+            <p className='text-right text-gray-900 font-semibold'>
               Rs.{item.price}
             </p>
           </div>
         ))}
 
-        <div className="flex justify-between py-2 border-b">
-          <p className="text-left text-gray-700 font-semibold">Packing Fee</p>
-          <p className="text-right text-gray-900 font-semibold">
+        <div className='flex justify-between py-2 border-b'>
+          <p className='text-left text-gray-700 font-semibold'>Packing Fee</p>
+          <p className='text-right text-gray-900 font-semibold'>
             Rs.{packingFee}
           </p>
         </div>
 
         {/* Line before total */}
-        <hr className="border-t-2 my-4" />
+        <hr className='border-t-2 my-4' />
 
-        <div className="flex justify-between text-lg font-bold">
-          <p className="text-left">Total</p>
-          <p className="text-right">Rs.{totalAmount}</p>
+        <div className='flex justify-between text-lg font-bold'>
+          <p className='text-left'>Total</p>
+          <p className='text-right'>Rs.{totalAmount}</p>
         </div>
 
         {/* Additional line after total */}
-        <hr className="border-t-2 my-4" />
+        <hr className='border-t-2 my-4' />
       </div>
 
-      <div className="flex justify-end space-x-4 mt-6">
+      <div className='flex justify-end space-x-4 mt-6'>
         <button
           onClick={() => navigate("/products")}
-          className="py-3 px-6 rounded-lg"
+          className='py-3 px-6 rounded-lg'
         >
-          <IoChevronBackCircleOutline className="text-black text-2xl" />
+          <IoChevronBackCircleOutline className='text-black text-2xl' />
         </button>
 
         <button
           onClick={downloadPDF}
-          className="bg-sky-950 text-white py-3 px-6 rounded-lg hover:bg-sky-800"
+          className='bg-sky-950 text-white py-3 px-6 rounded-lg hover:bg-sky-800'
         >
           Download PDF
         </button>
