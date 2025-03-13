@@ -4,7 +4,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import { MdArrowBackIos } from "react-icons/md";
 import { z } from "zod";
 import axios from "axios";
-import { Link } from "react-router-dom";
+
 const artSchema = z.object({
   userName: z.string().min(1, "Username is required"),
   title: z.string().min(1, "Title is required"),
@@ -35,6 +35,39 @@ const AddArtItem = () => {
   const [errors, setErrors] = useState({});
   const [imageSelected, setImageSelected] = useState(false);
   const navigate = useNavigate();
+
+  // Fetch the username from the backend when the component mounts
+  useEffect(() => {
+    const fetchUsername = async () => {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+
+      if (!token) {
+        console.error("No token found, please login first.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/user/username",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Set the fetched username in the state
+        setArtDetails((prevDetails) => ({
+          ...prevDetails,
+          userName: response.data,
+        }));
+      } catch (error) {
+        console.error("Error fetching username:", error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
 
   useEffect(() => {
     // Fetch all art items when the component mounts
@@ -136,13 +169,12 @@ const AddArtItem = () => {
         content: `New artwork titled "${artDetails.title}" has been added by an artist.`,
       };
       sendMessageToAdmin(message);
-      
-    // Navigate to the artist's detail page using their userName
+
+      // Navigate to the artist's detail page using their userName
       navigate(`/artist-detail/${artDetails.userName}`);
 
       handleClear();
     } catch (validationError) {
-      
       if (validationError.errors) {
         const formattedErrors = validationError.errors.reduce((acc, error) => {
           acc[error.path[0]] = error.message;
@@ -194,21 +226,6 @@ const AddArtItem = () => {
   const handleBack = () => {
     navigate(-1);
   };
-  const handleAddArt = () => {
-    const newNotification = {
-      artistName: username, // From artist profile
-      artTitle: artTitle,   // From add art form
-      timestamp: new Date().toLocaleTimeString(),
-    };
-  
-    // Store in localStorage
-    const existingNotifications = JSON.parse(localStorage.getItem("notifications")) || [];
-    existingNotifications.push(newNotification);
-    localStorage.setItem("notifications", JSON.stringify(existingNotifications));
-  
-    alert("Art added successfully!"); // Confirmation for artist
-  };
-  
 
   return (
     <div className="max-w-4xl mx-auto mt-10 bg-gray-100 shadow-lg rounded-lg">
@@ -247,27 +264,28 @@ const AddArtItem = () => {
               onChange={handleInputChange}
               placeholder="Artist's Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+              readOnly // Make the field read-only
             />
             {errors.userName && (
               <p className="text-red-500 text-sm mt-1">{errors.userName}</p>
             )}
           </div>
           <div>
-  <label className="block text-gray-600 text-sm font-medium">
-    Art Size (cm)
-  </label>
-  <input
-    type="text"
-    name="size"
-    value={artDetails.size}
-    onChange={handleInputChange}
-    placeholder="Enter size as (width cm,height cm)"
-    className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-  />
-  {errors.size && (
-    <p className="text-red-500 text-sm mt-1">{errors.size}</p>
-  )}
-</div>
+            <label className="block text-gray-600 text-sm font-medium">
+              Art Size (cm)
+            </label>
+            <input
+              type="text"
+              name="size"
+              value={artDetails.size}
+              onChange={handleInputChange}
+              placeholder="Enter size as (width cm,height cm)"
+              className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+            />
+            {errors.size && (
+              <p className="text-red-500 text-sm mt-1">{errors.size}</p>
+            )}
+          </div>
           <div className="md:col-span-2">
             <label className="block text-gray-600 text-sm font-medium">
               Description
@@ -335,11 +353,12 @@ const AddArtItem = () => {
                 onChange={handleImageChange}
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
-               <button
+              <button
                 type="button"
                 className="mt-1 w-full px-6 py-3 text-gray-500 bg-sky-200 border rounded-lg flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-green-300"
               >
-                <RiImageAddFill className="mr-2" /> {imageSelected ? "Image Added" : "Choose Image"}
+                <RiImageAddFill className="mr-2" />{" "}
+                {imageSelected ? "Image Added" : "Choose Image"}
               </button>
             </div>
             {errors.image && (
@@ -376,10 +395,7 @@ const AddArtItem = () => {
         {artItems.length === 0 ? (
           <p className="text-gray-600">No items added yet.</p>
         ) : (
-          <p>
- 
-</p>
-    
+          <p></p>
         )}
       </div>
     </div>
