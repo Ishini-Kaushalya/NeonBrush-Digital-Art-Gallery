@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { assets } from "../assets/Common/assets.js";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
@@ -6,19 +6,18 @@ import { StoreContext } from "../Context/StoreContext.jsx";
 import { TbBasketFilled } from "react-icons/tb";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   const [loggedInUsername, setLoggedInUsername] = useState();
   const [menu, setMenu] = useState("home");
-  const { getCartSize } = useContext(StoreContext);
+  const { getCartSize, clearCart } = useContext(StoreContext);
   const [isArtist, setIsArtist] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [notification, setNotification] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [hasProfile, setHasProfile] = useState(false); // State to track if the user has a profile
+  const [hasProfile, setHasProfile] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -77,10 +76,10 @@ const Navbar = () => {
                 },
               }
             );
-            setHasProfile(!!profileResponse.data); // Set hasProfile to true if profile exists
+            setHasProfile(!!profileResponse.data);
           } catch (error) {
             if (error.response?.status === 404) {
-              setHasProfile(false); // No profile found
+              setHasProfile(false);
             } else {
               console.error("Error fetching profile:", error);
             }
@@ -129,6 +128,7 @@ const Navbar = () => {
     setIsSignedIn(false);
     setIsArtist(false);
     setHasProfile(false);
+    clearCart();
     navigate("/");
   };
 
@@ -156,8 +156,8 @@ const Navbar = () => {
         }
       );
       setNotification("Profile and all artworks deleted successfully!");
-      setHasProfile(false); // Update hasProfile state
-      handleSignOut(); // Sign out the user after deleting the profile
+      setHasProfile(false);
+      handleSignOut();
     } catch (error) {
       console.error("Error deleting profile:", error);
       setNotification("Failed to delete profile. Please try again.");
@@ -299,7 +299,7 @@ const Navbar = () => {
                           }`}
                           style={{
                             pointerEvents: hasProfile ? "none" : "auto",
-                          }} // Disable click if hasProfile is true
+                          }}
                         >
                           Create Profile
                         </Link>
