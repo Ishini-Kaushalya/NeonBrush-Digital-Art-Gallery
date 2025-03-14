@@ -4,6 +4,7 @@ import axios from "axios";
 import ArtItem from "../Components/ArtItem";
 import { FaTrash } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
+import { MdAttachEmail } from "react-icons/md";
 
 const ArtistDetail = () => {
   const { id } = useParams(); // Get the artist's ID or username from the URL
@@ -183,6 +184,19 @@ const ArtistDetail = () => {
           <h2 className='text-3xl font-semibold mt-4 text-center text-white'>
             {artist.userName}
           </h2>
+            {/* Add the artist's email with a 2D button design and animated icon */}
+            <div className='flex justify-center items-center mt-4'>
+    <a
+      href={`mailto:${artist.email}`} // Open default email client
+      className='flex items-center bg-white bg-opacity-20 backdrop-blur-sm p-4 shadow-lg hover:bg-opacity-30 transition-all duration-300 cursor-pointer'
+      style={{
+        borderRadius: '50px', // Custom border radius for half-circle effect
+      }}
+    >
+      <MdAttachEmail className='text-white text-2xl animate-bounce mr-2' /> {/* Animated icon */}
+      <p className='text-lg text-white font-medium'>{artist.email}</p>
+    </a>
+  </div>
         </div>
 
         {/* Right Side: Artist Details */}
