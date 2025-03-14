@@ -40,4 +40,15 @@ public class UserController {
         String username = userDetails.getUsername();
         return ResponseEntity.ok(username);
     }
+
+    @GetMapping("/email")
+    public ResponseEntity<?> getEmail() {
+        // Get the authenticated user's details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        // Extract and return the email
+        String email = userDetails.getEmail(); // Assuming UserDetailsImpl has an email field
+        return ResponseEntity.ok(email);
+    }
 }
