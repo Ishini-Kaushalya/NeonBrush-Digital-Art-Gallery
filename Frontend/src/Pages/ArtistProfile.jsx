@@ -10,16 +10,14 @@ const ArtistProfile = () => {
   const [errors, setErrors] = useState({});
   const [isProfileComplete, setIsProfileComplete] = useState(false);
   const [username, setUsername] = useState(""); // State to store the fetched username
+  const [email, setEmail] = useState(""); // State to store the fetched email
   const fileInputRef = React.useRef();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Retrieve email from the navigation state
-  const { email } = location.state || {};
-
-  // Fetch the username when the component mounts
+  // Fetch the username and email when the component mounts
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchUserDetails = async () => {
       const token = JSON.parse(localStorage.getItem("accessToken"));
 
       if (!token) {
@@ -28,7 +26,8 @@ const ArtistProfile = () => {
       }
 
       try {
-        const response = await axios.get(
+        // Fetch username
+        const usernameResponse = await axios.get(
           "http://localhost:8080/api/user/username",
           {
             headers: {
@@ -36,15 +35,24 @@ const ArtistProfile = () => {
             },
           }
         );
+        setUsername(usernameResponse.data);
 
-        // Set the fetched username in the state
-        setUsername(response.data);
+        // Fetch email
+        const emailResponse = await axios.get(
+          "http://localhost:8080/api/user/email",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setEmail(emailResponse.data);
       } catch (err) {
-        console.error("Error fetching username:", err);
+        console.error("Error fetching user details:", err);
       }
     };
 
-    fetchUsername();
+    fetchUserDetails();
   }, []); // Empty dependency array ensures this runs only once on mount
 
   // Define Zod schema for form validation
@@ -251,7 +259,8 @@ const ArtistProfile = () => {
               type="email"
               placeholder="Your email"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-              defaultValue={email} // Pre-fill with email from signup
+              defaultValue={email} // Pre-fill with fetched email
+              readOnly // Make the field read-only
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
