@@ -23,7 +23,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(null); // State to store the artist's profile image URL
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -78,6 +80,24 @@ const Navbar = () => {
               }
             );
             setHasProfile(!!profileResponse.data); // Set hasProfile to true if profile exists
+            // Fetch the artist's profile image if the user is an artist
+            if (profileResponse.data.imageId) {
+              const imageResponse = await axios.get(
+                `http://localhost:8080/api/artist/image/${profileResponse.data.imageId}`,
+                {
+                  responseType: "blob", // Fetch the image as a blob
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
+              // Convert the blob to a URL
+              const imageUrl = URL.createObjectURL(imageResponse.data);
+              setProfileImage(imageUrl);
+            } else {
+              setProfileImage(null); // No profile image found
+            }
+
           } catch (error) {
             if (error.response?.status === 404) {
               setHasProfile(false); // No profile found
@@ -266,10 +286,19 @@ const Navbar = () => {
             </button>
             {isArtist && (
               <div className='relative'>
-                <FaUserCircle
-                  className='w-[30px] h-[30px] text-gray-700 cursor-pointer'
-                  onClick={toggleDropdown}
-                />
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt='Profile'
+                    className='w-[50px] h-[50px] rounded-full cursor-pointer object-cover'
+                    onClick={toggleDropdown}
+                  />
+                ) : (
+                  <FaUserCircle
+                    className='w-[30px] h-[30px] text-gray-700 cursor-pointer'
+                    onClick={toggleDropdown}
+                  />
+                )}
                 {dropdownOpen && (
                   <motion.div
                     ref={dropdownRef}
