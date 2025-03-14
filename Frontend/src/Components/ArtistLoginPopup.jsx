@@ -90,7 +90,7 @@ const ArtistLoginPopup = ({ setShowLogin }) => {
 
           // Close the login popup and navigate to the artist profile page
           setShowLogin(false);
-          navigate("/artist-profile", {
+          navigate("/show-artist", {
             state: { username: formData.username },
           });
         }

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { RiImageAddFill } from "react-icons/ri";
 import { z } from "zod";
 import { MdArrowBackIos } from "react-icons/md";
@@ -9,12 +9,43 @@ const ArtistProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [isProfileComplete, setIsProfileComplete] = useState(false);
+  const [username, setUsername] = useState(""); // State to store the fetched username
   const fileInputRef = React.useRef();
   const navigate = useNavigate();
-  const location = useLocation(); // Use useLocation to access navigation state
+  const location = useLocation();
 
-  // Retrieve username and email from the navigation state
-  const { username, email } = location.state || {};
+  // Retrieve email from the navigation state
+  const { email } = location.state || {};
+
+  // Fetch the username when the component mounts
+  useEffect(() => {
+    const fetchUsername = async () => {
+      const token = JSON.parse(localStorage.getItem("accessToken"));
+
+      if (!token) {
+        console.error("No token found, please login first.");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/user/username",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Set the fetched username in the state
+        setUsername(response.data);
+      } catch (err) {
+        console.error("Error fetching username:", err);
+      }
+    };
+
+    fetchUsername();
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   // Define Zod schema for form validation
   const schema = z.object({
@@ -186,7 +217,8 @@ const ArtistProfile = () => {
               type="text"
               placeholder="Your user Name"
               className="mt-1 w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-300"
-              defaultValue={username} // Pre-fill with username from signup
+              defaultValue={username} // Pre-fill with fetched username
+              readOnly // Make the field read-only
             />
             {errors.userName && (
               <p className="text-red-500 text-sm">{errors.userName}</p>
